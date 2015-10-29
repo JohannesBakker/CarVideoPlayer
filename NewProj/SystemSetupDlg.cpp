@@ -1,4 +1,4 @@
-// SystemSetupDlg.cpp : implementation file
+Ôªø// SystemSetupDlg.cpp : implementation file
 //
 
 #include "stdafx.h"
@@ -234,13 +234,13 @@ BOOL CSystemSetupDlg::OnInitDialog()
 	else m_264Check.SetCheck(0);
 	m_showDateBtn.SetIcon(IDI_UNCHECKED, BS_LEFT, IDI_CHECKED);
 
-	m_cmb_language.InsertString(0, _T("?Ô≈Íª€Ï"));
+	m_cmb_language.InsertString(0, _T("ÁÆÄ‰Ωì‰∏≠Êñá"));
 	m_cmb_language.InsertString(1, _T("English"));
-	m_cmb_language.InsertString(2, _T("›–ÔŒÍª€Ï"));
-	m_cmb_language.InsertString(3, _T("???????"));
-	m_cmb_language.InsertString(4, _T("Espa?a"));
-	m_cmb_language.InsertString(5, _T("portugu?s"));
-	m_cmb_language.InsertString(6, _T("T?rkiye"));
+	m_cmb_language.InsertString(2, _T("ÁπÅÈ´î‰∏≠Êñá"));
+	m_cmb_language.InsertString(3, _T("‡∏†‡∏≤‡∏©‡∏≤‡πÑ‡∏ó‡∏¢"));
+	m_cmb_language.InsertString(4, _T("Espa√±a"));
+	m_cmb_language.InsertString(5, _T("portugu√™s"));
+	m_cmb_language.InsertString(6, _T("T√ºrkiye"));
 	m_cmb_language.SetCurSel(CNewProjDlg::g_config_Value_ST.nLanguageID);
 
 	m_cmb_windows.AddString(_T("One Window"));
