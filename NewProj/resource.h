@@ -77,6 +77,8 @@
 #define IDB_SEEK_CURSOR                 218
 #define IDB_BITMAP_AVI_STOP             223
 #define IDI_ICON1                       225
+#define IDB_BITMAP2                     227
+#define IDB_NUMBER_RED_CIRCLE           227
 #define IDC_SLIDER_SEEK                 1000
 #define IDC_AVI_FILE_CHECK              1001
 #define IDC_264_FILE_CHECK              1002
@@ -433,7 +435,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        226
+#define _APS_NEXT_RESOURCE_VALUE        228
 #define _APS_NEXT_COMMAND_VALUE         32799
 #define _APS_NEXT_CONTROL_VALUE         1187
 #define _APS_NEXT_SYMED_VALUE           101

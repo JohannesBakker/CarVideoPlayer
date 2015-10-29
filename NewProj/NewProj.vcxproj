@@ -432,6 +432,8 @@
     <ClInclude Include="Yuv2rgb.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bmp2\bitmap1.bmp" />
+    <None Include="Bmp2\RedCircle.bmp" />
     <None Include="resource.hm" />
     <None Include="10-8Player.bmp" />
     <None Include="Bmp2\1Red.bmp" />

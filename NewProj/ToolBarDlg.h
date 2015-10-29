@@ -237,6 +237,10 @@ public:
 	afx_msg void OnBnClickedPrevSeg();
 	afx_msg void OnBnClickedNextSeg();
 	afx_msg void OnBnClickedRepairFile();
+
+private:
+	int m_recAlarm;
+
 };
 
 //{{AFX_INSERT_LOCATION}}

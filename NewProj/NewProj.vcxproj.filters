@@ -933,5 +933,11 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="logo.png" />
     <None Include="ReadMe.txt" />
+    <None Include="bmp2\bitmap1.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\RedCircle.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
