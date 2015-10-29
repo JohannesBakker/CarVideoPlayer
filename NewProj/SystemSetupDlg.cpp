@@ -596,7 +596,7 @@ void CSystemSetupDlg::OnOK()
 	if(m_cmb_speed_unit.GetCurSel() == 0) CNewProjDlg::g_config_Value_ST.nSpeedUnitID = 0;
 	else CNewProjDlg::g_config_Value_ST.nSpeedUnitID = 1;
 	CFile file;
-	file.Open(_T("config.sav"), CFile::modeWrite);
+	file.Open(_T(CONFIG_FILE_PATH), CFile::modeWrite);
 	file.SeekToBegin();
 	CNewProjDlg::g_config_Value_ST.nLanguageID = m_cmb_language.GetCurSel();
 	file.Write(&CNewProjDlg::g_config_Value_ST, sizeof(Config_Datas));

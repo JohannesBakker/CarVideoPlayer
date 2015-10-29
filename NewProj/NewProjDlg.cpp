@@ -107,7 +107,7 @@ CNewProjDlg::CNewProjDlg(CWnd* pParent /*=NULL*/)
 	g_bViewChange = false;
 	g_bResetFlag = false;
 	g_bOpenFlag = false;
-	if(!m_ConfigFile.Open(_T("Config.sav"), CFile::modeReadWrite)){
+	if(!m_ConfigFile.Open(_T(CONFIG_FILE_PATH), CFile::modeReadWrite)){
 		MessageBox(_T("Error Reading Config Datas"), NULL, 0);
 		ZeroMemory(&g_config_Value_ST, sizeof(Config_Datas));
 	}else{
@@ -362,7 +362,7 @@ void CNewProjDlg::OnFileOpen()
 	m_FolderTime.wDay = wtoi(timeTemp);
 	memcpy(CNewProjDlg::g_config_Value_ST.lastpath, str, 260);
 	CFile file;
-	if(!file.Open(_T("Config.sav"), CFile::modeReadWrite)) return;
+	if(!file.Open(_T(CONFIG_FILE_PATH), CFile::modeReadWrite)) return;
 	file.Write(&CNewProjDlg::g_config_Value_ST, sizeof(CNewProjDlg::g_config_Value_ST));
 	file.Close();
 	strInfo ="D264\\mdvr.log"; 
@@ -503,7 +503,7 @@ void CNewProjDlg::OnExit()
 {
 	// TODO: Add your command handler code here
 	CFile file;
-	file.Open(_T("config.sav"), CFile::modeWrite);
+	file.Open(_T(CONFIG_FILE_PATH), CFile::modeWrite);
 	file.Write(&g_config_Value_ST, sizeof(Config_Datas));
 	file.Close();
 	OnOK();

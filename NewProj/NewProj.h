@@ -19,6 +19,8 @@
 // See NewProj.cpp for the implementation of this class
 //
 
+#define CONFIG_FILE_PATH	"config.sav"
+
 class CNewProjApp : public CWinApp
 {
 public:
