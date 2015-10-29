@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="NewProj">
+</Property><Property Name="Solution File" Value="E:\task\NewProj_8_13\NewProj.sln">
+</Property><Property Name="User Options File" Value="E:\task\NewProj_8_13\NewProj.suo">
+</Property><Property Name="Date" Value="Sunday, August 24, 2014">
+</Property><Property Name="Time" Value="15:38 PM">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="NewProj.sln" Description="File successfully backed up as E:\task\NewProj_8_13\NewProj.sln.old">
+</Event><Event ErrorLevel="0" Project="" Source="NewProj.suo" Description="File successfully backed up as E:\task\NewProj_8_13\NewProj.suo.old">
+</Event><Event ErrorLevel="0" Project="NewProj" Source="NewProj.vcproj" Description="Converting project file 'E:\task\NewProj_8_13\NewProj.vcproj'.">
+</Event><Event ErrorLevel="1" Project="NewProj" Source="NewProj.vcproj" Description="VCWebServiceProxyGeneratorTool is no longer supported. The tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="NewProj" Source="NewProj.vcproj" Description="MSB8012: $(TargetPath) ('E:\task\NewProj_8_13\.\Release\NewProj.exe') does not match the Linker's OutputFile property value '.\_Output/NewProj.exe' ('E:\task\NewProj_8_13\_Output/NewProj.exe') in project configuration 'Release|Win32'. This may cause your project to build incorrectly. To correct this, please make sure that $(TargetPath) property value matches the value specified in %(Link.OutputFile).">
+</Event><Event ErrorLevel="1" Project="NewProj" Source="NewProj.vcproj" Description="MSB8012: $(TargetName) ('NewProj') does not match the Linker's OutputFile property value '.\_Output(D)\NewProj(D).exe' ('NewProj(D)') in project configuration 'Debug|Win32'. This may cause your project to build incorrectly. To correct this, please make sure that $(TargetName) property value matches the value specified in %(Link.OutputFile).">
+</Event><Event ErrorLevel="1" Project="NewProj" Source="NewProj.vcproj" Description="MSB8012: $(TargetPath) ('E:\task\NewProj_8_13\.\Debug\NewProj.exe') does not match the Linker's OutputFile property value '.\_Output(D)\NewProj(D).exe' ('E:\task\NewProj_8_13\_Output(D)\NewProj(D).exe') in project configuration 'Debug|Win32'. This may cause your project to build incorrectly. To correct this, please make sure that $(TargetPath) property value matches the value specified in %(Link.OutputFile).">
+</Event><Event ErrorLevel="0" Project="NewProj" Source="NewProj.vcproj" Description="Done converting to new project file 'E:\task\NewProj_8_13\NewProj.vcxproj'.">
+</Event><Event ErrorLevel="3" Project="NewProj" Source="NewProj.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="NewProj.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="NewProj.sln" Description="Converted">
+</Event></UpgradeLog>
