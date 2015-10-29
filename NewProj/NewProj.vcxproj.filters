@@ -1,0 +1,937 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{24822ef2-00dc-4454-81c8-c0ad17fa6bcc}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{b4656acd-9536-49f9-b3d8-199cd8fdbd76}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{6ddd4a9f-2d18-444a-a412-34f33b6b6e94}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="264Decoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="264Demuxer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="264Spliter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ACCGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AdjustVideoParamDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlarmGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AVIConverterDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BatchConvertDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BCMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BitComboBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BitItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BitListBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BitmapSlider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BitSlider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BitWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BtnST.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Buffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BurnToDiscDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CxStatic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DirObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiscFormatData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiscFormatDataEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiscMaster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiscRecorder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EditTrans.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="errorprint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="explorer1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GPSDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HTMLWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageTextButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoListDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IOLightSetDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewProj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewProjDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgressDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PtrFifo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RecordPlayerAboutDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReportCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundIn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundOut.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpeedGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemSetupDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeLineDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="timelines.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeRangeDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolBarDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="View1Dlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="View2Dlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xCheckButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="yuv2rgb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NewProj.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="264Decoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="264Demuxer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="264Spliter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ACCGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AdjustVideoParamDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlarmGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AVIConverterDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BatchConvertDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BCMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BitComboBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BitItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BitListBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapSlider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapSlidermemdc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BitSlider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BitWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BtnST.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BurnToDiscDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CxStatic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CxStaticMemDC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DirObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiscFormatData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiscFormatDataEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiscMaster.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiscRecorder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EditTrans.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="errorprint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="explorer1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GPSDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HTMLWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageTextButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoListDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IOLightSetDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewProj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewProjDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgressDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PtrFifo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RecordPlayerAboutDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReportCtrl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundIn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundOut.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpeedGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemSetupDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeLineDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="timelines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeRangeDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolBarDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="View1Dlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="View2Dlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xCheckButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Yuv2rgb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource.hm">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="10-8Player.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\1Red.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\1White.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\2Red.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\2White.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\3Red.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\3White.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Adjust.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\App.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\AVI.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\AVI_Stop.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Back.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\bmp00001.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\bmp00002.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20139.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\bmp20139.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20140.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20141.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20142.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20143.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20144.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20145.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20146.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20147.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20148.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20149.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20150.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20151.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20152.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20153.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20154.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20155.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20156.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20157.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20158.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20159.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20160.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20161.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20162.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\bmp20162.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\bmp20163.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20163.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20164.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20165.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20168.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20169.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20170.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20171.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20175.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20176.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20177.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20178.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20180.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20181.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20182.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20183.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20184.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20185.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20186.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20187.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20188.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20189.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20190.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20191.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20192.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20193.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20194.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20195.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20196.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20197.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20198.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20199.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20200.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20201.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20202.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20203.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20204.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20205.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20206.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20207.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20208.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20209.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20210.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20211.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20212.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20213.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20214.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20215.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20216.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20217.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20218.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20219.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20220.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20221.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20222.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20223.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20224.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20225.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20226.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20227.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20228.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20236.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20253.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20254.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20255.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp20256.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp21272.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp21273.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp21274.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp21275.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp30994.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp\bmp30996.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Button_Clicked.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Button_Normal.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Button_OK.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Cancel.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Change.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\checked.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\combo center.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\comboleft.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\comboright.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur30977.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur30998.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur30999.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31000.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31001.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31002.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31003.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31004.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31005.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31006.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31007.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31008.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31009.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31010.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Cur\cur31011.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\CutEnd.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\CutStart.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Fast.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Forward.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\FullScr.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ico20128.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Icon.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\icon1.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\list_bot.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\list_left.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\list_right.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\list_top.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="logo.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\NewProj.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\NextSeg.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Normal.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\ok.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\OneWnd.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Open.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Pause.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Play.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\PrevSeg.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\radiooff.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\radioon.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\radioon2.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\RecEnd.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\RecStart.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Repair.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Restor_Default.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\SeekCursor.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\SeekSlider.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\SeekSlider1.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\SeekSliderActive.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Slow.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\SnapShot.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Start.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\Stop.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\TwoWnd.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\unchecked.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\VideoParamSlider.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\VideoParamSlider1.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\VideoParamThumb.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\VideoParamThumb2.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\VolumeSlider.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\VolumeSliderActive.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\VolumeThumb.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Bmp2\VolumeThumbActive.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="logo.png" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

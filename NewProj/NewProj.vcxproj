@@ -1,0 +1,631 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CE0DD135-93BC-483A-ACE7-6122DFF5DCD6}</ProjectGuid>
+    <RootNamespace>NewProj</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\_Output\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\_Output\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Release/NewProj.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <PrecompiledHeaderOutputFile>.\Release/NewProj.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0404</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>.\_Output/NewProj.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+      <ProgramDatabaseFile>.\Release/NewProj.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/NewProj.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Debug/NewProj.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <PrecompiledHeaderOutputFile>.\Debug/NewProj.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0404</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>.\_Output(D)\NewProj(D).exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+      <ProgramDatabaseFile>.\Debug/NewProj.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/NewProj.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="264Decoder.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="264Demuxer.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="264Spliter.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="ACCGraph.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="AdjustVideoParamDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="AlarmGraph.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="AVIConverterDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="BaseObject.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="BatchConvertDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="BCMenu.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="BitComboBox.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="BitItem.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="BitListBox.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="BitmapSlider.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="BitSlider.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="BitWnd.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="BtnST.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="Buffer.cpp" />
+    <ClCompile Include="BurnToDiscDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="CxStatic.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="DirObject.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="DiscFormatData.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="DiscFormatDataEvent.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="DiscMaster.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="DiscRecorder.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="EditTrans.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="errorprint.cpp" />
+    <ClCompile Include="explorer1.cpp" />
+    <ClCompile Include="FileObject.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="GPSDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="HTMLWriter.cpp" />
+    <ClCompile Include="ImageTextButton.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="InfoListDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="IOLightSetDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="NewProj.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="NewProjDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="Pipe.cpp" />
+    <ClCompile Include="ProgressDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="PtrFifo.cpp" />
+    <ClCompile Include="RecordPlayerAboutDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="ReportCtrl.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="SearchDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="SoundBase.cpp" />
+    <ClCompile Include="SoundFile.cpp" />
+    <ClCompile Include="SoundIn.cpp" />
+    <ClCompile Include="SoundOut.cpp" />
+    <ClCompile Include="SpeedGraph.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="SystemSetupDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="TimeLineDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="timelines.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="TimeRangeDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="ToolBarDlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="View1Dlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="View2Dlg.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="xCheckButton.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="yuv2rgb.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NewProj.rc">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="264Decoder.h" />
+    <ClInclude Include="264Demuxer.h" />
+    <ClInclude Include="264Spliter.h" />
+    <ClInclude Include="ACCGraph.h" />
+    <ClInclude Include="AdjustVideoParamDlg.h" />
+    <ClInclude Include="AlarmGraph.h" />
+    <ClInclude Include="AVIConverterDlg.h" />
+    <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="BatchConvertDlg.h" />
+    <ClInclude Include="BCMenu.h" />
+    <ClInclude Include="BitComboBox.h" />
+    <ClInclude Include="BitItem.h" />
+    <ClInclude Include="BitListBox.h" />
+    <ClInclude Include="BitmapSlider.h" />
+    <ClInclude Include="BitmapSlidermemdc.h" />
+    <ClInclude Include="BitSlider.h" />
+    <ClInclude Include="BitWnd.h" />
+    <ClInclude Include="BtnST.h" />
+    <ClInclude Include="Buffer.h" />
+    <ClInclude Include="BurnToDiscDlg.h" />
+    <ClInclude Include="CxStatic.h" />
+    <ClInclude Include="CxStaticMemDC.h" />
+    <ClInclude Include="DirObject.h" />
+    <ClInclude Include="DiscFormatData.h" />
+    <ClInclude Include="DiscFormatDataEvent.h" />
+    <ClInclude Include="DiscMaster.h" />
+    <ClInclude Include="DiscRecorder.h" />
+    <ClInclude Include="EditTrans.h" />
+    <ClInclude Include="errorprint.h" />
+    <ClInclude Include="explorer1.h" />
+    <ClInclude Include="FileObject.h" />
+    <ClInclude Include="GPSDlg.h" />
+    <ClInclude Include="HTMLWriter.h" />
+    <ClInclude Include="ImageTextButton.h" />
+    <ClInclude Include="InfoListDlg.h" />
+    <ClInclude Include="IOLightSetDlg.h" />
+    <ClInclude Include="NewProj.h" />
+    <ClInclude Include="NewProjDlg.h" />
+    <ClInclude Include="Pipe.h" />
+    <ClInclude Include="ProgressDlg.h" />
+    <ClInclude Include="PtrFifo.h" />
+    <ClInclude Include="RecordPlayerAboutDlg.h" />
+    <ClInclude Include="ReportCtrl.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SearchDlg.h" />
+    <ClInclude Include="SoundBase.h" />
+    <ClInclude Include="SoundFile.h" />
+    <ClInclude Include="SoundIn.h" />
+    <ClInclude Include="SoundOut.h" />
+    <ClInclude Include="SpeedGraph.h" />
+    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="SystemSetupDlg.h" />
+    <ClInclude Include="TimeLineDlg.h" />
+    <ClInclude Include="timelines.h" />
+    <ClInclude Include="TimeRangeDlg.h" />
+    <ClInclude Include="ToolBarDlg.h" />
+    <ClInclude Include="type.h" />
+    <ClInclude Include="View1Dlg.h" />
+    <ClInclude Include="View2Dlg.h" />
+    <ClInclude Include="xCheckButton.h" />
+    <ClInclude Include="Yuv2rgb.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource.hm" />
+    <None Include="10-8Player.bmp" />
+    <None Include="Bmp2\1Red.bmp" />
+    <None Include="Bmp2\1White.bmp" />
+    <None Include="Bmp2\2Red.bmp" />
+    <None Include="Bmp2\2White.bmp" />
+    <None Include="Bmp2\3Red.bmp" />
+    <None Include="Bmp2\3White.bmp" />
+    <None Include="Bmp2\Adjust.bmp" />
+    <None Include="Bmp2\App.bmp" />
+    <None Include="Bmp2\AVI.bmp" />
+    <None Include="Bmp2\AVI_Stop.bmp" />
+    <None Include="Bmp2\Back.bmp" />
+    <None Include="res\bmp00001.bmp" />
+    <None Include="res\bmp00002.bmp" />
+    <None Include="Bmp\bmp20139.bmp" />
+    <None Include="Bmp2\bmp20139.bmp" />
+    <None Include="Bmp\bmp20140.bmp" />
+    <None Include="Bmp\bmp20141.bmp" />
+    <None Include="Bmp\bmp20142.bmp" />
+    <None Include="Bmp\bmp20143.bmp" />
+    <None Include="Bmp\bmp20144.bmp" />
+    <None Include="Bmp\bmp20145.bmp" />
+    <None Include="Bmp\bmp20146.bmp" />
+    <None Include="Bmp\bmp20147.bmp" />
+    <None Include="Bmp\bmp20148.bmp" />
+    <None Include="Bmp\bmp20149.bmp" />
+    <None Include="Bmp\bmp20150.bmp" />
+    <None Include="Bmp\bmp20151.bmp" />
+    <None Include="Bmp\bmp20152.bmp" />
+    <None Include="Bmp\bmp20153.bmp" />
+    <None Include="Bmp\bmp20154.bmp" />
+    <None Include="Bmp\bmp20155.bmp" />
+    <None Include="Bmp\bmp20156.bmp" />
+    <None Include="Bmp\bmp20157.bmp" />
+    <None Include="Bmp\bmp20158.bmp" />
+    <None Include="Bmp\bmp20159.bmp" />
+    <None Include="Bmp\bmp20160.bmp" />
+    <None Include="Bmp\bmp20161.bmp" />
+    <None Include="Bmp\bmp20162.bmp" />
+    <None Include="Bmp2\bmp20162.bmp" />
+    <None Include="Bmp2\bmp20163.bmp" />
+    <None Include="Bmp\bmp20163.bmp" />
+    <None Include="Bmp\bmp20164.bmp" />
+    <None Include="Bmp\bmp20165.bmp" />
+    <None Include="Bmp\bmp20168.bmp" />
+    <None Include="Bmp\bmp20169.bmp" />
+    <None Include="Bmp\bmp20170.bmp" />
+    <None Include="Bmp\bmp20171.bmp" />
+    <None Include="Bmp\bmp20175.bmp" />
+    <None Include="Bmp\bmp20176.bmp" />
+    <None Include="Bmp\bmp20177.bmp" />
+    <None Include="Bmp\bmp20178.bmp" />
+    <None Include="Bmp\bmp20180.bmp" />
+    <None Include="Bmp\bmp20181.bmp" />
+    <None Include="Bmp\bmp20182.bmp" />
+    <None Include="Bmp\bmp20183.bmp" />
+    <None Include="Bmp\bmp20184.bmp" />
+    <None Include="Bmp\bmp20185.bmp" />
+    <None Include="Bmp\bmp20186.bmp" />
+    <None Include="Bmp\bmp20187.bmp" />
+    <None Include="Bmp\bmp20188.bmp" />
+    <None Include="Bmp\bmp20189.bmp" />
+    <None Include="Bmp\bmp20190.bmp" />
+    <None Include="Bmp\bmp20191.bmp" />
+    <None Include="Bmp\bmp20192.bmp" />
+    <None Include="Bmp\bmp20193.bmp" />
+    <None Include="Bmp\bmp20194.bmp" />
+    <None Include="Bmp\bmp20195.bmp" />
+    <None Include="Bmp\bmp20196.bmp" />
+    <None Include="Bmp\bmp20197.bmp" />
+    <None Include="Bmp\bmp20198.bmp" />
+    <None Include="Bmp\bmp20199.bmp" />
+    <None Include="Bmp\bmp20200.bmp" />
+    <None Include="Bmp\bmp20201.bmp" />
+    <None Include="Bmp\bmp20202.bmp" />
+    <None Include="Bmp\bmp20203.bmp" />
+    <None Include="Bmp\bmp20204.bmp" />
+    <None Include="Bmp\bmp20205.bmp" />
+    <None Include="Bmp\bmp20206.bmp" />
+    <None Include="Bmp\bmp20207.bmp" />
+    <None Include="Bmp\bmp20208.bmp" />
+    <None Include="Bmp\bmp20209.bmp" />
+    <None Include="Bmp\bmp20210.bmp" />
+    <None Include="Bmp\bmp20211.bmp" />
+    <None Include="Bmp\bmp20212.bmp" />
+    <None Include="Bmp\bmp20213.bmp" />
+    <None Include="Bmp\bmp20214.bmp" />
+    <None Include="Bmp\bmp20215.bmp" />
+    <None Include="Bmp\bmp20216.bmp" />
+    <None Include="Bmp\bmp20217.bmp" />
+    <None Include="Bmp\bmp20218.bmp" />
+    <None Include="Bmp\bmp20219.bmp" />
+    <None Include="Bmp\bmp20220.bmp" />
+    <None Include="Bmp\bmp20221.bmp" />
+    <None Include="Bmp\bmp20222.bmp" />
+    <None Include="Bmp\bmp20223.bmp" />
+    <None Include="Bmp\bmp20224.bmp" />
+    <None Include="Bmp\bmp20225.bmp" />
+    <None Include="Bmp\bmp20226.bmp" />
+    <None Include="Bmp\bmp20227.bmp" />
+    <None Include="Bmp\bmp20228.bmp" />
+    <None Include="Bmp\bmp20236.bmp" />
+    <None Include="Bmp\bmp20253.bmp" />
+    <None Include="Bmp\bmp20254.bmp" />
+    <None Include="Bmp\bmp20255.bmp" />
+    <None Include="Bmp\bmp20256.bmp" />
+    <None Include="Bmp\bmp21272.bmp" />
+    <None Include="Bmp\bmp21273.bmp" />
+    <None Include="Bmp\bmp21274.bmp" />
+    <None Include="Bmp\bmp21275.bmp" />
+    <None Include="Bmp\bmp30994.bmp" />
+    <None Include="Bmp\bmp30996.bmp" />
+    <None Include="Bmp2\Button_Clicked.bmp" />
+    <None Include="Bmp2\Button_Normal.bmp" />
+    <None Include="Bmp2\Button_OK.bmp" />
+    <None Include="Bmp2\Cancel.bmp" />
+    <None Include="Bmp2\Change.bmp" />
+    <None Include="Bmp2\checked.ico" />
+    <None Include="Bmp2\combo center.bmp" />
+    <None Include="Bmp2\comboleft.bmp" />
+    <None Include="Bmp2\comboright.bmp" />
+    <None Include="Cur\cur30977.cur" />
+    <None Include="Cur\cur30998.cur" />
+    <None Include="Cur\cur30999.cur" />
+    <None Include="Cur\cur31000.cur" />
+    <None Include="Cur\cur31001.cur" />
+    <None Include="Cur\cur31002.cur" />
+    <None Include="Cur\cur31003.cur" />
+    <None Include="Cur\cur31004.cur" />
+    <None Include="Cur\cur31005.cur" />
+    <None Include="Cur\cur31006.cur" />
+    <None Include="Cur\cur31007.cur" />
+    <None Include="Cur\cur31008.cur" />
+    <None Include="Cur\cur31009.cur" />
+    <None Include="Cur\cur31010.cur" />
+    <None Include="Cur\cur31011.cur" />
+    <None Include="Bmp2\CutEnd.bmp" />
+    <None Include="Bmp2\CutStart.bmp" />
+    <None Include="Bmp2\Fast.bmp" />
+    <None Include="Bmp2\Forward.bmp" />
+    <None Include="Bmp2\FullScr.bmp" />
+    <None Include="ico20128.ico" />
+    <None Include="Bmp2\Icon.bmp" />
+    <None Include="Bmp2\icon1.ico" />
+    <None Include="Bmp2\list_bot.bmp" />
+    <None Include="Bmp2\list_left.bmp" />
+    <None Include="Bmp2\list_right.bmp" />
+    <None Include="Bmp2\list_top.bmp" />
+    <None Include="logo.bmp" />
+    <None Include="res\NewProj.ico" />
+    <None Include="Bmp2\NextSeg.bmp" />
+    <None Include="Bmp2\Normal.bmp" />
+    <None Include="Bmp2\ok.bmp" />
+    <None Include="Bmp2\OneWnd.bmp" />
+    <None Include="Bmp2\Open.bmp" />
+    <None Include="Bmp2\Pause.bmp" />
+    <None Include="Bmp2\Play.bmp" />
+    <None Include="Bmp2\PrevSeg.bmp" />
+    <None Include="Bmp2\radiooff.ico" />
+    <None Include="Bmp2\radioon.ico" />
+    <None Include="Bmp2\radioon2.ico" />
+    <None Include="Bmp2\RecEnd.bmp" />
+    <None Include="Bmp2\RecStart.bmp" />
+    <None Include="Bmp2\Repair.bmp" />
+    <None Include="Bmp2\Restor_Default.bmp" />
+    <None Include="Bmp2\SeekCursor.bmp" />
+    <None Include="Bmp2\SeekSlider.bmp" />
+    <None Include="Bmp2\SeekSlider1.bmp" />
+    <None Include="Bmp2\SeekSliderActive.bmp" />
+    <None Include="Bmp2\Slow.bmp" />
+    <None Include="Bmp2\SnapShot.bmp" />
+    <None Include="Bmp2\Start.bmp" />
+    <None Include="Bmp2\Stop.bmp" />
+    <None Include="Bmp2\TwoWnd.bmp" />
+    <None Include="Bmp2\unchecked.ico" />
+    <None Include="Bmp2\VideoParamSlider.bmp" />
+    <None Include="Bmp2\VideoParamSlider1.bmp" />
+    <None Include="Bmp2\VideoParamThumb.bmp" />
+    <None Include="Bmp2\VideoParamThumb2.bmp" />
+    <None Include="Bmp2\VolumeSlider.bmp" />
+    <None Include="Bmp2\VolumeSliderActive.bmp" />
+    <None Include="Bmp2\VolumeThumb.bmp" />
+    <None Include="Bmp2\VolumeThumbActive.bmp" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="logo.png" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="NewProj.rc" _x007B_8856F961-340A-11D0-A96B-00C04FD705A2_x007D_="CExplorer1" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
