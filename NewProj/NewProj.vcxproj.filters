@@ -186,6 +186,9 @@
     <ClCompile Include="yuv2rgb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ColorEdit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NewProj.rc">
@@ -374,6 +377,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Yuv2rgb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorEdit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

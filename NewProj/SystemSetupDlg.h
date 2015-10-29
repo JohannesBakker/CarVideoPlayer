@@ -7,7 +7,7 @@
 // SystemSetupDlg.h : header file
 //
 #include "CxStatic.h"
-#include "EditTrans.h"
+#include "ColorEdit.h"
 #include "NewProjDlg.h"
 #include "xCheckButton.h"
 #include "BitComboBox.h"
@@ -44,17 +44,17 @@ public:
 	CxCheckButton	m_accCheck;
 	CxCheckButton	m_264Check;
 	CxCheckButton	m_showGPSTrackBtn;
-	CEditTrans	m_edit_wtmk_vert;
-	CEditTrans	m_edit_wtmk_hori;
-	CEditTrans	m_edit_watermask;
-	CEditTrans	m_edit_alarm_vert;
-	CEditTrans	m_edit_alarm_hori;
-	CEditTrans	m_edit_dri_company_vert;
-	CEditTrans	m_edit_dri_company_hori;
-	CEditTrans	m_edit_dev_camera_vert;
-	CEditTrans	m_edit_dev_camera_hori;
-	CEditTrans	m_edit_acc_winker_vert;
-	CEditTrans	m_edit_acc_winder_hori;
+	CColorEdit	m_edit_wtmk_vert;
+	CColorEdit	m_edit_wtmk_hori;
+	CColorEdit	m_edit_watermask;
+	CColorEdit	m_edit_alarm_vert;
+	CColorEdit	m_edit_alarm_hori;
+	CColorEdit	m_edit_dri_company_vert;
+	CColorEdit	m_edit_dri_company_hori;
+	CColorEdit	m_edit_dev_camera_vert;
+	CColorEdit	m_edit_dev_camera_hori;
+	CColorEdit	m_edit_acc_winker_vert;
+	CColorEdit	m_edit_acc_winder_hori;
 	CxStatic	m_static_wtmkvertpix;
 	CxStatic	m_static_wtmkvert;
 	CxStatic	m_static_wtmkhoripix;
@@ -130,7 +130,6 @@ protected:
 	virtual void OnOK();
 	virtual void OnCancel();
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnShowChannelNumber();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -142,7 +142,6 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>.\_Output(D)\NewProj(D).exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
@@ -232,6 +231,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="ColorEdit.cpp" />
     <ClCompile Include="CxStatic.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -389,6 +389,7 @@
     <ClInclude Include="BtnST.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="BurnToDiscDlg.h" />
+    <ClInclude Include="ColorEdit.h" />
     <ClInclude Include="CxStatic.h" />
     <ClInclude Include="CxStaticMemDC.h" />
     <ClInclude Include="DirObject.h" />

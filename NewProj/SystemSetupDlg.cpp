@@ -12,6 +12,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+ 
+#define TEXT_COLOR		RGB(255, 255, 255)
+#define BK_COLOR		RGB(47, 56, 66)
+
 /////////////////////////////////////////////////////////////////////////////
 // CSystemSetupDlg dialog
 
@@ -170,27 +174,27 @@ BOOL CSystemSetupDlg::OnInitDialog()
 	m_systemParamStatic.SetTextColor(RGB(200,200,200));
 	m_systemParamStatic.SetFont("Arial", 14, FW_NORMAL);
 	m_systemParamStatic.FormatW(CNewProjDlg::m_wLanguageRes[106]);
-	m_systemParamStatic.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_systemParamStatic.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_windowParamStc.SetTextColor(RGB(200,200,200));
 	m_windowParamStc.SetFont("Arial", 14, FW_NORMAL);
 	m_windowParamStc.FormatW(CNewProjDlg::m_wLanguageRes[535]);
-	m_windowParamStc.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_windowParamStc.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_mapParamStc.SetTextColor(RGB(200,200,200));
 	m_mapParamStc.SetFont("Arial", 14, FW_NORMAL);
 	m_mapParamStc.FormatW(CNewProjDlg::m_wLanguageRes[105]);
-	m_mapParamStc.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_mapParamStc.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_videoParamStc.SetTextColor(RGB(200,200,200));
 	m_videoParamStc.SetFont("Arial", 14, FW_NORMAL);
 	m_videoParamStc.FormatW(CNewProjDlg::m_wLanguageRes[109]);
-	m_videoParamStc.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_videoParamStc.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 		
 	m_fileAssStc.SetTextColor(RGB(200,200,200));
 	m_fileAssStc.SetFont("Arial", 14, FW_NORMAL);
 	m_fileAssStc.FormatW(CNewProjDlg::m_wLanguageRes[125]);
-	m_fileAssStc.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_fileAssStc.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_showGPSTrackBtn.SetIcon(IDI_UNCHECKED, BS_LEFT, IDI_CHECKED);
 	if(CNewProjDlg::g_config_Value_ST.bShowGPSTrack == TRUE) m_showGPSTrackBtn.SetCheck(1);
@@ -267,17 +271,17 @@ BOOL CSystemSetupDlg::OnInitDialog()
 	m_cmb_device_camera.AddString(_T("Below"));
 	m_cmb_device_camera.SetCurSel(CNewProjDlg::g_config_Value_ST.nDevCameraCmb);
 
-	m_edit_wtmk_vert.SetTextColor(RGB(255, 255, 255));
-	m_edit_wtmk_hori.SetTextColor(RGB(255, 255, 255));
-	m_edit_watermask.SetTextColor(RGB(255, 255, 255));
-	m_edit_alarm_vert.SetTextColor(RGB(255, 255, 255));
-	m_edit_alarm_hori.SetTextColor(RGB(255, 255, 255));
-	m_edit_dri_company_vert.SetTextColor(RGB(255, 255, 255));
-	m_edit_dri_company_hori.SetTextColor(RGB(255, 255, 255));
-	m_edit_dev_camera_vert.SetTextColor(RGB(255, 255, 255));
-	m_edit_dev_camera_hori.SetTextColor(RGB(255, 255, 255));
-	m_edit_acc_winker_vert.SetTextColor(RGB(255, 255, 255));
-	m_edit_acc_winder_hori.SetTextColor(RGB(255, 255, 255));
+	m_edit_wtmk_vert.SetTextColor(TEXT_COLOR);
+	m_edit_wtmk_hori.SetTextColor(TEXT_COLOR);
+	m_edit_watermask.SetTextColor(TEXT_COLOR);
+	m_edit_alarm_vert.SetTextColor(TEXT_COLOR);
+	m_edit_alarm_hori.SetTextColor(TEXT_COLOR);
+	m_edit_dri_company_vert.SetTextColor(TEXT_COLOR);
+	m_edit_dri_company_hori.SetTextColor(TEXT_COLOR);
+	m_edit_dev_camera_vert.SetTextColor(TEXT_COLOR);
+	m_edit_dev_camera_hori.SetTextColor(TEXT_COLOR);
+	m_edit_acc_winker_vert.SetTextColor(TEXT_COLOR);
+	m_edit_acc_winder_hori.SetTextColor(TEXT_COLOR);
 	wchar_t buf[4];
 	char	temp[4];
 	int n = sizeof(CNewProjDlg::g_config_Value_ST);
@@ -315,152 +319,152 @@ BOOL CSystemSetupDlg::OnInitDialog()
 	m_static_language.SetTextColor(RGB(200,200,200));
 	m_static_language.SetFont("Arial", 14, FW_NORMAL);
 	m_static_language.FormatW(CNewProjDlg::m_wLanguageRes[97]);
-	m_static_language.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_language.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_windows.SetTextColor(RGB(200,200,200));
 	m_static_windows.SetFont("Arial", 14, FW_NORMAL);
 	m_static_windows.FormatW(CNewProjDlg::m_wLanguageRes[129]);
-	m_static_windows.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_windows.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_viewscale.SetTextColor(RGB(200,200,200));
 	m_static_viewscale.SetFont("Arial", 14, FW_NORMAL);
 	m_static_viewscale.FormatW(CNewProjDlg::m_wLanguageRes[231]);
-	m_static_viewscale.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_viewscale.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_speedunit.SetTextColor(RGB(200,200,200));
 	m_static_speedunit.SetFont("Arial", 14, FW_NORMAL);
 	m_static_speedunit.FormatW(CNewProjDlg::m_wLanguageRes[618]);
-	m_static_speedunit.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_speedunit.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_maptype.SetTextColor(RGB(200,200,200));
 	m_static_maptype.SetFont("Arial", 14, FW_NORMAL);
 	m_static_maptype.FormatW(CNewProjDlg::m_wLanguageRes[135]);
-	m_static_maptype.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_maptype.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_watermask.SetTextColor(RGB(200,200,200));
 	m_static_watermask.SetFont("Arial", 14, FW_NORMAL);
 	m_static_watermask.FormatW(CNewProjDlg::m_wLanguageRes[273]);
-	m_static_watermask.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_watermask.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_wtmkhori.SetTextColor(RGB(200,200,200));
 	m_static_wtmkhori.SetFont("Arial", 14, FW_NORMAL);
 	m_static_wtmkhori.FormatW(CNewProjDlg::m_wLanguageRes[117]);
-	m_static_wtmkhori.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_wtmkhori.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_wtmkvert.SetTextColor(RGB(200,200,200));
 	m_static_wtmkvert.SetFont("Arial", 14, FW_NORMAL);
 	m_static_wtmkvert.FormatW(CNewProjDlg::m_wLanguageRes[118]);
-	m_static_wtmkvert.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_wtmkvert.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_wtmkhoripix.SetTextColor(RGB(200,200,200));
 	m_static_wtmkhoripix.SetFont("Arial", 14, FW_NORMAL);
 	m_static_wtmkhoripix.FormatW(CNewProjDlg::m_wLanguageRes[120]);
-	m_static_wtmkhoripix.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_wtmkhoripix.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_wtmkvertpix.SetTextColor(RGB(200,200,200));
 	m_static_wtmkvertpix.SetFont("Arial", 14, FW_NORMAL);
 	m_static_wtmkvertpix.FormatW(CNewProjDlg::m_wLanguageRes[120]);
-	m_static_wtmkvertpix.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_wtmkvertpix.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_alarmposi.SetTextColor(RGB(200,200,200));
 	m_static_alarmposi.SetFont("Arial", 14, FW_NORMAL);
 	m_static_alarmposi.FormatW(CNewProjDlg::m_wLanguageRes[37]);
-	m_static_alarmposi.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_alarmposi.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_alarmhori.SetTextColor(RGB(200,200,200));
 	m_static_alarmhori.SetFont("Arial", 14, FW_NORMAL);
 	m_static_alarmhori.FormatW(CNewProjDlg::m_wLanguageRes[117]);
-	m_static_alarmhori.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_alarmhori.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_alarmvert.SetTextColor(RGB(200,200,200));
 	m_static_alarmvert.SetFont("Arial", 14, FW_NORMAL);
 	m_static_alarmvert.FormatW(CNewProjDlg::m_wLanguageRes[118]);
-	m_static_alarmvert.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_alarmvert.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_alarmhoripix.SetTextColor(RGB(200,200,200));
 	m_static_alarmhoripix.SetFont("Arial", 14, FW_NORMAL);
 	m_static_alarmhoripix.FormatW(CNewProjDlg::m_wLanguageRes[120]);
-	m_static_alarmhoripix.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_alarmhoripix.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_alarmvertpix.SetTextColor(RGB(200,200,200));
 	m_static_alarmvertpix.SetFont("Arial", 14, FW_NORMAL);
 	m_static_alarmvertpix.FormatW(CNewProjDlg::m_wLanguageRes[120]);
-	m_static_alarmvertpix.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_alarmvertpix.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_accposi.SetTextColor(RGB(200,200,200));
 	m_static_accposi.SetFont("Arial", 14, FW_NORMAL);
 	m_static_accposi.FormatW(CNewProjDlg::m_wLanguageRes[37]);
-	m_static_accposi.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_accposi.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_acchori.SetTextColor(RGB(200,200,200));
 	m_static_acchori.SetFont("Arial", 14, FW_NORMAL);
 	m_static_acchori.FormatW(CNewProjDlg::m_wLanguageRes[117]);
-	m_static_acchori.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_acchori.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_accvert.SetTextColor(RGB(200,200,200));
 	m_static_accvert.SetFont("Arial", 14, FW_NORMAL);
 	m_static_accvert.FormatW(CNewProjDlg::m_wLanguageRes[118]);
-	m_static_accvert.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_accvert.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_acchoripix.SetTextColor(RGB(200,200,200));
 	m_static_acchoripix.SetFont("Arial", 14, FW_NORMAL);
 	m_static_acchoripix.FormatW(CNewProjDlg::m_wLanguageRes[120]);
-	m_static_acchoripix.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_acchoripix.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_accvertpix.SetTextColor(RGB(200,200,200));
 	m_static_accvertpix.SetFont("Arial", 14, FW_NORMAL);
 	m_static_accvertpix.FormatW(CNewProjDlg::m_wLanguageRes[120]);
-	m_static_accvertpix.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_accvertpix.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_driposi.SetTextColor(RGB(200,200,200));
 	m_static_driposi.SetFont("Arial", 14, FW_NORMAL);
 	m_static_driposi.FormatW(CNewProjDlg::m_wLanguageRes[37]);
-	m_static_driposi.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_driposi.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_drihori.SetTextColor(RGB(200,200,200));
 	m_static_drihori.SetFont("Arial", 14, FW_NORMAL);
 	m_static_drihori.FormatW(CNewProjDlg::m_wLanguageRes[117]);
-	m_static_drihori.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_drihori.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_drivert.SetTextColor(RGB(200,200,200));
 	m_static_drivert.SetFont("Arial", 14, FW_NORMAL);
 	m_static_drivert.FormatW(CNewProjDlg::m_wLanguageRes[118]);
-	m_static_drivert.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_drivert.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_drihoripix.SetTextColor(RGB(200,200,200));
 	m_static_drihoripix.SetFont("Arial", 14, FW_NORMAL);
 	m_static_drihoripix.FormatW(CNewProjDlg::m_wLanguageRes[120]);
-	m_static_drihoripix.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_drihoripix.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_drivertpix.SetTextColor(RGB(200,200,200));
 	m_static_drivertpix.SetFont("Arial", 14, FW_NORMAL);
 	m_static_drivertpix.FormatW(CNewProjDlg::m_wLanguageRes[120]);
-	m_static_drivertpix.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_drivertpix.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_devposi.SetTextColor(RGB(200,200,200));
 	m_static_devposi.SetFont("Arial", 14, FW_NORMAL);
 	m_static_devposi.FormatW(CNewProjDlg::m_wLanguageRes[37]);
-	m_static_devposi.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_devposi.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_devhori.SetTextColor(RGB(200,200,200));
 	m_static_devhori.SetFont("Arial", 14, FW_NORMAL);
 	m_static_devhori.FormatW(CNewProjDlg::m_wLanguageRes[117]);
-	m_static_devhori.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_devhori.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_devvert.SetTextColor(RGB(200,200,200));
 	m_static_devvert.SetFont("Arial", 14, FW_NORMAL);
 	m_static_devvert.FormatW(CNewProjDlg::m_wLanguageRes[118]);
-	m_static_devvert.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_devvert.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_devhoripix.SetTextColor(RGB(200,200,200));
 	m_static_devhoripix.SetFont("Arial", 14, FW_NORMAL);
 	m_static_devhoripix.FormatW(CNewProjDlg::m_wLanguageRes[120]);
-	m_static_devhoripix.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_devhoripix.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 
 	m_static_devvertpix.SetTextColor(RGB(200,200,200));
 	m_static_devvertpix.SetFont("Arial", 14, FW_NORMAL);
 	m_static_devvertpix.FormatW(CNewProjDlg::m_wLanguageRes[120]);
-	m_static_devvertpix.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_devvertpix.SetBkColor(BK_COLOR, 0, CxStatic::Normal);
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 
@@ -481,7 +485,7 @@ void CSystemSetupDlg::OnPaint()
 // 		CRect rt;
 // 		CDC* pDC = GetDC();
 // 		GetClientRect(&rt);
-// 		pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(47, 56, 66));
+// 		pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), BK_COLOR);
 	// Do not call CDialog::OnPaint() for painting messages]
 	
 }
@@ -491,7 +495,7 @@ BOOL CSystemSetupDlg::OnEraseBkgnd(CDC* pDC)
 	// TODO: Add your message handler code here and/or call default
 	CRect rt;
 	GetClientRect(&rt);
-	pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(47, 56, 66));
+	pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), BK_COLOR);
 	return TRUE;//CDialog::OnEraseBkgnd(pDC);
 }
 
