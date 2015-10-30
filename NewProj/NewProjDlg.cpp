@@ -147,6 +147,7 @@ BEGIN_MESSAGE_MAP(CNewProjDlg, CDialog)
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOVE()
 	//}}AFX_MSG_MAP
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -317,13 +318,16 @@ int CALLBACK BrowseCallbackProc(HWND hwnd,UINT uMsg,LPARAM lp, LPARAM pData)
 	}
 	return 0;
 }
+
 bool bFirstOpen = true;
 void CNewProjDlg::OnFileOpen() 
 {
-	if(m_nPathCounts != 0)
-	g_bOpenFlag = true;
+	if (m_nPathCounts != 0)
+		g_bOpenFlag = true;
+
 	CTimeLineDlg::m_bTimeFlag = false;
 	CToolBarDlg::g_bSoundPlay = false;
+
 	Sleep(50);
 	// TODO: Add your command handler code here
 	CString str = "";
@@ -360,9 +364,16 @@ void CNewProjDlg::OnFileOpen()
 	m_FolderTime.wMonth = wtoi(timeTemp);
 	timeTemp = m_FolderPath.Mid(m_FolderPath.GetLength() - 2, 2);	
 	m_FolderTime.wDay = wtoi(timeTemp);
-	memcpy(CNewProjDlg::g_config_Value_ST.lastpath, str, 260);
+	
 	CFile file;
-	if(!file.Open(_T(CONFIG_FILE_PATH), CFile::modeReadWrite)) return;
+	if(!file.Open(_T(CONFIG_FILE_PATH), CFile::modeReadWrite)) 
+	{
+		// clear last path
+		str.Empty();
+		memcpy(CNewProjDlg::g_config_Value_ST.lastpath, str, 260);
+		return;
+	}
+
 	file.Write(&CNewProjDlg::g_config_Value_ST, sizeof(CNewProjDlg::g_config_Value_ST));
 	file.Close();
 	strInfo ="D264\\mdvr.log"; 
@@ -393,8 +404,16 @@ void CNewProjDlg::OnFileOpen()
 	if(FileCount == 0) 
 	{
 		MessageBox(_T("No Exist 264 Files!"), NULL, 0);
+
+		// clear last path
+		str.Empty();
+		memcpy(CNewProjDlg::g_config_Value_ST.lastpath, str, 260);
 		return;
 	}
+
+	// save last path
+	memcpy(CNewProjDlg::g_config_Value_ST.lastpath, str, 260);	
+
 	for(i = 0 ; i < 20; i++)
 	{
 		m_FirstPathArrays[i] = "";
@@ -787,4 +806,16 @@ int wtoi(CString str)
 	WideCharToMultiByte(CP_ACP,	WC_NO_BEST_FIT_CHARS, str, wcslen(str), chAscii, MAX_PATH, NULL, NULL);
 	int nRet = atoi(chAscii);
 	return nRet;
+}
+
+void CNewProjDlg::OnClose()
+{
+	// TODO: Add your message handler code here and/or call default
+	// TODO: Add your command handler code here
+	CFile file;
+	file.Open(_T(CONFIG_FILE_PATH), CFile::modeWrite);
+	file.Write(&g_config_Value_ST, sizeof(Config_Datas));
+	file.Close();
+
+	CDialog::OnClose();
 }

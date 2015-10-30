@@ -119,6 +119,8 @@ protected:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnClose();
 };
 void WndsBK_Paint(CView1Dlg*, CView2Dlg*, int);
 int Unichar2Ascii(WCHAR *unichar, char* asciichar);
