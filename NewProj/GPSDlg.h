@@ -72,12 +72,15 @@ public:
 	int m_nWindowHeight;
 
 	bool m_bViewUpdatedArray[BROWSER_LIST_SIZE];
+	GPS_INFO m_gpsInitInfo;
+	bool m_bInitedGpsInfo;
 
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 
 	int getNextBrowserId(int nCurrentId);
 	void setGpsBrowser(GPS_INFO gpsCurInfo, int browserId);
 	void setActiveBrowser(int browserId);
+	void ResetMapInfo(bool bResetMap);
 };
 
 //{{AFX_INSERT_LOCATION}}

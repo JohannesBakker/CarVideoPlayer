@@ -14,6 +14,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #define VIEW_DIFF	3
+#define TIMER_INTERVAL	500
+
 /////////////////////////////////////////////////////////////////////////////
 // CGPSDlg dialog
 CGPSDlg::CGPSDlg(CWnd* pParent /*=NULL*/)
@@ -94,6 +96,7 @@ BOOL CGPSDlg::OnInitDialog()
 
 	m_nCurrentBrowserId = 0;
 	m_nLastGpsWinId = 0;
+	m_bInitedGpsInfo = false;
 
 	for (int i = 0; i < BROWSER_LIST_SIZE; i++)
 	{
@@ -110,7 +113,7 @@ BOOL CGPSDlg::OnInitDialog()
 
 	GetDlgItem(m_BrowserIdArray[m_nCurrentBrowserId])->MoveWindow(0, 0, m_nWindowWidth, m_nWindowHeight, true);
 
-	SetTimer(0, 1000, NULL);
+	SetTimer(0, TIMER_INTERVAL, NULL);
 
 	m_bInitComplete = true;
 
@@ -148,6 +151,12 @@ void CGPSDlg::ShowGPS_Pos(MainBinaryData * pMBDatas)
 	{
 		m_gpsOldInfo = m_gpsCurInfo;
 		m_bGPSUpdated = true;
+
+		if (m_bInitedGpsInfo == false)
+		{
+			m_gpsInitInfo = m_gpsCurInfo;
+			m_bInitedGpsInfo = true;
+		}
 
 		m_nLastGpsWinId = getNextBrowserId(m_nLastGpsWinId);
 
@@ -228,7 +237,33 @@ void CGPSDlg::setGpsBrowser(GPS_INFO gpsCurInfo, int browserId)
 void CGPSDlg::setActiveBrowser(int browserId)
 {
 	GetDlgItem(m_BrowserIdArray[browserId])->MoveWindow(0, 0, m_nWindowWidth, m_nWindowHeight);	
-	GetDlgItem(m_BrowserIdArray[m_nCurrentBrowserId])->MoveWindow(0, 0, 0, 0);
+
+	if (browserId != m_nCurrentBrowserId)
+		GetDlgItem(m_BrowserIdArray[m_nCurrentBrowserId])->MoveWindow(0, 0, 0, 0);
 
 	m_nCurrentBrowserId = browserId;
+}
+
+void CGPSDlg::ResetMapInfo(bool bResetMap)
+{
+	m_nCurrentBrowserId = 0;
+	m_nLastGpsWinId = 0;
+	m_bInitComplete = false;
+
+	GetDlgItem(m_BrowserIdArray[0])->MoveWindow(0, 0, m_nWindowWidth, m_nWindowHeight);	
+	for (int i = 1; i < BROWSER_LIST_SIZE; i++) 
+	{
+		GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, 0, 0);
+		m_bViewUpdatedArray[i] = false;
+	}
+
+	//m_bViewUpdatedArray[0] = true;
+	
+	if (bResetMap)
+	{
+		setActiveBrowser(m_nLastGpsWinId);
+		//setGpsBrowser(m_gpsInitInfo, m_nLastGpsWinId);
+	}
+	
+
 }

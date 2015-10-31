@@ -772,6 +772,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 				Init_PlayOpertion(m_1stFilePath, m_2ndFilePath);
 				OnPlayBtnClick();
 			}
+
+			m_pGpsDlg->ResetMapInfo(false);
+
 		}
 	}
 
@@ -1353,6 +1356,8 @@ void CToolBarDlg::OnStop()
 		memset(&m_pInfoListDlg->m_pBinData[i],0,sizeof(TempBinData));
 	}
 		binDataNum = 0;
+
+	m_pGpsDlg->ResetMapInfo(true);
 }
 
 void CToolBarDlg::OnStartCut() 
