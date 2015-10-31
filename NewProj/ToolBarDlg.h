@@ -227,9 +227,13 @@ protected:
 	//}}AFX_MSG
 public:	
 	bool m_bSeekSignal;
-	int m_alarmVal;
+	bool m_bAlarmOn;
+
 	int m_SignalId;
 	static CString m_AviPathStr;
+
+	void OnAlarmSwitch(bool bON);
+
 	afx_msg void OnOneWindow();
 	//afx_msg void OnMM_WOM_DONE(UINT parm1, LONG parm2);
 	DECLARE_MESSAGE_MAP()

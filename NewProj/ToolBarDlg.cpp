@@ -33,13 +33,6 @@ static char THIS_FILE[] = __FILE__;
 #define TIMER_ALARM		20009
 #define TIMER_RECORD_ALARM		20010
 
-enum {
-	REC_ALARM_STOP = -1,
-	REC_ALARM1 = 0,
-	REC_ALARM2,
-	REC_ALARM3,
-	REC_ALARM_MAX = REC_ALARM3,
-};
 
 HWAVEOUT		g_hWaveOut;
 #define VIDEOW 704
@@ -123,6 +116,8 @@ CToolBarDlg::CToolBarDlg(CWnd* pParent /*=NULL*/)
 	sprintf(m_statusStr,"%s", "Normal Play");
 	ZeroMemory(&m_DateTime, sizeof(m_DateTime));
 	//m_lpHdr = new WAVEHDR;
+
+	m_bAlarmOn = false;
 }
 
 void CToolBarDlg::DoDataExchange(CDataExchange* pDX)
@@ -407,7 +402,7 @@ BOOL CToolBarDlg::OnInitDialog()
 	m_pipe->m_audioTrack[0] = this->m_1stOutDatas[this->m_nPlayPtr].buf_A;
 
 	// init record alarm
-	m_recAlarm = REC_ALARM_STOP;
+	m_bAlarmOn = false;
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
@@ -808,21 +803,8 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 
 	if (nIDEvent == TIMER_RECORD_ALARM) 
 	{
-		if (m_recAlarm == REC_ALARM_STOP) {
-			m_number1.SetBitmap(IDB_NUMBER_ONE_WHITE);
-			m_number2.SetBitmap(IDB_NUMBER_TWO_WHITE);
-			m_number3.SetBitmap(IDB_NUMBER_THREE_WHITE);
-		}
-		else {
-			m_number1.SetBitmap(IDB_NUMBER_RED_CIRCLE);
-			m_number2.SetBitmap(IDB_NUMBER_RED_CIRCLE);
-			m_number3.SetBitmap(IDB_NUMBER_RED_CIRCLE);
-		}
-
-		if (m_recAlarm != REC_ALARM_STOP)
-			m_recAlarm = REC_ALARM_STOP;
-		else
-			m_recAlarm = REC_ALARM1;
+		OnAlarmSwitch(m_bAlarmOn);
+		m_bAlarmOn = !m_bAlarmOn;
 	}
 	CDialog::OnTimer(nIDEvent);
 }
@@ -1165,7 +1147,7 @@ void CToolBarDlg::OnRecordBegin()
 	GetDlgItem(IDC_REPAIR_FILE)->EnableWindow(false);
 
 	// start record alarm
-	m_recAlarm = REC_ALARM1;
+	m_bAlarmOn = true;
 	KillTimer(TIMER_ALARM);
 	SetTimer(TIMER_RECORD_ALARM, 400, NULL);
 }
@@ -1176,12 +1158,12 @@ void CToolBarDlg::OnRecordEnd()
 	// TODO: Add your control notification handler code here
 
 	// stop record alarm
-	m_recAlarm = REC_ALARM_STOP;
 	m_number1.SetBitmap(IDB_NUMBER_ONE_WHITE);
 	m_number2.SetBitmap(IDB_NUMBER_TWO_WHITE);
 	m_number3.SetBitmap(IDB_NUMBER_THREE_WHITE);
 	KillTimer(TIMER_RECORD_ALARM);
 	SetTimer(TIMER_ALARM,100,NULL);
+	m_bAlarmOn = false;
 
 
 	m_nEndPos = m_Slider_Seek.GetPos();
@@ -2386,4 +2368,18 @@ void CToolBarDlg::OnBnClickedRepairFile()
 		Repairing(&_1stRepairFile, &_2ndRepairFile);
 	else
 		Repairing(&_1stRepairFile, NULL);
+}
+
+void CToolBarDlg::OnAlarmSwitch(bool bON)
+{
+	if (bON == true) {
+		m_number1.SetBitmap(IDB_NUMBER_RED_CIRCLE);
+		m_number2.SetBitmap(IDB_NUMBER_RED_CIRCLE);
+		m_number3.SetBitmap(IDB_NUMBER_RED_CIRCLE);
+	}
+	else {
+		m_number1.SetBitmap(IDB_NUMBER_ONE_WHITE);
+		m_number2.SetBitmap(IDB_NUMBER_TWO_WHITE);
+		m_number3.SetBitmap(IDB_NUMBER_THREE_WHITE);
+	}
 }
