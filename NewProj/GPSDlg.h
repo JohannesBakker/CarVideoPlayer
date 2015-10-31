@@ -55,7 +55,29 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CExplorer1 m_WebBrowser;
+	CExplorer1 m_WebBrowser2;
+	CExplorer1 m_WebBrowser3;
+	CExplorer1 m_WebBrowser4;
+	CExplorer1 m_WebBrowser5;
+
+#define BROWSER_LIST_SIZE	5
+
+	CExplorer1* m_BrowerArray[BROWSER_LIST_SIZE];
+	int m_BrowserIdArray[BROWSER_LIST_SIZE];
+	int m_nCurrentBrowserId;
+	int m_nLastGpsWinId;
+	bool m_bInitComplete;
+
+	int m_nWindowWidth;
+	int m_nWindowHeight;
+
+	bool m_bViewUpdatedArray[BROWSER_LIST_SIZE];
+
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+
+	int getNextBrowserId(int nCurrentId);
+	void setGpsBrowser(GPS_INFO gpsCurInfo, int browserId);
+	void setActiveBrowser(int browserId);
 };
 
 //{{AFX_INSERT_LOCATION}}
