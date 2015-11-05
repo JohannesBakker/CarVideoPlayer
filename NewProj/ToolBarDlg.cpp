@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #define  RGBMAX   255   /* R,G, and B vary over 0-RGBMAX */
 /* HSLMAX BEST IF DIVISIBLE BY 6 */
 /* RGBMAX, HSLMAX must each fit in a byte. */
-/* Hue is undefined if Saturation is 0 (grey-scale) */
+/* Hue is undefined if Saturation is 0 (gray-scale) */
 /* This value determines where the Hue scrollbar is */
 /* initially set for achromatic colors */
 #define UNDEFINED (HSLMAX*2/3)
@@ -118,6 +118,8 @@ CToolBarDlg::CToolBarDlg(CWnd* pParent /*=NULL*/)
 	//m_lpHdr = new WAVEHDR;
 
 	m_bAlarmOn = false;
+	m_bClearGraph = true;
+
 }
 
 void CToolBarDlg::DoDataExchange(CDataExchange* pDX)
@@ -283,6 +285,7 @@ void CToolBarDlg::OnPlayBtnClick()
 	m_nOutDatasPtr = 0;
 	if(buf[1] != 'a')
 	{
+		
 		CNewProjDlg::g_nPlayState = STATE_PLAY;
 		SetDlgItemText(IDC_PLAY, _T("Pause"));
 		hBmp = (HBITMAP)::LoadImage(hInst, MAKEINTRESOURCE(IDB_BITMAP_PAUSE), IMAGE_BITMAP, 0, 0, 0);
@@ -292,6 +295,8 @@ void CToolBarDlg::OnPlayBtnClick()
 			
 			if(m_1stSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax()) == false) return;
 			if(m_2ndSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax()) == false) return;
+
+			
 			for(int  i = 0 ; i < 5; i++)
 			{
 				m_1stSpliter.GetDatas1();
@@ -305,6 +310,8 @@ void CToolBarDlg::OnPlayBtnClick()
 				m_nOutDatasPtr ++;
 
 			}
+
+		
 			m_bPlayer1 = true;
 			SetTimer(TIMER_PLAYER1, m_nSpeed / 10, NULL);
 			m_bPlayer2 = true;
@@ -314,6 +321,7 @@ void CToolBarDlg::OnPlayBtnClick()
 		}else if(m_nThreadCounts == 1)
 		{
 			m_1stSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax());
+
 			for(int i = 0 ; i < 5; i++)
 			{
 				m_1stSpliter.GetDatas1();
@@ -463,7 +471,11 @@ void CToolBarDlg::OnAvi()
 {
 	// TODO: Add your control notification handler code here
 	if(m_1stFilePath == "") return;
+
+	m_bClearGraph = false;
 	OnStop();
+	m_bClearGraph = true;
+	
 	m_AVIConverterDlg.m_bPaint = true;
 	m_AVIConverterDlg.m_1stFilePath = m_1stFilePath;
 	m_AVIConverterDlg.m_2ndFilePath = m_2ndFilePath;
@@ -547,6 +559,7 @@ void CToolBarDlg::Init_PlayOpertion(CString path1, CString path2)
 		m_2ndSpliter.Initialization(&m_2ndFile);
 		CNewProjDlg::g_config_Value_ST.nWndCounts = 2;
 	}
+	
 }
 FILE* fp = fopen("c:\\temp1.bin", "wb");
 void CToolBarDlg::OnTimer(UINT nIDEvent) 
@@ -557,7 +570,10 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 
 	if(CTimeLineDlg::m_bTimeSeekFlag == true)
 	{
+		m_bClearGraph = false;
 		OnStop();
+		m_bClearGraph = true;
+		
 		KillTimer(TIMER_PLAYER1);
 		KillTimer(TIMER_PLAYER2);
 		KillTimer(TIMER_SLIDER);
@@ -567,7 +583,10 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 	}
 	if(CNewProjDlg::g_bOpenFlag == true) 
 	{
+		m_bClearGraph = false;
 		OnStop();
+		m_bClearGraph = true;
+		
 		KillTimer(TIMER_PLAYER1);
 		KillTimer(TIMER_PLAYER2);
 		KillTimer(TIMER_SLIDER);
@@ -581,7 +600,10 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 	}
 	if(CNewProjDlg::g_bResetFlag == true)
 	{
+		m_bClearGraph = false;
 		OnStop();
+		m_bClearGraph = true;
+		
 		CNewProjDlg::g_bResetFlag = false;
 		g_bSoundPlay = false;
 		m_1stFilePath = CNewProjDlg::m_FirstPathArrays[CNewProjDlg::m_nPathArraysPtr];
@@ -591,7 +613,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 	}
 	if(CTimeLineDlg::m_bTimeFlag == false) 
 	{
+		m_bClearGraph = false;
 		OnStop();
+		m_bClearGraph = true;
 		return;
 	}
 
@@ -602,6 +626,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 		char buf[100];
 		CString str;
 		int nSecs = (m_1stSpliter.m_1stOutDatas.dwDTS_V - m_dwFirstDTS) / 1000;
+		int nMiliSecs = m_1stSpliter.m_1stOutDatas.dwDTS_V;
+		int nDwFirstDTS = m_dwFirstDTS;
+		
 		str.Format(_T("%02d:%02d  Current Time %04d-%02d-%02d %02d:%02d:%02d"), nSecs / 60, 
 			nSecs % 60, CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr].wYear,
 			CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr].wMonth, CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr].wDay,
@@ -612,8 +639,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 		m_Slider_Seek.strTipText = str;
 		if(!g_bSoundPlay) waveOutSetVolume(g_hWaveOut, (DWORD)((float)m_slider_volume.GetPos() / 100 * 0xFFFF));
 		else waveOutSetVolume(g_hWaveOut, (DWORD)((float)m_slider_volume.GetPos() / 100 * 0x0000));
+
 		if(m_1stSpliter.GetDatas1() == -1) 
-			g_ErrRead = true;
+			g_ErrRead = true;		
 		
 		m_1stOutDatas[m_nOutDatasPtr]= m_1stSpliter.m_1stOutDatas;
 		if(CNewProjDlg::g_config_Value_ST.nWndCounts == 2)
@@ -669,7 +697,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 		}
 		m_1stSpliter.m_1stOutDatas.bBuf = false;
 		if (m_1stSpliter.m_1stOutDatas.nB_Size == 60 && m_bDrawSeek ==FALSE)
-		{			
+		{	
+
+
 			m_pGpsDlg->ShowGPS_Pos(&m_1stSpliter.m_1stOutDatas.mB_Data);
 			m_pInfoListDlg->m_pBinData[binDataNum].mBinData =   m_1stSpliter.m_1stOutDatas.mB_Data;
 			m_pInfoListDlg->m_pBinData[binDataNum].nBinSize =   m_1stSpliter.m_1stOutDatas.nB_Size;
@@ -678,7 +708,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 			m_pInfoListDlg->m_BinDataCount = binDataNum;
 			m_pInfoListDlg->m_dura = m_duration;
 			 
-			m_pInfoListDlg->DrawGraph(&m_1stSpliter.m_1stOutDatas.mB_Data,m_Slider_Seek.GetPos(),CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr],m_1stSpliter.m_1stOutDatas.nB_Size, m_1stSpliter.m_file->GetLength(),m_bDrawSeek );
+			m_pInfoListDlg->DrawGraph(&m_1stSpliter.m_1stOutDatas.mB_Data,m_Slider_Seek.GetPos(),CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr],m_1stSpliter.m_1stOutDatas.nB_Size, m_1stSpliter.m_file->GetLength(),m_bDrawSeek,
+				nDwFirstDTS, nMiliSecs);
+			
 			if(m_prevPos != m_Slider_Seek.GetPos())
 			{
 				m_prevPos = m_Slider_Seek.GetPos();
@@ -688,9 +720,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 			}						
 		}
 		else if(m_1stSpliter.m_1stOutDatas.nB_Size != 0 && m_bDrawSeek == TRUE)
-		{
-			
-			m_pInfoListDlg->DrawGraph(&m_1stSpliter.m_1stOutDatas.mB_Data,m_Slider_Seek.GetPos(),CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr],m_1stSpliter.m_1stOutDatas.nB_Size ,m_1stSpliter.m_file->GetLength(),m_bDrawSeek);
+		{			
+			m_pInfoListDlg->DrawGraph(&m_1stSpliter.m_1stOutDatas.mB_Data,m_Slider_Seek.GetPos(),CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr],m_1stSpliter.m_1stOutDatas.nB_Size ,m_1stSpliter.m_file->GetLength(),m_bDrawSeek,
+				nDwFirstDTS, nMiliSecs);
 
 			m_bDrawSeek = FALSE;	
 		}
@@ -757,7 +789,11 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 			m_Slider_Seek.SetPos(m_1stSpliter.m_1stOutDatas.dwDTS_V - m_1stSpliter.m_dwFirstDTS);
 			m_1stSpliter.m_file->Close();
 			m_2ndSpliter.m_file->Close();
+
+			m_bClearGraph = false;
 			OnStop();
+			m_bClearGraph = true;
+			
 			if(CNewProjDlg::m_nPathArraysPtr < CNewProjDlg::m_nPathCounts - 1)
 			{
 				
@@ -989,6 +1025,10 @@ void CToolBarDlg::OnCustomdrawSliderSeek(NMHDR* pNMHDR, LRESULT* pResult)
 void CToolBarDlg::OnReleasedcaptureSliderSeek(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	//if(g_hWaveOut) waveOutReset(g_hWaveOut);
+	bool bPlayer1 = m_bPlayer1;
+	bool bPlayer2 = m_bPlayer2;
+	int prevBinDataTime = binDataNum;
+
 	if(CNewProjDlg::g_config_Value_ST.nWndCounts == 0) return;
 	if(m_nThreadCounts == 2) 
 	{
@@ -1032,6 +1072,10 @@ void CToolBarDlg::OnReleasedcaptureSliderSeek(NMHDR* pNMHDR, LRESULT* pResult)
 		if(m_1stSpliter.m_file->m_hFile != INVALID_HANDLE_VALUE /*0xFFFFFFFF*/)
 		m_1stSpliter.m_file->Close();
 	}
+
+	// reset info list dlg.
+	m_pInfoListDlg->ClearAlarmGraph();
+
 	float fPos = (float)nSeekPos;
 	if(m_2ndFilePath != "") m_nThreadCounts = 2;
 	else m_nThreadCounts = 1;
@@ -1044,7 +1088,8 @@ void CToolBarDlg::OnReleasedcaptureSliderSeek(NMHDR* pNMHDR, LRESULT* pResult)
 		m_2ndFile.Open(CNewProjDlg::m_SecondPathArrays[CNewProjDlg::m_nPathArraysPtr], CFile::modeRead);
 		m_2ndSpliter.Initialization(&m_2ndFile);
 		m_2ndSpliter.m_file->SeekToBegin();
-		SetTimer(TIMER_SLIDER, 1000, NULL);
+
+		//SetTimer(TIMER_SLIDER, 1000, NULL);
 		if(m_1stSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax()) == false) return;
 		if(m_2ndSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax(), m_1stSpliter.m_FrameHeader.dwDTS) == false) return;
 		bool bExit = false;
@@ -1066,6 +1111,12 @@ void CToolBarDlg::OnReleasedcaptureSliderSeek(NMHDR* pNMHDR, LRESULT* pResult)
 				bExit = m_2ndSpliter.ReSeek();
 			}while(!bExit);
 		}
+
+		if (bPlayer1 == false)
+			return;
+
+		SetTimer(TIMER_SLIDER, 1000, NULL);
+
 		m_bPlayer1 = true;
 		SetTimer(TIMER_PLAYER1, m_nSpeed / 10, NULL);
 		m_bPlayer2 = true;
@@ -1084,12 +1135,21 @@ void CToolBarDlg::OnReleasedcaptureSliderSeek(NMHDR* pNMHDR, LRESULT* pResult)
 		}
 	}else if(m_nThreadCounts == 1)
 	{
-		SetTimer(TIMER_SLIDER, 1000, NULL);
+		
+
+		//SetTimer(TIMER_SLIDER, 1000, NULL);
 		m_1stFile.Open(CNewProjDlg::m_FirstPathArrays[CNewProjDlg::m_nPathArraysPtr], CFile::modeRead);
 		m_1stSpliter.Initialization(&m_1stFile);
 		m_1stSpliter.m_file->SeekToBegin();
 		m_1stSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax());
 		m_bPlayer1 = true;
+
+		// only playing
+		if (bPlayer1 == false)
+			return;
+
+		SetTimer(TIMER_SLIDER, 1000, NULL);
+
 		for(int i = 0; i < 5; i++)
 		{
 			m_1stSpliter.GetDatas1();
@@ -1104,6 +1164,7 @@ void CToolBarDlg::OnReleasedcaptureSliderSeek(NMHDR* pNMHDR, LRESULT* pResult)
 	m_pipe->StartPlayingFromFile();
 	//AfxBeginThread(SoundPlayThread, this);
 	*pResult = 0;
+
 }
 
 void CToolBarDlg::OnOutofmemorySliderSeek(NMHDR* pNMHDR, LRESULT* pResult) 
@@ -1181,7 +1242,11 @@ void CToolBarDlg::OnRecordEnd()
 	m_TimeRangeDlg.m_EndDateTime.wMinute = (WORD)(dwTime / 60) % 60;
 	m_TimeRangeDlg.m_EndDateTime.wSecond = (WORD)(dwTime % 60);
 	m_TimeRangeDlg.m_bRecordCurFlag = true;
+
+	m_bClearGraph = false;
 	OnStop();
+	m_bClearGraph = true;
+	
 	m_TimeRangeDlg.UpdateWnd();
 	m_TimeRangeDlg.m_1stFile = &m_1stFile;
 	if(CNewProjDlg::g_config_Value_ST.nWndCounts == 2)
@@ -1196,7 +1261,11 @@ void CToolBarDlg::OnRecordEnd()
 		KillTimer(TIMER_PLAYER1);
 		KillTimer(TIMER_PLAYER2);
 		KillTimer(TIMER_SLIDER);
+
+		m_bClearGraph = false;
 		OnStop();
+		m_bClearGraph = true;
+		
 		wchar_t		szFilter[]= _T("AVI Files(*.avi)|*.avi|");
 		CFileDialog	dlg(FALSE,NULL,NULL,OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT, szFilter);
 		if(dlg.DoModal() ==IDOK)
@@ -1239,7 +1308,10 @@ void CToolBarDlg::OnRecordEnd()
 	GetDlgItem(IDC_ADJUST)->EnableWindow(true);
 	GetDlgItem(IDC_FULLSCREEN)->EnableWindow(true);
 	GetDlgItem(IDC_REPAIR_FILE)->EnableWindow(true);
+
+	m_bClearGraph = false;
 	OnStop();
+	m_bClearGraph = true;
 }
 
 void CToolBarDlg::OnFast() 
@@ -1358,6 +1430,9 @@ void CToolBarDlg::OnStop()
 		binDataNum = 0;
 
 	m_pGpsDlg->ResetMapInfo(true);
+
+	if (m_bClearGraph)
+		m_pInfoListDlg->ClearAlarmGraph();
 }
 
 void CToolBarDlg::OnStartCut() 
@@ -1430,7 +1505,11 @@ void CToolBarDlg::OnEndCut()
 	itoa(m_TimeRangeDlg.m_StartDateTime.wSecond, buf, 10);
 	if(m_TimeRangeDlg.m_StartDateTime.wSecond < 10) path += "0";
 	path += buf;
+
+	m_bClearGraph = false;
 	OnStop();
+	m_bClearGraph = true;
+	
 	m_TimeRangeDlg.m_bRecordCurFlag = false;
 	m_TimeRangeDlg.UpdateWnd();
 	m_TimeRangeDlg.m_dw1stStartPos = m_dw1stStartPos;
@@ -1456,7 +1535,9 @@ void CToolBarDlg::OnEndCut()
 		m_ProgressDlg.Init_Progress(m_1stSpliter.m_file, NULL, m_dw1stStartPos, m_1stSpliter.m_file->GetPosition(), 0, 0);
 	if(m_TimeRangeDlg.DoModal() == IDOK)
 	{
+		m_bClearGraph = false;
 		OnStop();	
+		m_bClearGraph = true;
 	}
 	MessageBox(_T("Success Spliting!"), NULL, 0);
 #endif
@@ -1487,7 +1568,10 @@ void CToolBarDlg::OnEndCut()
 	GetDlgItem(IDC_ADJUST)->EnableWindow(true);
 	GetDlgItem(IDC_FULLSCREEN)->EnableWindow(true);
 	GetDlgItem(IDC_REPAIR_FILE)->EnableWindow(true);
+
+	m_bClearGraph = false;
 	OnStop();
+	m_bClearGraph = true;
 }
 
 void CToolBarDlg::OnPaint() 
@@ -1591,7 +1675,11 @@ void CToolBarDlg::OnPaint()
 void CToolBarDlg::ReSet()
 {
 	if(m_1stFilePath == "") return;
+
+	m_bClearGraph = false;
 	OnStop();
+	m_bClearGraph = true;
+	
 	if(CNewProjDlg::g_config_Value_ST.bAutoPlay == true) OnPlayBtnClick();
 }
 
@@ -2367,7 +2455,11 @@ void CToolBarDlg::OnBnClickedRepairFile()
 		MessageBox(_T("Cannot Create Repair File"),NULL, NULL);
 		return;
 	}
+
+	m_bClearGraph = false;
 	OnStop();
+	m_bClearGraph = true;
+	
 	Sleep(100);
 	if(CNewProjDlg::m_SecondPathArrays[CNewProjDlg::m_nPathArraysPtr] != "")
 		Repairing(&_1stRepairFile, &_2ndRepairFile);

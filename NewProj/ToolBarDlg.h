@@ -231,6 +231,7 @@ public:
 
 	int m_SignalId;
 	static CString m_AviPathStr;
+	bool m_bClearGraph;
 
 	void OnAlarmSwitch(bool bON);
 
@@ -242,8 +243,8 @@ public:
 	afx_msg void OnBnClickedNextSeg();
 	afx_msg void OnBnClickedRepairFile();
 
-private:
-	int m_recAlarm;
+
+
 
 };
 

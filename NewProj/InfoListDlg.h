@@ -24,10 +24,12 @@ public:
 public:
 	void load_file_list(DWORD,SYSTEMTIME ,int,DWORD,DWORD, int);
 	void load_event_list(CString,SYSTEMTIME);
-    void DrawGraph(MainBinaryData*,DWORD,DWORD,DWORD,DWORD,bool);
+	void DrawGraph(MainBinaryData* pData,DWORD curPos,DWORD dura,DWORD nBinSize,DWORD totalSize,bool bSeek, DWORD dwFristDTS, DWORD currDTS);
 	void DrawAccelSpeedGraph(MainBinaryData* , DWORD  , DWORD, DWORD );
 	void DrawSpeedGraph(MainBinaryData* , DWORD  , DWORD , DWORD, bool);
-	void DrawAlarmGraph(MainBinaryData* , DWORD  , DWORD ,DWORD);
+	void DrawAlarmGraph(DWORD dwFristDTS, DWORD currDTS, MainBinaryData* pData);
+	void ClearAlarmGraph();
+
 public:
 	bool			m_bInfoList;
 	bool			m_bState;

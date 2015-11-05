@@ -14,6 +14,12 @@ static char THIS_FILE[] = __FILE__;
 
 #define fixed_col_w 80
 #define fixed_col_h 37
+
+#define x_DataWidth		5
+#define x_DataHeight	20
+
+#define TIME_STEP		500
+
 /////////////////////////////////////////////////////////////////////////////
 // CAlarmGraph
 TempBinData CAlarmGraph::m_pAlarmBinData[100000];
@@ -26,6 +32,15 @@ CAlarmGraph::CAlarmGraph(CWnd* pWnd, CRect rt, UINT uID)
 
 	Create(NULL,NULL, dwFlags, rt, pWnd, uID);
 	m_curPosX = m_curPosY = 0;
+
+	m_dwSizePerData = 0;
+	m_dwVideoStartFilePos = 0;
+	m_dwCurretFilePos = 0;
+	m_nTotalPoints = 0;
+	m_nOffsetX = 0;
+	m_nStartNo = 0;
+
+	m_arrBinData.RemoveAll();
 }
 
 CAlarmGraph::~CAlarmGraph()
@@ -56,7 +71,7 @@ void CAlarmGraph::OnPaint()
 	memDC.CreateCompatibleDC(&dc);
 	bmp.CreateCompatibleBitmap(&dc, rt.Width(), rt.Height());
 	poldbmp = memDC.SelectObject(&bmp);
-	//¹É°Ò»°°û¶®±¨ 
+
 	CBrush hBrush(RGB(47, 56, 66));
 	memDC.FillRect(&rt, &hBrush);
 
@@ -88,7 +103,7 @@ void CAlarmGraph::OnPaint()
 	memDC.SetBkColor(RGB(47, 57, 66));
 	memDC.SetTextColor(RGB(185, 185, 255));
 
-//	Draw grid lines
+	//	Draw grid lines
 	int nCols = rt.Width() / fixed_col_w;
 	int nRows = rt.Height() / fixed_col_h;
 	int x, y;	
@@ -105,7 +120,7 @@ void CAlarmGraph::OnPaint()
 		memDC.LineTo(rt.Width(), y*fixed_col_h+19-m_curPosY);
 	}
 
-//	Draw Text
+	//	Draw Text
 	char StrBuf[100];
 	memset(StrBuf, 0, sizeof(StrBuf));
 	for(y=0; y < 8; y++)
@@ -126,40 +141,51 @@ void CAlarmGraph::OnPaint()
 	CPen redPen(PS_SOLID, 1, RGB(255, 0, 0));
 	memDC.SelectObject(&redPen);
 	CPoint oldPoint[8];
-	for ( i = 0; i < m_BinCount; i++){
-		//get the alarm informations
-		for(x=0; x<8; x++)
-			alarms[x < 4 ? x: 11-x] = (m_pAlarmBinData[i].mBinData.alarmInfo & j << x) >> x;
 
-		//Draw them
-		//Attention!!! In the case of alarm is active, the height of wave of it is 20, that is  
-		for(x = 0; x<8; x++){			
-			int cx =dx+i - m_curPosX, cy = x*fixed_col_h + 28-m_curPosY-alarms[x] * 20;
-			if(i == 0)
-				memDC.MoveTo(cx, cy);
-			else
-			{
+	for (i = 0; i < m_arrBinData.GetSize(); i++) {
+
+		AlarmBinData_t oneData = m_arrBinData.GetAt(i);
+
+		// get the alarm informations
+		for (x = 0; x < 8; x++) {
+			alarms[x < 4 ? x: 11-x] = (oneData.alamBinData.alarmInfo & j << x) >> x;
+
+			// Draw them
+			// Attention!!! In the case of alarm is active, the height of wave of it is 20, that is
+			int timeOffset = (oneData.alarmOffsetTime - m_dwFirstDTS) / TIME_STEP;
+			int cx = dx + timeOffset * x_DataWidth - m_curPosX;
+			int cy = x * fixed_col_h + 28 - m_curPosY - alarms[x] * x_DataHeight;
+			cy = x * fixed_col_h + 28 - m_curPosY;
+
+			if (i == 0) {
+				//memDC.MoveTo(cx, cy);
+
+				memDC.MoveTo(dx - m_curPosX, cy);
+				//memDC.LineTo(cx, cy);
+			}
+			else {
 				memDC.MoveTo(oldPoint[x]);
 				int yy = oldPoint[x].y;
 
-				if(cy != oldPoint[x].y)
-				{
-					memDC.LineTo(cx, cy);
-					memDC.MoveTo(cx, cy);
+				if (cx != oldPoint[x].x) {
+					memDC.LineTo(cx, yy);
 				}
 			}
-			memDC.LineTo(++cx, cy);
+
+			memDC.LineTo(cx, cy);
 			oldPoint[x] = CPoint(cx, cy);
 		}
 	}
-
+	
 	dc.BitBlt(rt.left, rt.top, rt.Width(), rt.Height(), &memDC, 0, 0, SRCCOPY);
 	memDC.SelectObject(poldbmp);
 	memDC.DeleteDC();
 	// TODO: Add your message handler code here
-	
+
 	// Do not call CStatic::OnPaint() for painting messages
 }
+
+
 void CAlarmGraph::setDatas(DWORD dura,TempBinData* pBinData, int count )
 {
 	m_dura =  dura;
@@ -167,6 +193,54 @@ void CAlarmGraph::setDatas(DWORD dura,TempBinData* pBinData, int count )
 	m_BinCount = count;
 	m_nAlarmCount = 0;
 	UpdateScrollSizes();
+	Invalidate();
+}
+
+void CAlarmGraph::setDatasWithSize(DWORD videoStartFilePos, DWORD fileCurrPos, DWORD sizePerData, TempBinData* pBinData, int count)
+{
+	m_dwVideoStartFilePos = videoStartFilePos;
+	m_dwCurretFilePos = fileCurrPos;
+	m_dwSizePerData = sizePerData;
+
+	memcpy((void*)&m_pAlarmBinData,(void*)pBinData,sizeof(TempBinData)*count);
+	m_BinCount = count;
+	m_nAlarmCount = 0;
+
+	UpdateScrollSizesExt();
+	Invalidate();
+}
+
+void CAlarmGraph::setDatasWithTime(DWORD dwFristDTS, DWORD currDTS, MainBinaryData* pBinData)
+{
+	AlarmBinData_t newAlarm;
+
+	newAlarm.alarmOffsetTime = currDTS;
+	memcpy(&newAlarm.alamBinData, pBinData, sizeof(MainBinaryData));
+
+	m_arrBinData.Add(newAlarm);
+
+	m_dwFirstDTS = dwFristDTS;
+
+	UpdateScrollSizesExt2();
+	Invalidate();
+
+}
+
+void CAlarmGraph::ClearAlarmGraph()
+{
+	m_dura = 0;
+//	memset((void*)&m_pAlarmBinData, 0, sizeof(m_pAlarmBinData));
+	m_BinCount = 0;
+	m_nAlarmCount = 0;
+	
+	m_dwCurretFilePos = 0;
+	m_dwVideoStartFilePos = 0;
+	m_dwSizePerData = 1;
+
+	m_arrBinData.RemoveAll();
+	
+//	UpdateScrollSizesExt();
+	UpdateScrollSizesExt2();
 	Invalidate();
 }
 
@@ -290,6 +364,7 @@ void CAlarmGraph::UpdateScrollSizes()
 	info.nMax = 100;
 	if(rt.Width() == 0) return;
 	int npages;
+
 	if(m_BinCount < rt.Width() && m_BinCount > rt.Width() - fixed_col_w - 45)
 		npages = m_BinCount / (rt.Width() - fixed_col_w - 45);
 	else
@@ -303,6 +378,97 @@ void CAlarmGraph::UpdateScrollSizes()
 
 #endif
 }
+
+void CAlarmGraph::UpdateScrollSizesExt()
+{
+	// patch from Dave Williss via CodeProject
+	SCROLLINFO info;
+	info.cbSize = sizeof(info);
+	info.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_DISABLENOSCROLL;
+	info.nMin = 0;
+	info.nMax = 100;
+	info.nPage = 50;
+	info.nPos =  m_curPosY;
+	SetScrollInfo(SB_VERT, &info);
+
+
+	CRect rt;
+	GetClientRect(&rt);
+	
+	info.nMax = 100;
+	if(rt.Width() == 0) return;
+
+	m_nTotalPoints = (m_dwCurretFilePos - m_dwVideoStartFilePos) / m_dwSizePerData;
+	int nStartPointNo = m_nTotalPoints - m_BinCount;
+	
+	int nPages;
+
+	if (m_nTotalPoints < rt.Width() && m_nTotalPoints > rt.Width() - fixed_col_w - 45)
+		nPages = m_nTotalPoints / (rt.Width() - fixed_col_w - 45);
+	else
+		nPages = m_nTotalPoints / rt.Width();
+
+	if (m_nTotalPoints % rt.Width() > 0)
+		nPages ++;
+
+	if (nPages == 0)
+		nPages = 1;
+
+	info.nPage = 100 / nPages;
+	info.nPos = (int)(((float)m_curPosX / abs(m_nTotalPoints - rt.Width())) * 100);
+	//info.nPos = nStartPointNo;
+
+	m_nStartNo = nStartPointNo;
+	
+	SetScrollInfo(SB_HORZ, &info);
+
+}
+
+void CAlarmGraph::UpdateScrollSizesExt2()
+{
+	// patch from Dave Williss via CodeProject
+	SCROLLINFO info;
+	info.cbSize = sizeof(info);
+	info.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_DISABLENOSCROLL;
+	info.nMin = 0;
+	info.nMax = 100;
+	info.nPage = 50;
+	info.nPos =  m_curPosY;
+	SetScrollInfo(SB_VERT, &info);
+
+
+	CRect rt;
+	GetClientRect(&rt);
+
+	info.nMax = 100;
+	if(rt.Width() == 0) return;
+
+	DWORD times = m_dwFirstDTS;
+	int arrSize = m_arrBinData.GetCount();
+	int vaildPoints = (rt.Width() - fixed_col_w - 45) / x_DataWidth;
+
+	if (arrSize > 0) {
+		AlarmBinData_t lastData = m_arrBinData.GetAt(arrSize - 1);
+
+		m_nTotalPoints = (lastData.alarmOffsetTime - m_dwFirstDTS) / TIME_STEP;
+	}
+	else {
+		m_nTotalPoints = 0;
+	}
+
+	int nPages;
+
+	nPages = m_nTotalPoints / vaildPoints;
+	
+	if (nPages <= 0)
+		nPages = 1;
+
+	info.nPage = 100 / nPages;
+	info.nPos = (int)((float)m_curPosX / abs(m_nTotalPoints*x_DataWidth - rt.Width()) * 100);
+
+	SetScrollInfo(SB_HORZ, &info);
+}
+
 
 void CAlarmGraph::OnSize(UINT nType, int cx, int cy)
 {

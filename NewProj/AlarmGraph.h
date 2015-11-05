@@ -10,6 +10,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // CAlarmGraph window
 
+typedef struct {
+	DWORD	alarmOffsetTime;
+	MainBinaryData	alamBinData;
+} AlarmBinData_t;
+
 class CAlarmGraph : public CWnd
 {
 // Construction
@@ -25,10 +30,27 @@ public:
 	int		m_curPosX;
 	int		m_curPosY;
 
+	DWORD	m_dwVideoStartFilePos;
+	DWORD	m_dwCurretFilePos;
+	DWORD	m_dwSizePerData;
+	int		m_nTotalPoints;
+	int		m_nStartNo;
+	int		m_nOffsetX;
+
+	DWORD	m_dwFirstDTS;
+	CArray<AlarmBinData_t, AlarmBinData_t> m_arrBinData;
+
 // Operations
 public:
 	void setDatas(DWORD dura,TempBinData* pBinData, int count );
-	void UpdateScrollSizes();
+	void UpdateScrollSizes();	
+	void ClearAlarmGraph();
+
+	void setDatasWithSize(DWORD fileSize, DWORD fileCurrPos, DWORD sizePerData, TempBinData* pBinData, int count );
+	void UpdateScrollSizesExt();
+	void UpdateScrollSizesExt2();
+
+	void setDatasWithTime(DWORD dwFristDTS, DWORD currDTS, MainBinaryData* pBinData);
 
 // Overrides
 	// ClassWizard generated virtual function overrides

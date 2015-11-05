@@ -495,7 +495,7 @@ void CInfoListDlg::OnSelchangeTab(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
-void CInfoListDlg::DrawGraph(MainBinaryData* pData,DWORD curPos,DWORD dura,DWORD nBinSize,DWORD totalSize,bool bSeek)
+void CInfoListDlg::DrawGraph(MainBinaryData* pData,DWORD curPos,DWORD dura,DWORD nBinSize,DWORD totalSize,bool bSeek, DWORD dwFristDTS, DWORD currDTS)
 {
 	switch(nBinSize)
 	{
@@ -506,13 +506,15 @@ void CInfoListDlg::DrawGraph(MainBinaryData* pData,DWORD curPos,DWORD dura,DWORD
 	case 60:
 		DrawAccelSpeedGraph( pData, curPos,  dura, totalSize);
 		DrawSpeedGraph( pData, curPos,  dura, totalSize,bSeek);
-		DrawAlarmGraph( pData, curPos,  dura, totalSize);
+		DrawAlarmGraph(dwFristDTS, currDTS, &pData[nBinSize - 1]);
 		break;
 	default:
 		return;
 	}
-	
 }
+
+
+
 void CInfoListDlg::DrawAccelSpeedGraph(MainBinaryData* pData,DWORD curPos,DWORD dura,DWORD totalSize)
 {
 	m_accGraphWnd.setDatas(dura,m_pBinData,m_BinDataCount);
@@ -525,10 +527,18 @@ void CInfoListDlg::DrawSpeedGraph(MainBinaryData* pData,DWORD curPos,DWORD dura,
 
 }
 
-void CInfoListDlg::DrawAlarmGraph(MainBinaryData* pData,DWORD curPos,DWORD dura,DWORD totalSize)
+void CInfoListDlg::DrawAlarmGraph(DWORD dwFristDTS, DWORD currDTS, MainBinaryData* pData)
 {
-	m_alarmGraphWnd->setDatas(dura,m_pBinData,m_BinDataCount);
+	m_alarmGraphWnd->setDatasWithTime(dwFristDTS, currDTS, pData);
 	//m_alarmGraphWnd->Invalidate();
+}
+
+
+
+void CInfoListDlg::ClearAlarmGraph()
+{
+
+	m_alarmGraphWnd->ClearAlarmGraph();
 }
 
 void CInfoListDlg::load_event_list(CString infoFile,SYSTEMTIME dateTime)
