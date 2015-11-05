@@ -77,10 +77,14 @@ public:
 
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 
-	int getNextBrowserId(int nCurrentId);
-	void setGpsBrowser(GPS_INFO gpsCurInfo, int browserId);
-	void setActiveBrowser(int browserId);
+	int GetNextBrowserId(int nCurrentId);
+	void SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId, CString szCarImageName);
+	void SetActiveBrowser(int browserId);
 	void ResetMapInfo(bool bResetMap);
+
+	int GetBearingLocation(float pos1Lat, float pos1Lng, float pos2Lat, float pos2Lng);
+	CString GetCarImageName(int degree);
+	void ResetGpsInfo();
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -231,7 +231,7 @@ public:
 
 	int m_SignalId;
 	static CString m_AviPathStr;
-	bool m_bClearGraph;
+	bool m_bClickedStop;
 
 	void OnAlarmSwitch(bool bON);
 

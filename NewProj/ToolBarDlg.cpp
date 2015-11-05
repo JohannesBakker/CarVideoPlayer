@@ -118,7 +118,7 @@ CToolBarDlg::CToolBarDlg(CWnd* pParent /*=NULL*/)
 	//m_lpHdr = new WAVEHDR;
 
 	m_bAlarmOn = false;
-	m_bClearGraph = true;
+	m_bClickedStop = true;
 
 }
 
@@ -472,9 +472,9 @@ void CToolBarDlg::OnAvi()
 	// TODO: Add your control notification handler code here
 	if(m_1stFilePath == "") return;
 
-	m_bClearGraph = false;
+	m_bClickedStop = false;
 	OnStop();
-	m_bClearGraph = true;
+	m_bClickedStop = true;
 	
 	m_AVIConverterDlg.m_bPaint = true;
 	m_AVIConverterDlg.m_1stFilePath = m_1stFilePath;
@@ -570,9 +570,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 
 	if(CTimeLineDlg::m_bTimeSeekFlag == true)
 	{
-		m_bClearGraph = false;
+		m_bClickedStop = false;
 		OnStop();
-		m_bClearGraph = true;
+		m_bClickedStop = true;
 		
 		KillTimer(TIMER_PLAYER1);
 		KillTimer(TIMER_PLAYER2);
@@ -583,9 +583,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 	}
 	if(CNewProjDlg::g_bOpenFlag == true) 
 	{
-		m_bClearGraph = false;
+		m_bClickedStop = false;
 		OnStop();
-		m_bClearGraph = true;
+		m_bClickedStop = true;
 		
 		KillTimer(TIMER_PLAYER1);
 		KillTimer(TIMER_PLAYER2);
@@ -600,9 +600,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 	}
 	if(CNewProjDlg::g_bResetFlag == true)
 	{
-		m_bClearGraph = false;
+		m_bClickedStop = false;
 		OnStop();
-		m_bClearGraph = true;
+		m_bClickedStop = true;
 		
 		CNewProjDlg::g_bResetFlag = false;
 		g_bSoundPlay = false;
@@ -613,9 +613,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 	}
 	if(CTimeLineDlg::m_bTimeFlag == false) 
 	{
-		m_bClearGraph = false;
+		m_bClickedStop = false;
 		OnStop();
-		m_bClearGraph = true;
+		m_bClickedStop = true;
 		return;
 	}
 
@@ -790,9 +790,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 			m_1stSpliter.m_file->Close();
 			m_2ndSpliter.m_file->Close();
 
-			m_bClearGraph = false;
+			m_bClickedStop = false;
 			OnStop();
-			m_bClearGraph = true;
+			m_bClickedStop = true;
 			
 			if(CNewProjDlg::m_nPathArraysPtr < CNewProjDlg::m_nPathCounts - 1)
 			{
@@ -1243,9 +1243,9 @@ void CToolBarDlg::OnRecordEnd()
 	m_TimeRangeDlg.m_EndDateTime.wSecond = (WORD)(dwTime % 60);
 	m_TimeRangeDlg.m_bRecordCurFlag = true;
 
-	m_bClearGraph = false;
+	m_bClickedStop = false;
 	OnStop();
-	m_bClearGraph = true;
+	m_bClickedStop = true;
 	
 	m_TimeRangeDlg.UpdateWnd();
 	m_TimeRangeDlg.m_1stFile = &m_1stFile;
@@ -1262,9 +1262,9 @@ void CToolBarDlg::OnRecordEnd()
 		KillTimer(TIMER_PLAYER2);
 		KillTimer(TIMER_SLIDER);
 
-		m_bClearGraph = false;
+		m_bClickedStop = false;
 		OnStop();
-		m_bClearGraph = true;
+		m_bClickedStop = true;
 		
 		wchar_t		szFilter[]= _T("AVI Files(*.avi)|*.avi|");
 		CFileDialog	dlg(FALSE,NULL,NULL,OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT, szFilter);
@@ -1309,9 +1309,9 @@ void CToolBarDlg::OnRecordEnd()
 	GetDlgItem(IDC_FULLSCREEN)->EnableWindow(true);
 	GetDlgItem(IDC_REPAIR_FILE)->EnableWindow(true);
 
-	m_bClearGraph = false;
+	m_bClickedStop = false;
 	OnStop();
-	m_bClearGraph = true;
+	m_bClickedStop = true;
 }
 
 void CToolBarDlg::OnFast() 
@@ -1431,7 +1431,7 @@ void CToolBarDlg::OnStop()
 
 	m_pGpsDlg->ResetMapInfo(true);
 
-	if (m_bClearGraph)
+	if (m_bClickedStop)
 		m_pInfoListDlg->ClearAlarmGraph();
 }
 
@@ -1506,9 +1506,9 @@ void CToolBarDlg::OnEndCut()
 	if(m_TimeRangeDlg.m_StartDateTime.wSecond < 10) path += "0";
 	path += buf;
 
-	m_bClearGraph = false;
+	m_bClickedStop = false;
 	OnStop();
-	m_bClearGraph = true;
+	m_bClickedStop = true;
 	
 	m_TimeRangeDlg.m_bRecordCurFlag = false;
 	m_TimeRangeDlg.UpdateWnd();
@@ -1535,9 +1535,9 @@ void CToolBarDlg::OnEndCut()
 		m_ProgressDlg.Init_Progress(m_1stSpliter.m_file, NULL, m_dw1stStartPos, m_1stSpliter.m_file->GetPosition(), 0, 0);
 	if(m_TimeRangeDlg.DoModal() == IDOK)
 	{
-		m_bClearGraph = false;
+		m_bClickedStop = false;
 		OnStop();	
-		m_bClearGraph = true;
+		m_bClickedStop = true;
 	}
 	MessageBox(_T("Success Spliting!"), NULL, 0);
 #endif
@@ -1569,9 +1569,9 @@ void CToolBarDlg::OnEndCut()
 	GetDlgItem(IDC_FULLSCREEN)->EnableWindow(true);
 	GetDlgItem(IDC_REPAIR_FILE)->EnableWindow(true);
 
-	m_bClearGraph = false;
+	m_bClickedStop = false;
 	OnStop();
-	m_bClearGraph = true;
+	m_bClickedStop = true;
 }
 
 void CToolBarDlg::OnPaint() 
@@ -1676,9 +1676,9 @@ void CToolBarDlg::ReSet()
 {
 	if(m_1stFilePath == "") return;
 
-	m_bClearGraph = false;
+	m_bClickedStop = false;
 	OnStop();
-	m_bClearGraph = true;
+	m_bClickedStop = true;
 	
 	if(CNewProjDlg::g_config_Value_ST.bAutoPlay == true) OnPlayBtnClick();
 }
@@ -2456,9 +2456,9 @@ void CToolBarDlg::OnBnClickedRepairFile()
 		return;
 	}
 
-	m_bClearGraph = false;
+	m_bClickedStop = false;
 	OnStop();
-	m_bClearGraph = true;
+	m_bClickedStop = true;
 	
 	Sleep(100);
 	if(CNewProjDlg::m_SecondPathArrays[CNewProjDlg::m_nPathArraysPtr] != "")
