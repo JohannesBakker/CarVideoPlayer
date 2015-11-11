@@ -28,6 +28,8 @@
 
 #include <sqltypes.h>
 
+#define IO_SIGNALS_NUM	3
+
 typedef struct _264_FILE_HEADER{
 	char	chUnk1[0x46];
 	DWORD	dwFileSize;
@@ -232,6 +234,7 @@ public:
 	int m_SignalId;
 	static CString m_AviPathStr;
 	bool m_bClickedStop;
+	bool m_bIoAlarmSignals[IO_SIGNALS_NUM];
 
 	void OnAlarmSwitch(bool bON);
 

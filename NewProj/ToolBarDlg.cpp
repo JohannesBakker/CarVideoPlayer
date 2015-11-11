@@ -120,6 +120,9 @@ CToolBarDlg::CToolBarDlg(CWnd* pParent /*=NULL*/)
 	m_bAlarmOn = false;
 	m_bClickedStop = true;
 
+	for (int i = 0; i < IO_ALARM_SIG_NUM; i++)
+		m_bIoAlarmSignals[i] = false;
+
 }
 
 void CToolBarDlg::DoDataExchange(CDataExchange* pDX)
@@ -707,9 +710,23 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 			binDataNum ++;
 			m_pInfoListDlg->m_BinDataCount = binDataNum;
 			m_pInfoListDlg->m_dura = m_duration;
+
+			unsigned char alarmFlag = 0;
+			for (int i = 0; i < IO_ALARM_SIG_NUM; i++) {
+				if (m_bIoAlarmSignals[i] == true) {
+					alarmFlag |= (1 << i);
+				}
+			}
 			 
-			m_pInfoListDlg->DrawGraph(&m_1stSpliter.m_1stOutDatas.mB_Data,m_Slider_Seek.GetPos(),CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr],m_1stSpliter.m_1stOutDatas.nB_Size, m_1stSpliter.m_file->GetLength(),m_bDrawSeek,
-				nDwFirstDTS, nMiliSecs);
+			m_pInfoListDlg->DrawGraph(&m_1stSpliter.m_1stOutDatas.mB_Data,
+				m_Slider_Seek.GetPos(),
+				CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr],
+				m_1stSpliter.m_1stOutDatas.nB_Size, 
+				m_1stSpliter.m_file->GetLength(),
+				m_bDrawSeek,
+				nDwFirstDTS, 
+				nMiliSecs,
+				alarmFlag);
 			
 			if(m_prevPos != m_Slider_Seek.GetPos())
 			{
@@ -720,9 +737,23 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 			}						
 		}
 		else if(m_1stSpliter.m_1stOutDatas.nB_Size != 0 && m_bDrawSeek == TRUE)
-		{			
-			m_pInfoListDlg->DrawGraph(&m_1stSpliter.m_1stOutDatas.mB_Data,m_Slider_Seek.GetPos(),CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr],m_1stSpliter.m_1stOutDatas.nB_Size ,m_1stSpliter.m_file->GetLength(),m_bDrawSeek,
-				nDwFirstDTS, nMiliSecs);
+		{	
+			unsigned char alarmFlag = 0;
+			for (int i = 0; i < IO_ALARM_SIG_NUM; i++) {
+				if (m_bIoAlarmSignals[i] == true) {
+					alarmFlag |= (1 << i);
+				}
+			}
+
+			m_pInfoListDlg->DrawGraph(&m_1stSpliter.m_1stOutDatas.mB_Data,
+				m_Slider_Seek.GetPos(),
+				CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr],
+				m_1stSpliter.m_1stOutDatas.nB_Size,
+				m_1stSpliter.m_file->GetLength(),
+				m_bDrawSeek,
+				nDwFirstDTS, 
+				nMiliSecs,
+				alarmFlag);
 
 			m_bDrawSeek = FALSE;	
 		}
@@ -816,27 +847,33 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 
 	
 	if (nIDEvent == TIMER_ALARM)
-	{	
-			if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x01) == 0x01) 
-//				m_number1.SetTextColor(RGB(255, 0, 0));	
-				m_number1.SetBitmap(IDB_NUMBER_ONE_RED);
-			else if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x01) == 0x00)
-//				m_number1.SetTextColor(RGB(255, 255, 255));
-				m_number1.SetBitmap(IDB_NUMBER_ONE_WHITE);
+	{
+		if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x01) == 0x01) {
+			m_number1.SetBitmap(IDB_NUMBER_ONE_RED);
+			m_bIoAlarmSignals[IO_ALARM_SIG_1] = true;
+		}
+		else if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x01) == 0x00) {
+			m_number1.SetBitmap(IDB_NUMBER_ONE_WHITE);
+			m_bIoAlarmSignals[IO_ALARM_SIG_1] = false;
+		}
 
-			if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x02) == 0x02) 
-//				m_number2.SetTextColor(RGB(255, 0, 0));
-				m_number2.SetBitmap(IDB_NUMBER_TWO_RED);
-			else if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x02) == 0x00)
-//				m_number2.SetTextColor(RGB(255, 255, 255));
-				m_number2.SetBitmap(IDB_NUMBER_TWO_WHITE);
+		if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x02) == 0x02) {
+			m_number2.SetBitmap(IDB_NUMBER_TWO_RED);				
+			m_bIoAlarmSignals[IO_ALARM_SIG_2] = true;
+		}
+		else if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x02) == 0x00) {
+			m_number2.SetBitmap(IDB_NUMBER_TWO_WHITE);
+			m_bIoAlarmSignals[IO_ALARM_SIG_2] = false;
+		}
 
-			if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x04) == 0x04) 
-//				m_number3.SetTextColor(RGB(255, 0, 0));
-				m_number3.SetBitmap(IDB_NUMBER_THREE_RED);
-			else if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x04) == 0x00)
-//				m_number3.SetTextColor(RGB(255, 255, 255));
-				m_number3.SetBitmap(IDB_NUMBER_THREE_WHITE);
+		if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x04) == 0x04) {
+			m_number3.SetBitmap(IDB_NUMBER_THREE_RED);
+			m_bIoAlarmSignals[IO_ALARM_SIG_3] = true;
+		}
+		else if((m_1stSpliter.m_1stOutDatas.mB_Data.alarmInfo & 0x04) == 0x00) {
+			m_number3.SetBitmap(IDB_NUMBER_THREE_WHITE);
+			m_bIoAlarmSignals[IO_ALARM_SIG_3] = false;
+		}
 	}
 	
 
@@ -1431,8 +1468,16 @@ void CToolBarDlg::OnStop()
 
 	m_pGpsDlg->ResetMapInfo(true);
 
-	if (m_bClickedStop)
+	if (m_bClickedStop) {
 		m_pInfoListDlg->ClearAlarmGraph();
+
+		for (int i = 0; i < IO_ALARM_SIG_NUM; i++) 
+			m_bIoAlarmSignals[i] = false;
+
+		m_number1.SetBitmap(IDB_NUMBER_ONE_WHITE);
+		m_number2.SetBitmap(IDB_NUMBER_TWO_WHITE);
+		m_number3.SetBitmap(IDB_NUMBER_THREE_WHITE);
+	}
 }
 
 void CToolBarDlg::OnStartCut() 

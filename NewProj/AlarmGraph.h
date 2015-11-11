@@ -12,8 +12,17 @@
 
 typedef struct {
 	DWORD	alarmOffsetTime;
+	unsigned char	alarmFlags;
 	MainBinaryData	alamBinData;
 } AlarmBinData_t;
+
+enum {
+	IO_ALARM_SIG_1 = 0,
+	IO_ALARM_SIG_2,
+	IO_ALARM_SIG_3,
+	IO_ALARM_SIG_NUM,
+};
+
 
 class CAlarmGraph : public CWnd
 {
@@ -34,11 +43,13 @@ public:
 	DWORD	m_dwCurretFilePos;
 	DWORD	m_dwSizePerData;
 	int		m_nTotalPoints;
+	int		m_nPointsPerPage;
 	int		m_nStartNo;
 	int		m_nOffsetX;
 
 	DWORD	m_dwFirstDTS;
 	CArray<AlarmBinData_t, AlarmBinData_t> m_arrBinData;
+	bool	m_bIoAlarmSigsON[IO_ALARM_SIG_NUM];
 
 // Operations
 public:
@@ -46,11 +57,9 @@ public:
 	void UpdateScrollSizes();	
 	void ClearAlarmGraph();
 
-	void setDatasWithSize(DWORD fileSize, DWORD fileCurrPos, DWORD sizePerData, TempBinData* pBinData, int count );
 	void UpdateScrollSizesExt();
-	void UpdateScrollSizesExt2();
 
-	void setDatasWithTime(DWORD dwFristDTS, DWORD currDTS, MainBinaryData* pBinData);
+	void setDatasWithTime(DWORD dwFristDTS, DWORD currDTS, MainBinaryData* pBinData, unsigned char alarmFlag);
 
 // Overrides
 	// ClassWizard generated virtual function overrides

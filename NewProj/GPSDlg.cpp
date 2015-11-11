@@ -14,7 +14,13 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #define VIEW_DIFF	3
-#define TIMER_INTERVAL	500
+#define TIMER_INTERVAL	1500
+//#define DEFAULT_IMAGE_NAME	_T("car-1.png")
+#define DEFAULT_IMAGE_NAME	_T("")
+
+#define DEFAULT_LAT 40.8833
+#define DEFAULT_LON -85.0167
+
 
 typedef struct {
 	int degree;
@@ -38,6 +44,12 @@ CGPSDlg::CGPSDlg(CWnd* pParent /*=NULL*/)
 
 	for (int i = 0; i < BROWSER_LIST_SIZE; i++)
 		m_bViewUpdatedArray[i] = false;
+
+	m_szImageName = DEFAULT_IMAGE_NAME;
+	ResetGpsInfo();
+
+	m_nCurrentBrowserId = 0;
+	m_nLastGpsWinId = 0;
 }
 
 void CGPSDlg::DoDataExchange(CDataExchange* pDX)
@@ -73,18 +85,20 @@ void CGPSDlg::OnSize(UINT nType, int cx, int cy)
 	
 	if (m_bInitComplete) {
 		for (int i = 0; i < BROWSER_LIST_SIZE; i++) {
-			GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, cx, cy);
+			if (i == m_nCurrentBrowserId) {
+				GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, cx, cy);
+			}
+			else {
+				GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, 0, 0);
+			}
 		}
 	}
-	
 }
 
 BOOL CGPSDlg::OnInitDialog() 
 {	
 	CDialog::OnInitDialog();
 	// TODO: Add extra initialization here
-
-	ResetGpsInfo();
 
 	m_BrowerArray[0] = &m_WebBrowser;
 	m_BrowerArray[1] = &m_WebBrowser2;
@@ -98,24 +112,40 @@ BOOL CGPSDlg::OnInitDialog()
 	m_BrowserIdArray[3] = IDC_EXPLORER4;
 	m_BrowserIdArray[4] = IDC_EXPLORER5;
 
-	m_nCurrentBrowserId = 0;
+	ResetGpsInfo();
+
+	// init GPS window Id
 	m_nLastGpsWinId = 0;
+
+	// init GpsInfo flag
 	m_bInitedGpsInfo = false;
 
-	for (int i = 0; i < BROWSER_LIST_SIZE; i++)
-	{
-		m_BrowerArray[i]->Navigate(_T("about:blank"), NULL, NULL, NULL, NULL);
+	// init browsers 
+	for (int i = 0; i < BROWSER_LIST_SIZE; i++) 
+	{		
+		int width = 0, height = 0;
 
+		if (i == m_nCurrentBrowserId) {
+			width = m_nWindowWidth;
+			height = m_nWindowHeight;
+		}
+
+		m_BrowerArray[i]->Navigate(_T("about:blank"), NULL, NULL, NULL, NULL);
 		m_BrowerArray[i]->ShowScrollBar(SB_VERT, false);
 		m_BrowerArray[i]->ShowScrollBar(SB_HORZ, false);
-
-		GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, 0, 0, true);
-
-		CHTMLWriter htmlWriter(m_BrowerArray[i]->GetControlUnknown());
-		htmlWriter.Write(L"<!DOCTYPE html><html><head><style type=\"text/css\">html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}</style><script type=\"text/javascript\"src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyA1bMjkIhG61jnA6MefByFaSVglbR5kvjw\"></script><script type=\"text/javascript\">function initialize() {var mapOptions = {center: { lat: 40.8833, lng: -85.0167},zoom: 5};var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);}google.maps.event.addDomListener(window, 'load', initialize);</script></head><body><div id=\"map-canvas\"></div></body></html>");
+		GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, width, height, true);
 	}
 
-	GetDlgItem(m_BrowserIdArray[m_nCurrentBrowserId])->MoveWindow(0, 0, m_nWindowWidth, m_nWindowHeight, true);
+	// setting default GpsWindow data 
+	CHTMLWriter htmlWriter(m_BrowerArray[m_nLastGpsWinId]->GetControlUnknown());
+	htmlWriter.Write(L"<!DOCTYPE html><html><head><style type=\"text/css\">html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}</style><script type=\"text/javascript\"src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyA1bMjkIhG61jnA6MefByFaSVglbR5kvjw\"></script><script type=\"text/javascript\">function initialize() {var mapOptions = {center: { lat: 40.8833, lng: -85.0167},zoom: 5};var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);}google.maps.event.addDomListener(window, 'load', initialize);</script></head><body><div id=\"map-canvas\"></div></body></html>");
+	
+	m_bViewUpdatedArray[m_nLastGpsWinId] = true;
+
+	// init Active Window Id
+	m_nCurrentBrowserId = GetRealNextBrowserId(m_nLastGpsWinId);
+
+	
 
 	SetTimer(0, TIMER_INTERVAL, NULL);
 
@@ -153,14 +183,15 @@ void CGPSDlg::ShowGPS_Pos(MainBinaryData * pMBDatas)
 
 	if (memcmp(&m_gpsCurInfo, &m_gpsOldInfo, sizeof(GPS_INFO)))
 	{
-		CString szImageName = _T("car-1.png");
-
 		if (m_gpsOldInfo.fLat == 0 && m_gpsOldInfo.fLon == 0) {
 
 		}
 		else {
 			int deg = GetBearingLocation(m_gpsOldInfo.fLat, m_gpsOldInfo.fLon, m_gpsCurInfo.fLat, m_gpsCurInfo.fLon);
-			szImageName = GetCarImageName(deg);
+			CString szImageName = GetCarImageName(deg);
+
+			if (!szImageName.IsEmpty())
+				m_szImageName = szImageName;
 		}
 
 		m_gpsOldInfo = m_gpsCurInfo;
@@ -172,55 +203,29 @@ void CGPSDlg::ShowGPS_Pos(MainBinaryData * pMBDatas)
 			m_bInitedGpsInfo = true;
 		}
 
-		m_nLastGpsWinId = GetNextBrowserId(m_nLastGpsWinId);
+		m_nLastGpsWinId = GetNextWinId(m_nLastGpsWinId, 1, true);
 
-		SetGpsBrowser(m_gpsCurInfo, m_nLastGpsWinId, szImageName);
+		SetGpsBrowser(m_gpsCurInfo, m_nLastGpsWinId, m_szImageName);
 	}
 }
 
 
 void CGPSDlg::OnTimer(UINT_PTR nIDEvent)
 {
+	static int prevWinId = 0;
+
 	if (m_bGPSUpdated == true)
 	{
 		m_bGPSUpdated = false;
 
-		int nNextBrowserId = GetNextBrowserId(m_nLastGpsWinId);
-
-		nNextBrowserId = m_nLastGpsWinId - VIEW_DIFF;
-		if (nNextBrowserId < 0) {
-			nNextBrowserId = BROWSER_LIST_SIZE - (VIEW_DIFF - m_nLastGpsWinId);
+		if (prevWinId != m_nCurrentBrowserId) {
+			SetActiveBrowser(m_nCurrentBrowserId);
+			prevWinId = m_nCurrentBrowserId;
 		}
-
-		if (m_bViewUpdatedArray[nNextBrowserId] == false) {
-			for (int i = 1; i < BROWSER_LIST_SIZE; i++)
-			{
-				nNextBrowserId = (nNextBrowserId + 1) % BROWSER_LIST_SIZE;
-				if (m_bViewUpdatedArray[nNextBrowserId] == true) {
-					break;
-				}
-			}			
-		}
-		
-		if (m_bViewUpdatedArray[nNextBrowserId] == true) {
-			if (nNextBrowserId == m_nCurrentBrowserId)
-				return;			
-		}
-
-		SetActiveBrowser(nNextBrowserId);
 	}
 	CDialog::OnTimer(nIDEvent);
 }
 
-int CGPSDlg::GetNextBrowserId(int nCurrentId)
-{
-	int nNextId = nCurrentId + 1;
-	
-	if (nNextId >= BROWSER_LIST_SIZE)
-		nNextId = 0;
-
-	return nNextId;
-}
 
 void CGPSDlg::SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId,  CString szCarImageName)
 {
@@ -245,41 +250,41 @@ void CGPSDlg::SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId,  CString szCarIm
 	CHTMLWriter htmlWriter(m_BrowerArray[browserId]->GetControlUnknown());
 	htmlWriter.Write(strHtml);
 
+	
 	m_bViewUpdatedArray[browserId] = true;
+
+	int nNewtBrowserId = GetRealNextBrowserId(browserId);	
+	SetActiveBrowser(nNewtBrowserId);
 }
+
 
 void CGPSDlg::SetActiveBrowser(int browserId)
 {
-	GetDlgItem(m_BrowserIdArray[browserId])->MoveWindow(0, 0, m_nWindowWidth, m_nWindowHeight);	
-
-	if (browserId != m_nCurrentBrowserId)
-		GetDlgItem(m_BrowserIdArray[m_nCurrentBrowserId])->MoveWindow(0, 0, 0, 0);
-
+	for (int i = 0; i < BROWSER_LIST_SIZE; i++) {
+		if (i == browserId) {
+			GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, m_nWindowWidth, m_nWindowHeight);
+		}
+		else {
+			GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, 0, 0);
+		}
+	}
 	m_nCurrentBrowserId = browserId;
 }
 
 void CGPSDlg::ResetMapInfo(bool bResetMap)
 {
-	m_nCurrentBrowserId = 0;
-	m_nLastGpsWinId = 0;
-	m_bInitComplete = false;
-
-	GetDlgItem(m_BrowserIdArray[0])->MoveWindow(0, 0, m_nWindowWidth, m_nWindowHeight);	
-	for (int i = 1; i < BROWSER_LIST_SIZE; i++) 
-	{
-		GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, 0, 0);
-		m_bViewUpdatedArray[i] = false;
-	}
-
-	//m_bViewUpdatedArray[0] = true;
-
-	ResetGpsInfo();
-	
-	if (bResetMap)
-	{
-		SetActiveBrowser(m_nLastGpsWinId);
+	if (bResetMap) {
 		
-		//SetGpsBrowser(m_gpsInitInfo, m_nLastGpsWinId);
+		for (int i = 0; i < BROWSER_LIST_SIZE; i++) {		
+			m_bViewUpdatedArray[i] = false;
+		}
+
+		if (m_bInitedGpsInfo == false) {
+			m_bViewUpdatedArray[m_nCurrentBrowserId] = true;
+		}
+
+		m_szImageName.Empty();
+
 	}
 }
 
@@ -293,8 +298,6 @@ int CGPSDlg::GetBearingLocation(float pos1Lat, float pos1Lng, float pos2Lat, flo
 	brng = brng * 180 / 3.141592;
 
 	int deg = (int)brng;
-	deg = 360 - ((deg + 360) % 360);
-
 	return deg;
 }
 
@@ -302,31 +305,27 @@ CString CGPSDlg::GetCarImageName(int degree)
 {
 	static AngleImage arrAngleImages[] = {
 		{0,		_T("car-1.png")},
-		{45,	_T("car-2.png")},
-		{90,	_T("car-3.png")},
-		{135,	_T("car-4.png")},
-		{180,	_T("car-5.png")},
-		{225,	_T("car-6.png")},
-		{270,	_T("car-7.png")},
-		{315,	_T("car-8.png")},
-		{360,	_T("car-1.png")},
+		{-45,	_T("car-2.png")},
+		{-90,	_T("car-3.png")},
+		{-135,	_T("car-4.png")},
+		{-179,	_T("car-5.png")},
+		{179,	_T("car-5.png")},
+		{135,	_T("car-6.png")},
+		{90,	_T("car-7.png")},
+		{45,	_T("car-8.png")},
 	};
 
 	int i;
 	int selId = 0;
 
+	if (degree == -180 || degree == 180 || degree == 0) {
+		return _T("");
+	}
+
 	for (i = 1; i < sizeof(arrAngleImages)/sizeof(AngleImage); i++)
 	{
 		int d1 = abs(arrAngleImages[i].degree - degree);
 		int d2 = abs(arrAngleImages[selId].degree - degree);
-
-		/*
-		d1 = d1 % 360;
-		d1 = d1 > 180 ? (360 - d1): d1;
-
-		d2 = d2 % 360;
-		d2 = d2 > 180 ? (360 - d2): d2;
-		*/
 
 		if (d1 < d2)
 			selId = i;
@@ -340,4 +339,37 @@ void CGPSDlg::ResetGpsInfo()
 {
 	memset(&m_gpsOldInfo, 0, sizeof(GPS_INFO));
 	memset(&m_gpsCurInfo, 0, sizeof(GPS_INFO));
+
+	if (m_bInitedGpsInfo == false)
+		memset(&m_gpsInitInfo, 0, sizeof(GPS_INFO));
+
+	for (int i = 0; i < BROWSER_LIST_SIZE; i++)
+		m_bViewUpdatedArray[i] = false;
+
 }
+
+int CGPSDlg::GetNextWinId(int currentWinId, int offset, bool bNext)
+{
+	int nextWinId = 0;
+
+	nextWinId = currentWinId + BROWSER_LIST_SIZE;
+	if (bNext)
+		nextWinId += offset;
+	else
+		nextWinId -= offset;
+
+	nextWinId = nextWinId % BROWSER_LIST_SIZE;
+
+	return nextWinId;
+}
+
+int CGPSDlg::GetRealNextBrowserId(int currBrowserId)  {
+	int nNextId = GetNextWinId(currBrowserId, VIEW_DIFF, false);
+
+	while (m_bViewUpdatedArray[nNextId] == false && nNextId != currBrowserId) {
+		nNextId = GetNextWinId(nNextId, 1, true);
+	}
+
+	return nNextId;
+}
+

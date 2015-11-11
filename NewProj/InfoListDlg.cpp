@@ -495,7 +495,8 @@ void CInfoListDlg::OnSelchangeTab(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
-void CInfoListDlg::DrawGraph(MainBinaryData* pData,DWORD curPos,DWORD dura,DWORD nBinSize,DWORD totalSize,bool bSeek, DWORD dwFristDTS, DWORD currDTS)
+void CInfoListDlg::DrawGraph(MainBinaryData* pData,DWORD curPos,DWORD dura,DWORD nBinSize,DWORD totalSize,bool bSeek, 
+		DWORD dwFristDTS, DWORD currDTS, unsigned char alarmFlag)
 {
 	switch(nBinSize)
 	{
@@ -506,7 +507,7 @@ void CInfoListDlg::DrawGraph(MainBinaryData* pData,DWORD curPos,DWORD dura,DWORD
 	case 60:
 		DrawAccelSpeedGraph( pData, curPos,  dura, totalSize);
 		DrawSpeedGraph( pData, curPos,  dura, totalSize,bSeek);
-		DrawAlarmGraph(dwFristDTS, currDTS, &pData[nBinSize - 1]);
+		DrawAlarmGraph(dwFristDTS, currDTS, &pData[nBinSize - 1], alarmFlag);
 		break;
 	default:
 		return;
@@ -527,9 +528,9 @@ void CInfoListDlg::DrawSpeedGraph(MainBinaryData* pData,DWORD curPos,DWORD dura,
 
 }
 
-void CInfoListDlg::DrawAlarmGraph(DWORD dwFristDTS, DWORD currDTS, MainBinaryData* pData)
+void CInfoListDlg::DrawAlarmGraph(DWORD dwFristDTS, DWORD currDTS, MainBinaryData* pData, unsigned char alarmFlag)
 {
-	m_alarmGraphWnd->setDatasWithTime(dwFristDTS, currDTS, pData);
+	m_alarmGraphWnd->setDatasWithTime(dwFristDTS, currDTS, pData, alarmFlag);
 	//m_alarmGraphWnd->Invalidate();
 }
 
@@ -677,3 +678,4 @@ void CInfoListDlg::OnDestroy()
 	delete m_alarmGraphWnd;
 	// TODO: Add your message handler code here
 }
+
