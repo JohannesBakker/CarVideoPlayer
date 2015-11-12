@@ -115,6 +115,7 @@ static	tagTIMESTAMP_STRUCT	m_DateTime;
 	int						m_nSpeed;
 static	int						m_nStartPos;
 static	int						m_nEndPos;
+
 	int						m_nThreadCounts;
 	int						m_n1stTimeCount;
 	int						m_n2ndTimeCount;
@@ -235,6 +236,10 @@ public:
 	static CString m_AviPathStr;
 	bool m_bClickedStop;
 	bool m_bIoAlarmSignals[IO_SIGNALS_NUM];
+	
+	long m_2ndBeginSecs;
+static	int m_n2ndRecordStopPos;
+	
 
 	void OnAlarmSwitch(bool bON);
 

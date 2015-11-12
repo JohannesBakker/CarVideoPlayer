@@ -19,11 +19,13 @@ public:
 	CProgressDlg(CWnd* pParent = NULL);   // standard constructor
 public:
 	DWORD m_limiteVal;
+	DWORD m_limit2ndVal;	// used 2nd Video recording	
 	int m_nChannel;
 	CFile m_AVIFile;
 	CString m_AVIFilePath;
+	
 	void Init_ConvertHeader(int, int);
-	void Init_AVI_Convert(CFile*, CFile*, float, float, float, float);
+	void Init_AVI_Convert(CFile*, CFile*, float, float, float, float, float);
 	
 	bool WriteFile();
 	FuncAVI_Xvid_EnCore			m_Func_XvidEnc;

@@ -23,6 +23,9 @@ XVID_STATE			CProgressDlg::m_lpState;
 // CString             CToolBarDlg::m_1stFilePath;
 // CString				CToolBarDlg::m_2ndFilePath;
 
+#define VIDEO_FILL_PATTERN		((char)0x55)
+
+
 CProgressDlg::CProgressDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CProgressDlg::IDD, pParent)
 {
@@ -31,7 +34,6 @@ CProgressDlg::CProgressDlg(CWnd* pParent /*=NULL*/)
 	//}}AFX_DATA_INIT
 	m_1stDestFilePath = "";
 	m_2ndDestFilePath = "";
-	
 }
 
 
@@ -61,6 +63,7 @@ void CProgressDlg::OnStop()
 	// TODO: Add your control notification handler code here
 	SendMessage(WM_CLOSE, (WPARAM)this, NULL);
 }
+
 unsigned char	ReadBuf[0x10000000];
 #if 0
 UINT Cut_264ThreadProc(LPVOID pParam)
@@ -364,8 +367,11 @@ bool CProgressDlg::WriteFile()
 UINT AVI_SpliterProc(LPVOID lParam)
 {
 	CProgressDlg* pDlg = (CProgressDlg*)lParam;
+	bool bEnableFillPattern = false;
+	
 	pDlg->m_bEnd = false;
 	//FILE* fp = fopen(pDlg->m_AVIFilePath, "wb");
+	
 	if(pDlg->m_2ndFile != NULL && pDlg->m_1stFile != NULL)
 	{
 		pDlg->Init_ConvertHeader(1408,480);
@@ -416,180 +422,236 @@ UINT AVI_SpliterProc(LPVOID lParam)
 	pDlg->m_2ndSpliter.GetDatas2();
 	pDlg->m_2ndSpliter.GetDatas2();
 
-		do{
-			if( pDlg->m_1stFile != NULL )
-				pDlg->m_progress.SetPos((int)((float)pDlg->m_1stSpliter.m_file->GetPosition() / pDlg->m_limiteVal * 100));
-			else
-				pDlg->m_progress.SetPos((int)((float)pDlg->m_2ndSpliter.m_file->GetPosition() / pDlg->m_limiteVal * 100));
-			pDlg->m_1stSpliter.GetDatas1();
-			pDlg->m_2ndSpliter.GetDatas2();
-			if(pDlg->m_1stSpliter.m_pY == 0) continue;
-			if(pDlg->m_nChannel == 1)
-			{
-				memset(pDlg->m_lpFrame.PushData, 0x80, 0x97e00);
-				memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY, 0x52800);
-				//memcpy((char*)(m_lpFrame.PushData + 0x65400), m_1stSpliter.m_pU, 0x19500);
-				//memcpy((char*)(m_lpFrame.PushData + 0x7E900), m_1stSpliter.m_pV, 0x19500);	
-			}else if(pDlg->m_nChannel == 2)
-			{
-				memset(pDlg->m_lpFrame.PushData, 0x80, 0x97e00);
-				memcpy(pDlg->m_lpFrame.PushData, pDlg->m_2ndSpliter.m_pY2, 0x52800);
+	do {
+		if ( pDlg->m_1stFile != NULL )
+			pDlg->m_progress.SetPos((int)((float)pDlg->m_1stSpliter.m_file->GetPosition() / pDlg->m_limiteVal * 100));
+		else
+			pDlg->m_progress.SetPos((int)((float)pDlg->m_2ndSpliter.m_file->GetPosition() / pDlg->m_limiteVal * 100));
+		
+		pDlg->m_1stSpliter.GetDatas1();
+		pDlg->m_2ndSpliter.GetDatas2();
+		
+		if(pDlg->m_1stSpliter.m_pY == 0) 
+			continue;
+		
+		if(pDlg->m_nChannel == 1)
+		{
+			memset(pDlg->m_lpFrame.PushData, 0x80, 0x97e00);
+			memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY, 0x52800);
+			//memcpy((char*)(m_lpFrame.PushData + 0x65400), m_1stSpliter.m_pU, 0x19500);
+			//memcpy((char*)(m_lpFrame.PushData + 0x7E900), m_1stSpliter.m_pV, 0x19500);	
+		} 
+		else if(pDlg->m_nChannel == 2)
+		{
+			memset(pDlg->m_lpFrame.PushData, 0x80, 0x97e00);
+			memcpy(pDlg->m_lpFrame.PushData, pDlg->m_2ndSpliter.m_pY2, 0x52800);
 //				memcpy((char*)(m_lpFrame.PushData + 0x65400), m_2ndSpliter.m_pU2, 0x19500);
 //				memcpy((char*)(m_lpFrame.PushData + 0x7E900), m_2ndSpliter.m_pV2, 0x19500);	
-			}else if(pDlg->m_nChannel == 3)
-			{
-				memset(pDlg->m_lpFrame.PushData, 0x80, 0x12FC00);
-				
-				memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY, 0x52800);
+		} 
+		else if(pDlg->m_nChannel == 3)
+		{
+			memset(pDlg->m_lpFrame.PushData, 0x80, 0x12FC00);
+			
+			memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY, 0x52800);
+
+			if (bEnableFillPattern == true) {
+				for(int j = 0; j < 480; j++)
+				{
+					memcpy((char*)(pDlg->m_lpFrame.PushData + 1408 * j), (char*)(pDlg->m_1stSpliter.m_pY + 704 * j), 704);
+
+					// second video fill with pattern
+					//memset((char*)(pDlg->m_lpFrame.PushData + 1408 * j + 704), VIDEO_FILL_PATTERN, 704);
+					memset((char*)(pDlg->m_lpFrame.PushData + 1408 * j + 704), 0x55, 704);
+				}
+			} else {
 				for(int j = 0; j < 480; j++)
 				{
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 1408 * j), (char*)(pDlg->m_1stSpliter.m_pY + 704 * j), 704);
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 1408 * j + 704), (char*)(pDlg->m_1stSpliter.m_pY2 + 704 * j), 704);
 				}
-				//memcpy((char*)(m_lpFrame.PushData + 0xCA800), m_1stSpliter.m_pU, 0x19500);
-				//memcpy((char*)(m_lpFrame.PushData + 0xFD200), m_1stSpliter.m_pV, 0x19500);	
-				//memcpy((char*)(m_lpFrame.PushData + 0x52800), m_2ndSpliter.m_pY, 0x52800);
-				//memcpy((char*)(m_lpFrame.PushData + 0xE3D00), m_2ndSpliter.m_pU2, 0x19500);
-				//memcpy((char*)(m_lpFrame.PushData + 0x116700), m_2ndSpliter.m_pV2, 0x19500);	
 			}
-			//memset((char*)(m_lpFrame.PushData + 0x7BC00), 0, 0x97E00 - 0x7BC00);
-			memset(&pDlg->m_lpState, 0, sizeof(XVID_STATE));
-			pDlg->m_lpState.nConst = 0x10202;
-			dwRetVal = (*pDlg->m_Func_XvidEnc)((DWORD*)(pDlg->m_lpCreate.Unk21), 2, &pDlg->m_lpFrame, &pDlg->m_lpState);
-			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwVideoID;
-			if(nCounts % 250 == 0)pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0x10;
-			else pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
-			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
-			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-			nFrmaeID ++;
-			pDlg->m_AVIFile.Write(&dwVideoID, 4);
-			pDlg->m_AVIFile.Write(&dwRetVal, 4);
-			pDlg->m_AVIFile.Write(pDlg->m_lpFrame.PopData, dwRetVal);
-			nCounts++;
+				
+			//memcpy((char*)(m_lpFrame.PushData + 0xCA800), m_1stSpliter.m_pU, 0x19500);
+			//memcpy((char*)(m_lpFrame.PushData + 0xFD200), m_1stSpliter.m_pV, 0x19500);	
+			//memcpy((char*)(m_lpFrame.PushData + 0x52800), m_2ndSpliter.m_pY, 0x52800);
+			//memcpy((char*)(m_lpFrame.PushData + 0xE3D00), m_2ndSpliter.m_pU2, 0x19500);
+			//memcpy((char*)(m_lpFrame.PushData + 0x116700), m_2ndSpliter.m_pV2, 0x19500);	
+		}
+		
+		//memset((char*)(m_lpFrame.PushData + 0x7BC00), 0, 0x97E00 - 0x7BC00);
+		memset(&pDlg->m_lpState, 0, sizeof(XVID_STATE));
+		pDlg->m_lpState.nConst = 0x10202;
+		dwRetVal = (*pDlg->m_Func_XvidEnc)((DWORD*)(pDlg->m_lpCreate.Unk21), 2, &pDlg->m_lpFrame, &pDlg->m_lpState);
+		pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwVideoID;
 
-			dwRetVal = 0x140;
+		if(nCounts % 250 == 0)
+			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0x10;
+		else 
+			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
+		
+		pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
+		pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
+		nFrmaeID ++;
+		pDlg->m_AVIFile.Write(&dwVideoID, 4);
+		pDlg->m_AVIFile.Write(&dwRetVal, 4);
+		pDlg->m_AVIFile.Write(pDlg->m_lpFrame.PopData, dwRetVal);
+		nCounts++;
+
+		dwRetVal = 0x140;
+		pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
+		pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
+		pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
+		pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
+
+		if (1)
+		{
+			pDlg->m_AVIFile.Write(&dwAudioID, 4);
+			pDlg->m_AVIFile.Write(&dwRetVal, 4);
+			pDlg->m_AVIFile.Write(pDlg->m_1stSpliter.m_1stOutDatas.buf_A, 320);
+			nFrmaeID ++;			
+			
 			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
 			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-			if(1)
-			{
-				pDlg->m_AVIFile.Write(&dwAudioID, 4);
-				pDlg->m_AVIFile.Write(&dwRetVal, 4);
-				pDlg->m_AVIFile.Write(pDlg->m_1stSpliter.m_1stOutDatas.buf_A, 320);
-				nFrmaeID ++;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-				pDlg->m_AVIFile.Write(&dwAudioID, 4);
-				pDlg->m_AVIFile.Write(&dwRetVal, 4);
-				pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320), 320);
-				nFrmaeID ++;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-				pDlg->m_AVIFile.Write(&dwAudioID, 4);
-				pDlg->m_AVIFile.Write(&dwRetVal, 4);
-				pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320 * 2), 320);
-				nFrmaeID ++;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-				pDlg->m_AVIFile.Write(&dwAudioID, 4);
-				pDlg->m_AVIFile.Write(&dwRetVal, 4);
-				pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320 * 3), 320);
-				nFrmaeID ++;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-				pDlg->m_AVIFile.Write(&dwAudioID, 4);
-				pDlg->m_AVIFile.Write(&dwRetVal, 4);
-				pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320 * 4), 320);
-				nFrmaeID ++;
-			}else{
-				pDlg->m_AVIFile.Write(&dwAudioID, 4);
-				pDlg->m_AVIFile.Write(&dwRetVal, 4);
-				pDlg->m_AVIFile.Write(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A, 320);
-				nFrmaeID ++;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-				pDlg->m_AVIFile.Write(&dwAudioID, 4);
-				pDlg->m_AVIFile.Write(&dwRetVal, 4);
-				pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320), 320);
-				nFrmaeID ++;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-				pDlg->m_AVIFile.Write(&dwAudioID, 4);
-				pDlg->m_AVIFile.Write(&dwRetVal, 4);
-				pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320 * 2), 320);
-				nFrmaeID ++;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-				pDlg->m_AVIFile.Write(&dwAudioID, 4);
-				pDlg->m_AVIFile.Write(&dwRetVal, 4);
-				pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320 * 3), 320);
-				nFrmaeID ++;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
-				pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
-				pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-				pDlg->m_AVIFile.Write(&dwAudioID, 4);
-				pDlg->m_AVIFile.Write(&dwRetVal, 4);
-				pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320 * 4), 320);
-				nFrmaeID ++;
-			}
-			if(pDlg->m_1stFile != NULL)
-				{if(pDlg->m_1stSpliter.m_file->GetPosition() >= pDlg->m_limiteVal - 0xC80) break;}
-			else if(pDlg->m_1stFile == NULL)
-					if(pDlg->m_2ndSpliter.m_file->GetPosition() >= pDlg->m_limiteVal - 0xC80) break;
-			if(pDlg->m_bEnd == true) break;
-		}while(dwRetVal > 0);
-		dwRetVal = pDlg->m_AVIFile.GetPosition() - 0x7FC;
-		pDlg->m_AVIFile.Seek(0x7F8, CFile::begin);
-		pDlg->m_AVIFile.Write(&dwRetVal, 4);
-		pDlg->m_AVIFile.SeekToEnd();
-		dwRetVal = 0x31786469;
-		pDlg->m_AVIFile.Write(&dwRetVal, 4);
-		dwRetVal = nFrmaeID * sizeof(SEEKPOS_FRAME);
-		pDlg->m_AVIFile.Write(&dwRetVal, 4);
-		//if(pDlg->m_bEnd == false)	
-		for(int i = 0; i < nFrmaeID; i++)
-		{
-			pDlg->m_AVIFile.Write(&pDlg->m_SeekPosFrame[i], sizeof(SEEKPOS_FRAME));
+			pDlg->m_AVIFile.Write(&dwAudioID, 4);
+			pDlg->m_AVIFile.Write(&dwRetVal, 4);
+			pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320), 320);
+			nFrmaeID ++;
+			
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
+			pDlg->m_AVIFile.Write(&dwAudioID, 4);
+			pDlg->m_AVIFile.Write(&dwRetVal, 4);
+			pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320 * 2), 320);
+			nFrmaeID ++;
+			
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
+			pDlg->m_AVIFile.Write(&dwAudioID, 4);
+			pDlg->m_AVIFile.Write(&dwRetVal, 4);
+			pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320 * 3), 320);
+			nFrmaeID ++;
+			
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
+			pDlg->m_AVIFile.Write(&dwAudioID, 4);
+			pDlg->m_AVIFile.Write(&dwRetVal, 4);
+			pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320 * 4), 320);
+			nFrmaeID ++;
 		}
-		dwRetVal = pDlg->m_AVIFile.GetPosition() - 8;
-		pDlg->m_AVIFile.Seek(4, CFile::begin);
-		pDlg->m_AVIFile.Write(&dwRetVal, 4);
-		pDlg->m_AVIFile.Seek(0x30, CFile::begin);
-		pDlg->m_AVIFile.Write(&nCounts, 4);
-		pDlg->m_AVIFile.Seek(0x8C, CFile::begin);
-		pDlg->m_AVIFile.Write(&nCounts, 4);
-		dwRetVal = dwRetVal / 10;
-		pDlg->m_AVIFile.Write(&dwRetVal, 4);
-		dwRetVal = 0;
-		pDlg->m_AVIFile.Seek(0x90,CFile::begin);
-		pDlg->m_AVIFile.Write(&dwRetVal,4);
-		dwRetVal = 0x100001;
-		pDlg->m_AVIFile.Seek(0x134,CFile::begin);
-		pDlg->m_AVIFile.Write(&dwRetVal,4);
-		pDlg->m_AVIFile.Close();
+		else
+		{
+			pDlg->m_AVIFile.Write(&dwAudioID, 4);
+			pDlg->m_AVIFile.Write(&dwRetVal, 4);
+			pDlg->m_AVIFile.Write(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A, 320);
+			nFrmaeID ++;
+			
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
+			pDlg->m_AVIFile.Write(&dwAudioID, 4);
+			pDlg->m_AVIFile.Write(&dwRetVal, 4);
+			pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320), 320);
+			nFrmaeID ++;
+			
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
+			pDlg->m_AVIFile.Write(&dwAudioID, 4);
+			pDlg->m_AVIFile.Write(&dwRetVal, 4);
+			pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320 * 2), 320);
+			nFrmaeID ++;
+			
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
+			pDlg->m_AVIFile.Write(&dwAudioID, 4);
+			pDlg->m_AVIFile.Write(&dwRetVal, 4);
+			pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320 * 3), 320);
+			nFrmaeID ++;
+			
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
+			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
+			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
+			pDlg->m_AVIFile.Write(&dwAudioID, 4);
+			pDlg->m_AVIFile.Write(&dwRetVal, 4);
+			pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320 * 4), 320);
+			nFrmaeID ++;
+		}
+
 		
-		MessageBox(NULL, _T("AVI Conversion Success!!!"), NULL, 0);
-		SendMessage(pDlg->GetSafeHwnd(), WM_CLOSE, (WPARAM)pDlg, NULL);
+		if(pDlg->m_1stFile != NULL)
+		{	
+			// check 2nd video pattern filling
+			if (bEnableFillPattern == false) {
+				if(pDlg->m_1stSpliter.m_file->GetPosition() >= pDlg->m_limit2ndVal- 0xC80) 
+					bEnableFillPattern = true;
+			}
+
+			if (pDlg->m_1stSpliter.m_file->GetPosition() >= pDlg->m_limiteVal - 0xC80) 
+				break;
+		}
+		else if(pDlg->m_1stFile == NULL) 
+		{
+			if(pDlg->m_2ndSpliter.m_file->GetPosition() >= pDlg->m_limiteVal - 0xC80) 
+				break;
+		}
+		
+		if (pDlg->m_bEnd == true) 
+			break;
+	}while (dwRetVal > 0);
+	
+	dwRetVal = pDlg->m_AVIFile.GetPosition() - 0x7FC;
+	pDlg->m_AVIFile.Seek(0x7F8, CFile::begin);
+	pDlg->m_AVIFile.Write(&dwRetVal, 4);
+	pDlg->m_AVIFile.SeekToEnd();
+	dwRetVal = 0x31786469;
+	pDlg->m_AVIFile.Write(&dwRetVal, 4);
+	dwRetVal = nFrmaeID * sizeof(SEEKPOS_FRAME);
+	pDlg->m_AVIFile.Write(&dwRetVal, 4);
+	//if(pDlg->m_bEnd == false)	
+	
+	for(int i = 0; i < nFrmaeID; i++)
+	{
+		pDlg->m_AVIFile.Write(&pDlg->m_SeekPosFrame[i], sizeof(SEEKPOS_FRAME));
+	}
+	
+	dwRetVal = pDlg->m_AVIFile.GetPosition() - 8;
+	pDlg->m_AVIFile.Seek(4, CFile::begin);
+	pDlg->m_AVIFile.Write(&dwRetVal, 4);
+	pDlg->m_AVIFile.Seek(0x30, CFile::begin);
+	pDlg->m_AVIFile.Write(&nCounts, 4);
+	pDlg->m_AVIFile.Seek(0x8C, CFile::begin);
+	pDlg->m_AVIFile.Write(&nCounts, 4);
+	dwRetVal = dwRetVal / 10;
+	pDlg->m_AVIFile.Write(&dwRetVal, 4);
+	dwRetVal = 0;
+	pDlg->m_AVIFile.Seek(0x90,CFile::begin);
+	pDlg->m_AVIFile.Write(&dwRetVal,4);
+	dwRetVal = 0x100001;
+	pDlg->m_AVIFile.Seek(0x134,CFile::begin);
+	pDlg->m_AVIFile.Write(&dwRetVal,4);
+	pDlg->m_AVIFile.Close();
+	
+	MessageBox(NULL, _T("AVI Conversion Success!!!"), NULL, 0);
+	SendMessage(pDlg->GetSafeHwnd(), WM_CLOSE, (WPARAM)pDlg, NULL);
 
 	return 0;
 }
-void CProgressDlg::Init_AVI_Convert(CFile * _1stFile, CFile *_2ndFile, float flt_1stStartPos, float flt_1stEndPos, float flt_2ndStartPos, float flt_2ndEndPos)
+
+
+void CProgressDlg::Init_AVI_Convert(CFile * _1stFile, CFile *_2ndFile, float flt_1stStartPos, float flt_1stEndPos, float flt_2ndStartPos, float flt_2ndEndPos, float flt_2ndMidStopPos)
 {
 	m_1stFile = _1stFile;
 	m_2ndFile = _2ndFile;
@@ -603,6 +665,14 @@ void CProgressDlg::Init_AVI_Convert(CFile * _1stFile, CFile *_2ndFile, float flt
 		nPacketCounts = (dwPos - ASF_FILE_HEAD_SIZE - nPacketCounts) / PACKET_SIZE;
 		dwPos = ASF_FILE_HEAD_SIZE + nPacketCounts * PACKET_SIZE;
 		m_limiteVal = dwPos;
+
+		// set m_limit2ndVal value
+		dwPos = (DWORD)(m_1stFile->GetLength() * flt_2ndMidStopPos) + ASF_FILE_HEAD_SIZE;
+		nPacketCounts = (dwPos - ASF_FILE_HEAD_SIZE) % PACKET_SIZE;
+		nPacketCounts = (dwPos - ASF_FILE_HEAD_SIZE - nPacketCounts) / PACKET_SIZE;
+		dwPos = ASF_FILE_HEAD_SIZE + nPacketCounts * PACKET_SIZE;
+		m_limit2ndVal = dwPos;
+		
 		m_1stSpliter.Seek(flt_1stStartPos);
 	}
 	if(flt_2ndEndPos != 0)
@@ -614,6 +684,7 @@ void CProgressDlg::Init_AVI_Convert(CFile * _1stFile, CFile *_2ndFile, float flt
 		nPacketCounts = (dwPos - ASF_FILE_HEAD_SIZE - nPacketCounts) / PACKET_SIZE;
 		dwPos = ASF_FILE_HEAD_SIZE + nPacketCounts * PACKET_SIZE;
 		m_limiteVal = dwPos;
+
 		//m_2ndFile->Open(CToolBarDlg::m_2ndFilePath,CFile::modeRead);
 		m_2ndSpliter.Seek(flt_2ndStartPos);
 	}

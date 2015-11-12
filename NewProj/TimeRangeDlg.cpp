@@ -92,11 +92,11 @@ void CTimeRangeDlg::OnOk()
 			path += _T(".avi");
 			m_ProgressDlg.m_AVIFilePath = path;
 			if(CNewProjDlg::g_config_Value_ST.nWndCounts == 2)
-				m_ProgressDlg.Init_AVI_Convert(m_1stFile, m_2ndFile, m_flt_1stStartPos, m_flt_1stEndPos, m_flt_2ndStartPos, m_flt_2ndEndPos);
+				m_ProgressDlg.Init_AVI_Convert(m_1stFile, m_2ndFile, m_flt_1stStartPos, m_flt_1stEndPos, m_flt_2ndStartPos, m_flt_2ndEndPos, m_flt_2ndStopPos);
 			else if(CNewProjDlg::g_config_Value_ST.nWndCounts == 1 && CNewProjDlg::g_config_Value_ST.nSelWndID == 1)
-				m_ProgressDlg.Init_AVI_Convert(m_1stFile, NULL, m_flt_1stStartPos, m_flt_1stEndPos, 0, 0);
+				m_ProgressDlg.Init_AVI_Convert(m_1stFile, NULL, m_flt_1stStartPos, m_flt_1stEndPos, 0, 0, 0);
 			else if(CNewProjDlg::g_config_Value_ST.nWndCounts == 1 && CNewProjDlg::g_config_Value_ST.nSelWndID == 2)
-				m_ProgressDlg.Init_AVI_Convert(NULL, m_2ndFile, 0, 0, m_flt_2ndStartPos, m_flt_2ndEndPos);
+				m_ProgressDlg.Init_AVI_Convert(NULL, m_2ndFile, 0, 0, m_flt_2ndStartPos, m_flt_2ndEndPos, m_flt_2ndEndPos);
 		}
 		m_ProgressDlg.ShowWindow(SW_SHOW | SW_SHOWNORMAL);
 	}else{

@@ -33,6 +33,11 @@ static char THIS_FILE[] = __FILE__;
 #define TIMER_ALARM		20009
 #define TIMER_RECORD_ALARM		20010
 
+// Total time calculate before 30 secs
+// because displayed video delay 30 secs than recording
+#define TOTAL_SECONDS_PER_DAY		(3600*24 + 30)
+//#define TOTAL_SECONDS_PER_DAY		(3600*10 + 60*29 + 30 + 30)
+
 
 HWAVEOUT		g_hWaveOut;
 #define VIDEOW 704
@@ -87,6 +92,10 @@ DWORD						CToolBarDlg::g_dwCurDTS;
 CPipe*						CToolBarDlg::m_pipe;
 bool						CToolBarDlg::g_ErrRead;
 //bool						CToolBarDlg::g_bAudioThread;
+
+int						CToolBarDlg::m_n2ndRecordStopPos;
+
+
 CToolBarDlg::CToolBarDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CToolBarDlg::IDD, pParent)
 {
@@ -881,6 +890,17 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 	{
 		OnAlarmSwitch(m_bAlarmOn);
 		m_bAlarmOn = !m_bAlarmOn;
+
+		if (m_n2ndRecordStopPos == -1) 
+		{
+			int currPos = m_Slider_Seek.GetPos();
+			long nRecStartSec = m_2ndBeginSecs + m_nStartPos / 1000;
+			long nRecCurrSec = m_2ndBeginSecs + currPos / 1000;
+
+			// check rec start previous day, and recording continue next day
+			if (nRecStartSec < TOTAL_SECONDS_PER_DAY && nRecCurrSec >= TOTAL_SECONDS_PER_DAY)
+				m_n2ndRecordStopPos = currPos;
+		}
 	}
 	CDialog::OnTimer(nIDEvent);
 }
@@ -1251,6 +1271,13 @@ void CToolBarDlg::OnRecordBegin()
 	m_bAlarmOn = true;
 	KillTimer(TIMER_ALARM);
 	SetTimer(TIMER_RECORD_ALARM, 400, NULL);
+
+	SYSTEMTIME recStartTime;
+	memcpy(&recStartTime, &CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr], sizeof(SYSTEMTIME));
+	m_2ndBeginSecs = recStartTime.wHour * 3600 + recStartTime.wMinute * 60 + recStartTime.wSecond;
+
+	m_n2ndRecordStopPos = -1;
+
 }
 int k = 0;
 UINT AviRecordThreadProc(LPVOID pParam);
@@ -1292,6 +1319,12 @@ void CToolBarDlg::OnRecordEnd()
 	m_TimeRangeDlg.m_flt_1stEndPos = (float)m_nEndPos / m_Slider_Seek.GetRangeMax();
 	m_TimeRangeDlg.m_flt_2ndStartPos = (float) m_nStartPos / m_Slider_Seek.GetRangeMax();
 	m_TimeRangeDlg.m_flt_2ndEndPos = (float)m_nEndPos / m_Slider_Seek.GetRangeMax();
+
+	if (m_n2ndRecordStopPos == -1) 
+		m_n2ndRecordStopPos = m_nEndPos;
+
+	m_TimeRangeDlg.m_flt_2ndStopPos = (float)m_n2ndRecordStopPos / m_Slider_Seek.GetRangeMax();
+	
 	m_TimeRangeDlg.ShowWindow(SW_SHOW);
 	
 #if 0
