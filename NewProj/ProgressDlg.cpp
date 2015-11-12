@@ -23,7 +23,7 @@ XVID_STATE			CProgressDlg::m_lpState;
 // CString             CToolBarDlg::m_1stFilePath;
 // CString				CToolBarDlg::m_2ndFilePath;
 
-#define VIDEO_FILL_PATTERN		((char)0x55)
+#define VIDEO_FILL_PATTERN		0x55
 
 
 CProgressDlg::CProgressDlg(CWnd* pParent /*=NULL*/)
@@ -460,8 +460,7 @@ UINT AVI_SpliterProc(LPVOID lParam)
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 1408 * j), (char*)(pDlg->m_1stSpliter.m_pY + 704 * j), 704);
 
 					// second video fill with pattern
-					//memset((char*)(pDlg->m_lpFrame.PushData + 1408 * j + 704), VIDEO_FILL_PATTERN, 704);
-					memset((char*)(pDlg->m_lpFrame.PushData + 1408 * j + 704), 0x55, 704);
+					memset((char*)(pDlg->m_lpFrame.PushData + 1408 * j + 704), (char)VIDEO_FILL_PATTERN, 704);
 				}
 			} else {
 				for(int j = 0; j < 480; j++)
