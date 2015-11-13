@@ -107,14 +107,14 @@ void CBitComboBox::OnPaint()
 	CBitmap bmpComboRight,bmpComboLeft, bmpComboCenter,bmpComboBot;
 	BITMAP bitRight, bitLeft, bitCenter;
 	SET_ZERO(bitRight); SET_ZERO(bitLeft); SET_ZERO(bitCenter);
-	if( m_nIDLeft )
+	if ( m_nIDLeft )
 	{
 		bmpComboLeft.LoadBitmap(m_nIDLeft);
 		bmpComboLeft.GetBitmap(&bitLeft);
 		MemDC.SelectObject(bmpComboLeft);
 		dc.BitBlt(rc.left,rc.top,bitLeft.bmWidth,bitLeft.bmHeight,&MemDC,0,0,SRCCOPY);
 	}
-	if( m_nIDRight )
+	if ( m_nIDRight )
 	{
 		bmpComboRight.LoadBitmap(m_nIDRight);
 		bmpComboRight.GetBitmap(&bitRight);
@@ -122,7 +122,7 @@ void CBitComboBox::OnPaint()
 		dc.BitBlt(rc.right-bitRight.bmWidth,rc.top,bitRight.bmWidth,bitRight.bmHeight,&MemDC,0,0,SRCCOPY);
 	}
 
-	if( m_nIDCenter )
+	if ( m_nIDCenter )
 	{
 		bmpComboCenter.LoadBitmap(m_nIDCenter);
 		bmpComboCenter.GetBitmap(&bitCenter);
@@ -135,7 +135,7 @@ void CBitComboBox::OnPaint()
 	rc.left += nListBoxTextLeft;
 
 	//Select the font only if list box is created
-	if( m_listbox )
+	if ( m_listbox )
  		dc.SelectObject(m_listbox.GetFont());
 
 	dc.SetBkMode(TRANSPARENT);
@@ -146,7 +146,7 @@ void CBitComboBox::OnPaint()
 	rcRepaint.right = rcRepaint.right - bitRight.bmWidth;
 	rcRepaint.top += 3; rcRepaint.bottom -= 8;
 	//Set the normal/highlight color when its repainted 
-	if( GetFocus()->m_hWnd == m_hWnd )
+	if ( GetFocus()->m_hWnd == m_hWnd )
 	{
 		dc.FillSolidRect(&rcRepaint,m_colBackGroundHighLight);
 		dc.SetTextColor(m_colTextHighLight);
@@ -161,7 +161,7 @@ void CBitComboBox::OnPaint()
 	
 	dc.DrawText(sz,&rc,DT_VCENTER | DT_SINGLELINE);
 	
-	if( m_listbox )
+	if ( m_listbox )
 	{
 
 		 //TRACE("Painting the listbox\n");
@@ -240,7 +240,7 @@ void CBitComboBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
 	// TODO: Add your code to draw the specified item
 	//TRACE("DrawItem()\n");
-	if( lpDrawItemStruct->itemID == -1 )
+	if ( lpDrawItemStruct->itemID == -1 )
 		return;
 
 	CDC			pDC;	
@@ -248,7 +248,7 @@ void CBitComboBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	CBrush pBrush;
 	CString		sItem;
 
-	if(lpDrawItemStruct->itemState & ODS_FOCUS)
+	if (lpDrawItemStruct->itemState & ODS_FOCUS)
 	{
 		pBrush.CreateSolidBrush(m_colBackGroundHighLight);
 		pDC.FillRect(&lpDrawItemStruct->rcItem, &pBrush);
@@ -267,10 +267,10 @@ void CBitComboBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	//Draw the right image of the list box
 	DrawListRight();
 	//Draw the bottom for the last item
-	if( lpDrawItemStruct->itemID == (UINT)(m_listbox.GetCount()-1) )
+	if ( lpDrawItemStruct->itemID == (UINT)(m_listbox.GetCount()-1) )
 		DrawListBot();
 	//Draw the top for the first item
-	if( lpDrawItemStruct->itemID == 0 )
+	if ( lpDrawItemStruct->itemID == 0 )
 		DrawListTop();
 
 	// Copy the text of the item to a string
@@ -304,7 +304,7 @@ void CBitComboBox::DrawListLeft(int nHeight)
 	CBitmap bmpImage;
 	BITMAP bitImage;
 
-	if( m_nIDListLeft )
+	if ( m_nIDListLeft )
 	{
 		bmpImage.LoadBitmap(m_nIDListLeft);
 		bmpImage.GetBitmap(&bitImage);
@@ -324,7 +324,7 @@ void CBitComboBox::DrawListRight(int nHeight)
 	CBitmap bmpImage;
 	BITMAP bitImage;
 
-	if( m_nIDListRight )
+	if ( m_nIDListRight )
 	{
 		bmpImage.LoadBitmap(m_nIDListRight);
 		bmpImage.GetBitmap(&bitImage);
@@ -344,7 +344,7 @@ void CBitComboBox::DrawListTop(int nWidth)
 	CBitmap bmpImage;
 	BITMAP bitImage;
 
-	if( m_nIDListTop )
+	if ( m_nIDListTop )
 	{
 		bmpImage.LoadBitmap(m_nIDListTop);
 		bmpImage.GetBitmap(&bitImage);
@@ -366,7 +366,7 @@ void CBitComboBox::DrawListBot(int nWidth)
 	CBitmap bmpImage;
 	BITMAP bitImage;
 
-	if( m_nIDListBot )
+	if ( m_nIDListBot )
 	{
 		bmpImage.LoadBitmap(m_nIDListBot);
 		bmpImage.GetBitmap(&bitImage);

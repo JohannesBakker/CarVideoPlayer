@@ -98,7 +98,7 @@ CNewProjDlg::CNewProjDlg(CWnd* pParent /*=NULL*/)
 	lp->lpSecurityDescriptor = NULL;
 	lp->nLength = 100;
 	BOOL bResult = CreateDirectory(_T("C:\\DVR264"), lp);
-	if(bResult == TRUE) bResult = CreateDirectory(_T("C:\\DVR264\\Output"), lp);
+	if (bResult == TRUE) bResult = CreateDirectory(_T("C:\\DVR264\\Output"), lp);
 	delete lp;
 	m_FolderPath = "";
 	m_FirstFilePath = "";
@@ -107,7 +107,7 @@ CNewProjDlg::CNewProjDlg(CWnd* pParent /*=NULL*/)
 	g_bViewChange = false;
 	g_bResetFlag = false;
 	g_bOpenFlag = false;
-	if(!m_ConfigFile.Open(_T(CONFIG_FILE_PATH), CFile::modeReadWrite)){
+	if (!m_ConfigFile.Open(_T(CONFIG_FILE_PATH), CFile::modeReadWrite)){
 		MessageBox(_T("Error Reading Config Datas"), NULL, 0);
 		ZeroMemory(&g_config_Value_ST, sizeof(Config_Datas));
 	}else{
@@ -193,7 +193,7 @@ BOOL CNewProjDlg::OnInitDialog()
 	m_View2Dlg.MoveWindow(cx / 3, 0, cx / 3, cy * 3 / 5, TRUE);
 	m_View2Dlg.ShowWindow(SW_SHOW);
 	CNewProjDlg::g_config_Value_ST.nWndCounts = 2;
-	if(m_SecondFilePath == "")
+	if (m_SecondFilePath == "")
 	{
 		m_View2Dlg.ShowWindow(SW_HIDE);
 		m_View1Dlg.MoveWindow(0, 0, cx * 2 / 3, cy * 3 / 5, TRUE);
@@ -216,7 +216,7 @@ BOOL CNewProjDlg::OnInitDialog()
 	m_SearchDlg.SetWindowText(CNewProjDlg::m_wLanguageRes[21]);
 	m_IOLightSetDlg.Create(IDD_IO_LIGHT_SET, this);
 	m_IOLightSetDlg.SetWindowText(CNewProjDlg::m_wLanguageRes[702]);
-	if(m_bDateWindow == TRUE)
+	if (m_bDateWindow == TRUE)
 	{
 //		m_CalendarDlg.Create(IDD_CALENDAR_DIALOG, this);
 //		m_CalendarDlg.m_bCalendarDlg = TRUE;
@@ -345,7 +345,7 @@ void CNewProjDlg::OnFileOpen()
 	LPITEMIDLIST idl = new ITEMIDLIST;
 	idl = SHBrowseForFolder(&bi);
 	
-	if(idl == NULL) 
+	if (idl == NULL) 
 	{
 		MessageBox(_T("Retry Open Folder!!!"), NULL, 0);
 		m_FirstFilePath = "";
@@ -366,7 +366,7 @@ void CNewProjDlg::OnFileOpen()
 	m_FolderTime.wDay = wtoi(timeTemp);
 	
 	CFile file;
-	if(!file.Open(_T(CONFIG_FILE_PATH), CFile::modeReadWrite)) 
+	if (!file.Open(_T(CONFIG_FILE_PATH), CFile::modeReadWrite)) 
 	{
 		// clear last path
 		str.Empty();
@@ -377,7 +377,7 @@ void CNewProjDlg::OnFileOpen()
 	file.Write(&CNewProjDlg::g_config_Value_ST, sizeof(CNewProjDlg::g_config_Value_ST));
 	file.Close();
 	strInfo ="D264\\mdvr.log"; 
-	if(str.GetAt(str.GetLength() - 1) !='\\') m_FolderPath += "\\";
+	if (str.GetAt(str.GetLength() - 1) !='\\') m_FolderPath += "\\";
 	CString strTempPath[40];
 	int i;
 	for(i = 0; i < 40; i++)
@@ -388,12 +388,12 @@ void CNewProjDlg::OnFileOpen()
 	while (bWorking)
 	{
 		bWorking = finder.FindNextFile();
-		if(finder.IsDots()) continue;
-		if(m_FirstFilePath == "")
+		if (finder.IsDots()) continue;
+		if (m_FirstFilePath == "")
 		{
 			CString strFileName;
 			strFileName = finder.GetFileName();
-			if(strFileName.Mid(0, 1) == "H" && strFileName.Mid(9, 1) == "-" && strFileName.Mid(16, 2) == "N1" && strFileName.Mid(strFileName.GetLength() - 4, 4) == ".264")
+			if (strFileName.Mid(0, 1) == "H" && strFileName.Mid(9, 1) == "-" && strFileName.Mid(16, 2) == "N1" && strFileName.Mid(strFileName.GetLength() - 4, 4) == ".264")
 			{
 				strTempPath[FileCount] = finder.GetFilePath();
 				FileCount++;
@@ -401,7 +401,7 @@ void CNewProjDlg::OnFileOpen()
 		}
 	}
 	finder.Close();
-	if(FileCount == 0) 
+	if (FileCount == 0) 
 	{
 		MessageBox(_T("No Exist 264 Files!"), NULL, 0);
 
@@ -424,7 +424,7 @@ void CNewProjDlg::OnFileOpen()
 	bool bf = false;
 	int j = 0;
 	do{
-		if(strTempPath[j].Mid(strTempPath[j].GetLength() - 8, 4) == "A1A0")
+		if (strTempPath[j].Mid(strTempPath[j].GetLength() - 8, 4) == "A1A0")
 		{
 			m_nPathCounts++;
 			m_FirstPathArrays[m_nPathCounts - 1] = strTempPath[j];
@@ -436,9 +436,9 @@ void CNewProjDlg::OnFileOpen()
 			m_DateTime[m_nPathCounts - 1].wSecond = wtoi(strTempPath[j].Mid(strTempPath[j].GetLength() - 12, 2));
 			bf = true;
 		}else{
-			if(bf == false) m_nPathCounts++;
+			if (bf == false) m_nPathCounts++;
 			m_SecondPathArrays[m_nPathCounts - 1] = strTempPath[j];
-			if(bf == false)
+			if (bf == false)
 			{
 				m_DateTime[m_nPathCounts - 1].wYear = wtoi(strTempPath[j].Mid(strTempPath[j].GetLength() - 25, 4));
 				m_DateTime[m_nPathCounts - 1].wMonth = wtoi(strTempPath[j].Mid(strTempPath[j].GetLength() - 21, 2));
@@ -454,26 +454,26 @@ void CNewProjDlg::OnFileOpen()
 	m_ToolBarDlg.m_1stFilePath = m_FirstPathArrays[0];
 	m_ToolBarDlg.m_2ndFilePath = m_SecondPathArrays[0];
 	m_ToolBarDlg.m_pTimeLineDlg = &m_TimeLineDlg;
-	if(m_FirstPathArrays[0] == "" && m_SecondPathArrays[0] == "") m_ToolBarDlg.m_nThreadCounts = 0;
-	if((m_FirstPathArrays[0] != "" && m_SecondPathArrays[0] == "") || (m_FirstPathArrays[0] == "" && m_SecondPathArrays[0] != "")) m_ToolBarDlg.m_nThreadCounts = 1;
-	if(m_FirstPathArrays[0] != "" && m_SecondPathArrays[0] != "") m_ToolBarDlg.m_nThreadCounts = 2;
+	if (m_FirstPathArrays[0] == "" && m_SecondPathArrays[0] == "") m_ToolBarDlg.m_nThreadCounts = 0;
+	if ((m_FirstPathArrays[0] != "" && m_SecondPathArrays[0] == "") || (m_FirstPathArrays[0] == "" && m_SecondPathArrays[0] != "")) m_ToolBarDlg.m_nThreadCounts = 1;
+	if (m_FirstPathArrays[0] != "" && m_SecondPathArrays[0] != "") m_ToolBarDlg.m_nThreadCounts = 2;
 	m_ToolBarDlg.m_bCheckChannel = true;
 	memcpy(&m_ToolBarDlg.m_DateTime, &m_DateTime[0], sizeof(SYSTEMTIME));
-	if(bFirstOpen) bFirstOpen = false;
+	if (bFirstOpen) bFirstOpen = false;
 	else m_InfoListDlg.m_fileList.DeleteAllItems();
 	for(i = m_nPathCounts-1; i >=0 ; i--)
 	{
 		m_InfoListDlg.load_event_list(strInfo,m_DateTime[i]);
 		CFile file;
-		if(m_FirstPathArrays[i] != "")
+		if (m_FirstPathArrays[i] != "")
 		{
 			
-			if(!file.Open(m_FirstPathArrays[i], CFile::modeRead)) return;
+			if (!file.Open(m_FirstPathArrays[i], CFile::modeRead)) return;
 			m_dwDurations[i] = GetDuration(&file);
-			if(m_SecondPathArrays[i] != "")
+			if (m_SecondPathArrays[i] != "")
 			{
 				CFile _2ndFile;
-				if(!_2ndFile.Open(m_SecondPathArrays[i], CFile ::modeRead)) return;
+				if (!_2ndFile.Open(m_SecondPathArrays[i], CFile ::modeRead)) return;
 				char temp[256];
 				sprintf(temp, " %d-%02d-%02d \n", m_DateTime[i].wYear, m_DateTime[i].wMonth, m_DateTime[i].wDay);
 				m_InfoListDlg.load_file_list(m_dwDurations[i], m_DateTime[i], 2, file.GetLength(), _2ndFile.GetLength(), i);
@@ -481,7 +481,7 @@ void CNewProjDlg::OnFileOpen()
 			}else m_InfoListDlg.load_file_list(m_dwDurations[i], m_DateTime[i], 1, file.GetLength(), 0, i);
 			file.Close();
 		}else{ 
-			if(!file.Open(m_SecondPathArrays[0], CFile::modeRead)) return;
+			if (!file.Open(m_SecondPathArrays[0], CFile::modeRead)) return;
 			m_dwDurations[i] = GetDuration(&file);
 			m_InfoListDlg.load_file_list(m_dwDurations[i], m_DateTime[i], 1, 0, file.GetLength(), i);
 			file.Close();
@@ -492,14 +492,14 @@ void CNewProjDlg::OnFileOpen()
 	CRect rt;
 	GetClientRect(&rt);
 	CNewProjDlg::g_config_Value_ST.nWndCounts = 0;
-	if(m_FirstPathArrays[0] == "")
+	if (m_FirstPathArrays[0] == "")
 	{
 		m_View1Dlg.ShowWindow(SW_HIDE);
 		m_View2Dlg.MoveWindow(0, 0 , rt.Width() * 2 / 3, rt.Height() * 3 / 5);
 		m_ToolBarDlg.Init_VideoOut(&m_View1Dlg, &m_View2Dlg);
 		CNewProjDlg::g_config_Value_ST.nWndCounts = 1;
 	}
-	if(m_SecondPathArrays[0] == "")
+	if (m_SecondPathArrays[0] == "")
 	{	
 		m_View2Dlg.ShowWindow(SW_HIDE);
 		m_View1Dlg.MoveWindow(0, 0, rt.Width() * 2 / 3, rt.Height() * 3 / 5);
@@ -531,9 +531,9 @@ void CNewProjDlg::OnExit()
 void CNewProjDlg::OnSize(UINT nType, int cx, int cy) 
 {
 	CDialog::OnSize(nType, cx, cy);
-	if(m_bDlg)
+	if (m_bDlg)
 	{
-		if(m_SecondFilePath == "")
+		if (m_SecondFilePath == "")
 		{	
 			m_View2Dlg.ShowWindow(SW_HIDE);
 			m_View1Dlg.MoveWindow(0, 0, cx * 2 / 3, cy * 3  / 5);
@@ -547,7 +547,7 @@ void CNewProjDlg::OnSize(UINT nType, int cx, int cy)
 		m_GPSDlg.MoveWindow(cx * 2 / 3, 0, cx / 3, cy * 3 / 5);
 		m_ToolBarDlg.MoveWindow(0, cy * 3 / 5, cx * 2 / 3, 50);
 		m_InfoListDlg.MoveWindow(cx * 2 / 3, cy * 3 / 5, cx / 3, cy * 2 / 5);
-		if(m_bDateWindow == TRUE)
+		if (m_bDateWindow == TRUE)
 		{
 //			m_CalendarDlg.MoveWindow(0, cy * 3 / 5 + 50, cx / 4, cy * 2 / 5 - 50);
 			m_TimeLineDlg.m_bPaint = true;
@@ -564,13 +564,13 @@ void CNewProjDlg::OnSize(UINT nType, int cx, int cy)
 		m_AboutRt.right = rt.Width() / 2 + 200;
 		m_AboutRt.top = rt.Height() / 2 - 100;
 		m_AboutRt.bottom = rt.Height() / 2 + 100;
-		if(CNewProjDlg::g_config_Value_ST.nWndCounts == 1)
+		if (CNewProjDlg::g_config_Value_ST.nWndCounts == 1)
 		{
 			m_View2Dlg.ShowWindow(SW_HIDE);
 			m_View1Dlg.MoveWindow(0, 0, cx * 2 / 3, cy * 3  / 5);
 			m_View1Dlg.ShowWindow(SW_SHOW);
 		}
-		else if(CNewProjDlg::g_config_Value_ST.nWndCounts == 2)
+		else if (CNewProjDlg::g_config_Value_ST.nWndCounts == 2)
 		{
 			m_View1Dlg.MoveWindow(0, 0, cx / 3, cy * 3  / 5);
 			m_View2Dlg.MoveWindow(cx / 3, 0, cx / 3, cy * 3 / 5);
@@ -592,11 +592,11 @@ void CNewProjDlg::OnSettings()
 	// TODO: Add your command handler code here
 	m_SystemSetupDlg.m_cmb_windows.SetCurSel(CNewProjDlg::g_config_Value_ST.nWndCounts - 1);
 	m_SystemSetupDlg.m_cmb_player_view_scale.SetCurSel(CNewProjDlg::g_config_Value_ST.nViewScaleID);
-	if(CNewProjDlg::g_config_Value_ST.bShowChanNum == true) m_SystemSetupDlg.m_channelCheckBtn.SetCheck(1);
+	if (CNewProjDlg::g_config_Value_ST.bShowChanNum == true) m_SystemSetupDlg.m_channelCheckBtn.SetCheck(1);
 	else m_SystemSetupDlg.m_channelCheckBtn.SetCheck(0);
-	if(CNewProjDlg::g_config_Value_ST.bUseRGB16 == true) m_SystemSetupDlg.m_rgb16Btn.SetCheck(1);
+	if (CNewProjDlg::g_config_Value_ST.bUseRGB16 == true) m_SystemSetupDlg.m_rgb16Btn.SetCheck(1);
 	else m_SystemSetupDlg.m_rgb16Btn.SetCheck(0);
-	if(CNewProjDlg::g_config_Value_ST.bWtrmkVerify == true) m_SystemSetupDlg.m_waterMarkBtn.SetCheck(1);
+	if (CNewProjDlg::g_config_Value_ST.bWtrmkVerify == true) m_SystemSetupDlg.m_waterMarkBtn.SetCheck(1);
 	else m_SystemSetupDlg.m_waterMarkBtn.SetCheck(0);
 	m_SystemSetupDlg.ShowWindow(SW_SHOW);
 }
@@ -646,7 +646,7 @@ bool CNewProjDlg::GetLanguageResource(int nLanguageID)
 	CString		strLangPath;
 	LPCWSTR		dumpline = NULL;
 	WCHAR		wStr[100], wCh;
-	if(nLanguageID < 0 && nLanguageID > 6) return false;
+	if (nLanguageID < 0 && nLanguageID > 6) return false;
 	switch(nLanguageID)
 	{
 	case 0:
@@ -672,21 +672,21 @@ bool CNewProjDlg::GetLanguageResource(int nLanguageID)
 		break;
 	}
 	CFile file;
-	if(!file.Open(strLangPath, CFile::modeRead))
+	if (!file.Open(strLangPath, CFile::modeRead))
 		MessageBox(_T("Error Reading Language Resource!"));
 	file.Read(&wStr, 2);
 	int i = 0;
 	int j = 0;
 	while(file.Read(&wCh, 2) > 0)
 	{
-		if(wCh == 0x000D) continue;
-		if(wCh == 0x000A)
+		if (wCh == 0x000D) continue;
+		if (wCh == 0x000A)
 		{
 			j++;
 			i = 0;
 			continue;
 		}
-		if(i > 5) m_wLanguageRes[j][i - 6] = wCh;
+		if (i > 5) m_wLanguageRes[j][i - 6] = wCh;
 		i++;
 	}
 	return true;
@@ -696,7 +696,7 @@ void WndsBK_Paint(CView1Dlg* pDlg1, CView2Dlg* pDlg2, int nSelWnd)
 	CDC* pDC1 = pDlg1->GetDC();
 	CRect rt1;
 	pDlg1->GetWindowRect(&rt1);
-	if(nSelWnd == 1) pDC1->FillSolidRect(0, 0, rt1.Width(), rt1.Height(), RGB(255, 0, 0));
+	if (nSelWnd == 1) pDC1->FillSolidRect(0, 0, rt1.Width(), rt1.Height(), RGB(255, 0, 0));
 	else pDC1->FillSolidRect(0, 0, rt1.Width(), rt1.Height(), RGB(0, 0, 255));
 	pDC1 = pDlg1->GetDlgItem(IDC_STATIC_VIEW1)->GetDC();
 	pDlg1->GetDlgItem(IDC_STATIC_VIEW1)->GetClientRect(&rt1);
@@ -705,7 +705,7 @@ void WndsBK_Paint(CView1Dlg* pDlg1, CView2Dlg* pDlg2, int nSelWnd)
 	CDC*pDC2 = pDlg2->GetDC();
 	CRect rt2;
 	pDlg2->GetWindowRect(&rt2);
-	if(nSelWnd == 1) pDC2->FillSolidRect(0, 0, rt2.Width(), rt2.Height(), RGB(0, 0, 255));
+	if (nSelWnd == 1) pDC2->FillSolidRect(0, 0, rt2.Width(), rt2.Height(), RGB(0, 0, 255));
 	else pDC2->FillSolidRect(0, 0, rt2.Width(), rt2.Height(), RGB(255, 0, 0));
 	pDC2 = pDlg2->GetDlgItem(IDC_STATIC_VIEW2)->GetDC();
 	pDlg2->GetDlgItem(IDC_STATIC_VIEW2)->GetClientRect(&rt2);
@@ -732,7 +732,7 @@ DWORD CNewProjDlg::GetDuration(CFile* m_file)
 	do{
 		m_file->Seek((PacketCounts - n) * PACKET_SIZE + ASF_FILE_HEAD_SIZE, CFile::begin);
 		m_file->Read(&pch, sizeof(PACKET_CONST_HEADER));
-		if(pch.byHead == 0x82 && pch.wdConst == 0x0000 && pch.byConst == 0x5d)
+		if (pch.byHead == 0x82 && pch.wdConst == 0x0000 && pch.byConst == 0x5d)
 		{
 			switch(pch.byType)
 			{
@@ -747,22 +747,22 @@ DWORD CNewProjDlg::GetDuration(CFile* m_file)
 			case PACKET00_TYPE:
 				m_file->Read(&p00h, sizeof(PACKET00_HEADER));
 				m_dwLastDTS = p00h.dwDTS;
-				if(m_dwLastDTS != 0 && m_dwLastDTS > dwFirstDTS) return m_dwLastDTS - dwFirstDTS;
+				if (m_dwLastDTS != 0 && m_dwLastDTS > dwFirstDTS) return m_dwLastDTS - dwFirstDTS;
 				break;
 			case PACKET01_TYPE:
 				m_file->Read(&p01h, sizeof(PACKET01_HEADER));
 				m_dwLastDTS = p01h.dwDTS;
-				if(m_dwLastDTS != 0 && m_dwLastDTS > dwFirstDTS) return m_dwLastDTS - dwFirstDTS;
+				if (m_dwLastDTS != 0 && m_dwLastDTS > dwFirstDTS) return m_dwLastDTS - dwFirstDTS;
 				break;
 			case PACKET08_TYPE:
 				m_file->Read(&p08h, sizeof(PACKET08_HEADER));
 				m_dwLastDTS = p08h.dwDTS;
-				if(m_dwLastDTS != 0 && m_dwLastDTS > dwFirstDTS) return m_dwLastDTS - dwFirstDTS;
+				if (m_dwLastDTS != 0 && m_dwLastDTS > dwFirstDTS) return m_dwLastDTS - dwFirstDTS;
 				break;
 			case PACKET09_TYPE:
 				m_file->Read(&p09h, sizeof(PACKET09_HEADER));
 				m_dwLastDTS = p09h.dwDTS;
-				if(m_dwLastDTS != 0 && m_dwLastDTS > dwFirstDTS) return m_dwLastDTS - dwFirstDTS;
+				if (m_dwLastDTS != 0 && m_dwLastDTS > dwFirstDTS) return m_dwLastDTS - dwFirstDTS;
 				break;
 			default:
 				break;

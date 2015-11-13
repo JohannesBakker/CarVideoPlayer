@@ -33,7 +33,7 @@ CSoundIn::CSoundIn()
 
 CSoundIn::~CSoundIn()
 {
-	if(m_bRecording)
+	if (m_bRecording)
 		Stop();
 	::PostQuitMessage(0);
 }
@@ -55,20 +55,20 @@ bool CSoundIn::Start(WAVEFORMATEX* format)
 {
 	MMRESULT mmReturn = 0;
 	
-	if(m_bRecording || DataFromSoundIn == NULL || m_pOwner == NULL)
+	if (m_bRecording || DataFromSoundIn == NULL || m_pOwner == NULL)
 	{
 		// already recording!
 		return FALSE;
 	}
 	else
 	{
-		if(format != NULL)
+		if (format != NULL)
 			m_Format = *format;
 
 		// open wavein device
 		mmReturn = ::waveInOpen( &m_hRecord, WAVE_MAPPER, &m_Format, m_ThreadID, NULL, CALLBACK_THREAD);
 		
-		if(mmReturn)
+		if (mmReturn)
 		{
 			waveInErrorMsg(mmReturn, (LPCTSTR)("in Start()"));
 			return FALSE;
@@ -83,7 +83,7 @@ bool CSoundIn::Start(WAVEFORMATEX* format)
 			
 			// start recording
 			mmReturn = ::waveInStart(m_hRecord);
-			if(mmReturn )
+			if (mmReturn )
 			{
 				waveInErrorMsg(mmReturn, (LPCTSTR)("in Start()"));
 				return FALSE;
@@ -97,14 +97,14 @@ bool CSoundIn::Start(WAVEFORMATEX* format)
 void CSoundIn::Stop()
 {
 	MMRESULT mmReturn = MMSYSERR_NOERROR;
-	if(!m_bRecording)
+	if (!m_bRecording)
 	{
 		return;
 	}
 	else
 	{
 		mmReturn = ::waveInReset(m_hRecord);
-		if(mmReturn)
+		if (mmReturn)
 		{
 			waveInErrorMsg(mmReturn, (LPCTSTR)("in Stop()"));
 			return;
@@ -114,9 +114,9 @@ void CSoundIn::Stop()
 			m_bRecording = FALSE;
 			Sleep(500);
 			mmReturn = ::waveInClose(m_hRecord);
-			if(mmReturn) waveInErrorMsg(mmReturn, (LPCTSTR)("in Stop()"));
+			if (mmReturn) waveInErrorMsg(mmReturn, (LPCTSTR)("in Stop()"));
 		}
-		if(m_QueuedBuffers != 0) ErrorMsg((LPCTSTR)("Still %d buffers in waveIn queue!"), m_QueuedBuffers);
+		if (m_QueuedBuffers != 0) ErrorMsg((LPCTSTR)("Still %d buffers in waveIn queue!"), m_QueuedBuffers);
 	}
 }
 
@@ -127,7 +127,7 @@ void CSoundIn::OnMM_WIM_DATA(UINT parm1, LONG parm2)
 	LPWAVEHDR pHdr = (LPWAVEHDR) parm2;
 
 	mmReturn = ::waveInUnprepareHeader(m_hRecord, pHdr, sizeof(WAVEHDR));
-	if(mmReturn)
+	if (mmReturn)
 	{
 		waveInErrorMsg(mmReturn, (LPCTSTR)("in OnWIM_DATA()"));
 		return;
@@ -135,7 +135,7 @@ void CSoundIn::OnMM_WIM_DATA(UINT parm1, LONG parm2)
 
 	TRACE((LPCTSTR)("WIM_DATA %4d\n"), pHdr->dwBytesRecorded);
 	
-	if(m_bRecording)
+	if (m_bRecording)
 	{
 		CBuffer buf(pHdr->lpData, pHdr->dwBufferLength);
 
@@ -145,7 +145,7 @@ void CSoundIn::OnMM_WIM_DATA(UINT parm1, LONG parm2)
 		// reuse the buffer:
 		// prepare it again
 		mmReturn = ::waveInPrepareHeader(m_hRecord,pHdr, sizeof(WAVEHDR));
-		if(mmReturn)
+		if (mmReturn)
 		{
 			waveInErrorMsg(mmReturn, (LPCTSTR)("in OnWIM_DATA()"));
 		}
@@ -153,7 +153,7 @@ void CSoundIn::OnMM_WIM_DATA(UINT parm1, LONG parm2)
 		{
 			// add the input buffer to the queue again
 			mmReturn = ::waveInAddBuffer(m_hRecord, pHdr, sizeof(WAVEHDR));
-			if(mmReturn) waveInErrorMsg(mmReturn, (LPCTSTR)("in OnWIM_DATA()"));
+			if (mmReturn) waveInErrorMsg(mmReturn, (LPCTSTR)("in OnWIM_DATA()"));
 			else return;  // no error
 		}
 		
@@ -173,7 +173,7 @@ int CSoundIn::AddInputBufferToQueue()
 	
 	// create the header
 	LPWAVEHDR pHdr = new WAVEHDR;
-	if(pHdr == NULL) return NULL;
+	if (pHdr == NULL) return NULL;
 	ZeroMemory(pHdr, sizeof(WAVEHDR));
 
 	// new a buffer
@@ -183,7 +183,7 @@ int CSoundIn::AddInputBufferToQueue()
 	
 	// prepare it
 	mmReturn = ::waveInPrepareHeader(m_hRecord,pHdr, sizeof(WAVEHDR));
-	if(mmReturn)
+	if (mmReturn)
 	{
 		waveInErrorMsg(mmReturn, (LPCTSTR)("in AddInputBufferToQueue()"));
 		return m_QueuedBuffers;
@@ -191,7 +191,7 @@ int CSoundIn::AddInputBufferToQueue()
 
 	// add the input buffer to the queue
 	mmReturn = ::waveInAddBuffer(m_hRecord, pHdr, sizeof(WAVEHDR));
-	if(mmReturn)
+	if (mmReturn)
 	{
 		waveInErrorMsg(mmReturn, (LPCTSTR)("in AddInputBufferToQueue()"));
 		return m_QueuedBuffers;

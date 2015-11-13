@@ -115,12 +115,12 @@ void CACCGraph::OnPaint()
 	m_BinCount = 0;
 	for ( i = 0; i < m_BinCount; i++)
 	{
-		if(m_pACCBinData[i].nBinSize != 60) continue;
+		if (m_pACCBinData[i].nBinSize != 60) continue;
 		m_nAccSpeedCount ++;
-		if(m_nAccSpeedCount == 1)
+		if (m_nAccSpeedCount == 1)
 		{
 			x	= (int)	m_pACCBinData[i].dwCurPos  * (rt.Width() - 130) / m_dura + 130;
-			if(m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
+			if (m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
 			{
 				m_accId = (int)m_pACCBinData[i].mBinData.accSpeedData.acc_G / m_pACCBinData[i].mBinData.accSpeedData.accOSet_G;
 				m_bAcc = FALSE;
@@ -148,7 +148,7 @@ void CACCGraph::OnPaint()
 			
 			x	= (int)	m_pACCBinData[i].dwCurPos  * (rt.Width() - 130) / m_dura + 130;
 			
-			if(m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
+			if (m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
 			{
 				m_accId = (int)m_pACCBinData[i].mBinData.accSpeedData.acc_G / m_pACCBinData[i].mBinData.accSpeedData.accOSet_G;
 				m_bAcc = FALSE;
@@ -179,12 +179,12 @@ void CACCGraph::OnPaint()
 	memDC.SelectObject(&penGreen);
 	for ( i = 0; i < m_BinCount; i++)
 	{
-		if(m_pACCBinData[i].nBinSize != 60) continue;
+		if (m_pACCBinData[i].nBinSize != 60) continue;
 		m_nAccSpeedCount ++;
-		if(m_nAccSpeedCount == 1)
+		if (m_nAccSpeedCount == 1)
 		{
 			 x	= (int)	m_pACCBinData[i].dwCurPos  * (rt.Width() - 130) / m_dura + 130;
-			if(m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
+			if (m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
 			{
 				m_accId = (int)m_pACCBinData[i].mBinData.accSpeedData.acc_G / m_pACCBinData[i].mBinData.accSpeedData.accOSet_G;
 				m_bAcc = FALSE;
@@ -210,7 +210,7 @@ void CACCGraph::OnPaint()
 			
 			 x	= (int)	m_pACCBinData[i].dwCurPos  * (rt.Width() - 130) / m_dura + 130;
 			
-			if(m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
+			if (m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
 			{
 				m_accId = (int)m_pACCBinData[i].mBinData.accSpeedData.acc_G / m_pACCBinData[i].mBinData.accSpeedData.accOSet_G;
 				m_bAcc = FALSE;
@@ -234,12 +234,12 @@ void CACCGraph::OnPaint()
 	memDC.SelectObject(&penBlue);
 	for ( i = 0; i < m_BinCount; i++)
 	{
-		if(m_pACCBinData[i].nBinSize != 60) continue;
+		if (m_pACCBinData[i].nBinSize != 60) continue;
 		m_nAccSpeedCount ++;
-		if(m_nAccSpeedCount == 1)
+		if (m_nAccSpeedCount == 1)
 		{
 			x	= (int)	m_pACCBinData[i].dwCurPos  * (rt.Width() - 130) / m_dura + 130;
-			if(m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
+			if (m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
 			{
 				m_accId = (int)m_pACCBinData[i].mBinData.accSpeedData.acc_G / m_pACCBinData[i].mBinData.accSpeedData.accOSet_G;
 				m_bAcc = FALSE;
@@ -267,7 +267,7 @@ void CACCGraph::OnPaint()
 			
 		 x	= (int)	m_pACCBinData[i].dwCurPos  * (rt.Width() - 130) / m_dura + 130;
 			
-			if(m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
+			if (m_bAcc && m_pACCBinData[i].mBinData.accSpeedData.accOSet_G != 0)
 			{
 				m_accId = (int)m_pACCBinData[i].mBinData.accSpeedData.acc_G / m_pACCBinData[i].mBinData.accSpeedData.accOSet_G;
 				m_bAcc = FALSE;

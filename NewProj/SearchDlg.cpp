@@ -164,9 +164,9 @@ void CSearchDlg::OnClickEventTypeLstcntlr(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 	else
 		m_eventType.SetCheck(pLst->iItem,TRUE);
-	if(pLst->iItem == 12)
+	if (pLst->iItem == 12)
 	{
-		if(m_eventType.GetCheck(12) != false)
+		if (m_eventType.GetCheck(12) != false)
 		{
 			m_eventType.CheckAllItems();
 			m_eventType.SetCheck(12,TRUE);

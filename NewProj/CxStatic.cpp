@@ -70,7 +70,7 @@ CxStatic::CxStatic()
 
 	// LIBRARY TO DRAW COLOR GRADIENTS
 	hinst_msimg32 = LoadLibrary( _T("msimg32.dll") );
-	if( hinst_msimg32 ){
+	if ( hinst_msimg32 ){
 		dllfunc_GradientFill = ((LPFNDLLFUNC) GetProcAddress( hinst_msimg32, "GradientFill" ));
 	}
 }
@@ -528,8 +528,8 @@ void CxStatic::DrawText(CDC* pDCMem, CRect* pRect, CString csText)
 	DWORD dwFlags = 0;
 
 	// Map "Static Styles" to "Text Styles" - WARNING MACROS
-#define MAP_STYLE(src, dest) if(dwStyle & (src)) dwFlags |= (dest)
-#define NMAP_STYLE(src, dest) if(!(dwStyle & (src))) dwFlags |= (dest)
+#define MAP_STYLE(src, dest) if (dwStyle & (src)) dwFlags |= (dest)
+#define NMAP_STYLE(src, dest) if (!(dwStyle & (src))) dwFlags |= (dest)
 
 	MAP_STYLE(	SS_RIGHT,			DT_RIGHT   					);
 	MAP_STYLE(	SS_CENTER,			DT_CENTER					);

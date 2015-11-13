@@ -83,7 +83,7 @@ STDMETHODIMP CDiscFormatDataEvent::XFormatDataEvents::GetTypeInfo(
 	METHOD_PROLOGUE(CDiscFormatDataEvent, FormatDataEvents)
 	*pptinfo = NULL;
 
-	if(itinfo != 0)
+	if (itinfo != 0)
 		return ResultFromScode(DISP_E_BADINDEX);
 	pThis->m_ptinfo->AddRef();
 	*pptinfo = pThis->m_ptinfo;

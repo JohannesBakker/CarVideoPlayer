@@ -39,9 +39,9 @@ void CPipe::DataFromSoundIn(CBuffer* buffer, void* Owner)
 
 void CPipe::WriteSoundDataToFile(CBuffer* buffer)
 {
-	if(m_pFile)
+	if (m_pFile)
 	{
-		if(!m_pFile->Write(buffer))
+		if (!m_pFile->Write(buffer))
 		{
 			m_SoundIn.Stop();
 			MessageBox(NULL, _T("Unable to write to file"), NULL, 0);
@@ -68,11 +68,11 @@ void CPipe::ReadSoundDataFromFile(CBuffer* buffer)
 {
 	memcpy(buffer->ptr.c, m_audioTrack[m_nBufPtr], 1600);
 	m_nBufPtr ++;
-	if(m_nBufPtr == 10) 
+	if (m_nBufPtr == 10) 
 		m_nBufPtr = 0;
-//	if(m_pFile)
+//	if (m_pFile)
 //	{
-//		if(!m_pFile->Read(buffer))
+//		if (!m_pFile->Read(buffer))
 //		{
 //			// enf of file -> tell the GUI
 //			OnEndOfPlayingFile();
@@ -94,7 +94,7 @@ void CPipe::ReadSoundDataFromFile(CBuffer* buffer)
 void CPipe::StartRecordingToFile()
 {
 	m_pFile = new CSoundFile("sound1.wav", m_SoundIn.GetFormat());
-	if(m_pFile && m_pFile->IsOK())
+	if (m_pFile && m_pFile->IsOK())
 		m_SoundIn.Start();
 }
 
@@ -102,14 +102,14 @@ void CPipe::StopRecordingToFile()
 {
 	m_SoundIn.Stop();
 	// close output file
-	if(m_pFile)
+	if (m_pFile)
 		delete m_pFile;
 }
 
 void CPipe::StartPlayingFromFile()
 {
 //	m_pFile = new CSoundFile("sound1.wav");
-//	if(m_pFile && m_pFile->IsOK())
+//	if (m_pFile && m_pFile->IsOK())
 	CSoundBase base;
 		m_SoundOut.Start(base.GetFormat());
 //	else
@@ -120,7 +120,7 @@ void CPipe::StopPlayingFromFile()
 {
 	m_SoundOut.Stop();
 	// close output file
-	//if(m_pFile)
+	//if (m_pFile)
 	//	delete m_pFile;
 }
 

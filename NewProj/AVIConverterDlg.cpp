@@ -1,4 +1,4 @@
-// AVIConverterDlg.cpp : implementation file
+я╗┐// AVIConverterDlg.cpp : implementation file
 //
 
 #include "stdafx.h"
@@ -12,6 +12,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#define TEXT_COLOR_GRAY			RGB(200, 200, 200)
+#define TEXT_COLOR_WHITE		RGB(255, 255, 255)
+#define TEXT_BK_COLOR_BLACK		RGB(47, 56, 66)
+#define FONT_SIZE				14
+
 /////////////////////////////////////////////////////////////////////////////
 // CAVIConverterDlg dialog
 XVID_HANDLE		CAVIConverterDlg::	m_lpHandle;
@@ -19,6 +24,7 @@ XVID_FRAME		CAVIConverterDlg::	m_lpFrame;
 XVID_CREATE		CAVIConverterDlg::	m_lpCreate;
 XVID_STATE		CAVIConverterDlg::	m_lpState;
 SEEKPOS_FRAME	CAVIConverterDlg::	m_SeekPosFrame[0x20000];
+
 CAVIConverterDlg::CAVIConverterDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CAVIConverterDlg::IDD, pParent)
 	, m_bRadioOriginalSize(true)
@@ -91,7 +97,7 @@ void CAVIConverterDlg::OnPaint()
 	// TODO: Add your message handler code here
 	CRect rt;
 	GetClientRect(&rt);
-	dc.FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(47, 56, 66));
+	dc.FillSolidRect(0, 0, rt.Width(), rt.Height(), TEXT_BK_COLOR_BLACK);
 	// Do not call CDialog::OnPaint() for painting messages
 }
 
@@ -107,8 +113,10 @@ BOOL CAVIConverterDlg::OnInitDialog()
 	hBmp = ::LoadBitmap(AfxGetResourceHandle(),MAKEINTRESOURCE(IDB_BUTTON_OPEN));
 	m_btn_target_open.SetBitmap(hBmp);
 	m_btn_out_open.SetBitmap(hBmp);
+
 	char chHeader[1000];
 	char str[100];
+
 	memset(chHeader, 0, sizeof(chHeader));
 	memset(str, 0, sizeof(str));
 	Unichar2Ascii(CNewProjDlg::m_wLanguageRes[4], str);
@@ -121,74 +129,75 @@ BOOL CAVIConverterDlg::OnInitDialog()
 	strcat(chHeader, str);
 	strcat(chHeader, ",300 ;");
 	m_aviFileList.SetHeadings(chHeader);
+
 	m_aviFileList.SetCheckboxes(TRUE);
-	m_aviFileList.SetBkColor(RGB(47,56,66));
-	m_aviFileList.SetTextBkColor(RGB(47,56,66));
-	m_aviFileList.SetTextColor(RGB(255,255,255));
+	m_aviFileList.SetBkColor(TEXT_BK_COLOR_BLACK);
+	m_aviFileList.SetTextBkColor(TEXT_BK_COLOR_BLACK);
+	m_aviFileList.SetTextColor(TEXT_COLOR_WHITE);
 	m_aviFileList.SetGridLines(TRUE);
 	
-	m_edit_filetime.SetTextColor(RGB(200, 200, 200));
-	m_edit_filetime.SetBackColor(RGB(47, 56, 66));
-	m_edit_output.SetTextColor(RGB(200, 200, 200));
-	m_edit_output.SetBackColor(RGB(47, 56, 66));
-	m_edit_destfilename.SetTextColor(RGB(255, 255, 255));
-	m_edit_target.SetTextColor(RGB(200, 200, 200));
-	m_edit_target.SetBackColor(RGB(47, 56, 66));
+	m_edit_filetime.SetTextColor(TEXT_COLOR_GRAY);
+	m_edit_filetime.SetBackColor(TEXT_BK_COLOR_BLACK);
+	m_edit_output.SetTextColor(TEXT_COLOR_GRAY);
+	m_edit_output.SetBackColor(TEXT_BK_COLOR_BLACK);
+	m_edit_destfilename.SetTextColor(TEXT_COLOR_WHITE);
+	m_edit_target.SetTextColor(TEXT_COLOR_GRAY);
+	m_edit_target.SetBackColor(TEXT_BK_COLOR_BLACK);
 
-	m_static_file.SetTextColor(RGB(200,200,200));
-	m_static_file.SetFont("Arial", 14, FW_NORMAL);
+	m_static_file.SetTextColor(TEXT_COLOR_GRAY);
+	m_static_file.SetFont("Arial", FONT_SIZE, FW_NORMAL);
 	m_static_file.FormatW(CNewProjDlg::m_wLanguageRes[150]);
-	m_static_file.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_file.SetBkColor(TEXT_BK_COLOR_BLACK, 0, CxStatic::Normal);
 
-	m_static_filetime.SetTextColor(RGB(200,200,200));
-	m_static_filetime.SetFont("Arial", 14, FW_NORMAL);
+	m_static_filetime.SetTextColor(TEXT_COLOR_GRAY);
+	m_static_filetime.SetFont("Arial", FONT_SIZE, FW_NORMAL);
 	m_static_filetime.FormatW(CNewProjDlg::m_wLanguageRes[151]);
-	m_static_filetime.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_filetime.SetBkColor(TEXT_BK_COLOR_BLACK, 0, CxStatic::Normal);
 
-	m_static_timerange.SetTextColor(RGB(200,200,200));
-	m_static_timerange.SetFont("Arial", 14, FW_NORMAL);
+	m_static_timerange.SetTextColor(TEXT_COLOR_GRAY);
+	m_static_timerange.SetFont("Arial", FONT_SIZE, FW_NORMAL);
 	m_static_timerange.FormatW(CNewProjDlg::m_wLanguageRes[169]);
-	m_static_timerange.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_timerange.SetBkColor(TEXT_BK_COLOR_BLACK, 0, CxStatic::Normal);
 
-	m_static_to.SetTextColor(RGB(200,200,200));
-	m_static_to.SetFont("Arial", 14, FW_NORMAL);
+	m_static_to.SetTextColor(TEXT_COLOR_GRAY);
+	m_static_to.SetFont("Arial", FONT_SIZE, FW_NORMAL);
 	m_static_to.FormatW(CNewProjDlg::m_wLanguageRes[173]);
-	m_static_to.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_to.SetBkColor(TEXT_BK_COLOR_BLACK, 0, CxStatic::Normal);
 
-	m_static_selectaudio.SetTextColor(RGB(200,200,200));
-	m_static_selectaudio.SetFont("Arial", 14, FW_NORMAL);
+	m_static_selectaudio.SetTextColor(TEXT_COLOR_GRAY);
+	m_static_selectaudio.SetFont("Arial", FONT_SIZE, FW_NORMAL);
 	m_static_selectaudio.FormatW(CNewProjDlg::m_wLanguageRes[171]);
-	m_static_selectaudio.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_selectaudio.SetBkColor(TEXT_BK_COLOR_BLACK, 0, CxStatic::Normal);
 
-	m_static_progress.SetTextColor(RGB(200,200,200));
-	m_static_progress.SetFont("Arial", 14, FW_NORMAL);
+	m_static_progress.SetTextColor(TEXT_COLOR_GRAY);
+	m_static_progress.SetFont("Arial", FONT_SIZE, FW_NORMAL);
 	m_static_progress.FormatW(CNewProjDlg::m_wLanguageRes[154]);
-	m_static_progress.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_progress.SetBkColor(TEXT_BK_COLOR_BLACK, 0, CxStatic::Normal);
 
-	m_static_output.SetTextColor(RGB(200,200,200));
-	m_static_output.SetFont("Arial", 14, FW_NORMAL);
+	m_static_output.SetTextColor(TEXT_COLOR_GRAY);
+	m_static_output.SetFont("Arial", FONT_SIZE, FW_NORMAL);
 	m_static_output.FormatW(CNewProjDlg::m_wLanguageRes[153]);
-	m_static_output.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_output.SetBkColor(TEXT_BK_COLOR_BLACK, 0, CxStatic::Normal);
 
-	m_static_destfilename.SetTextColor(RGB(200,200,200));
-	m_static_destfilename.SetFont("Arial", 14, FW_NORMAL);
+	m_static_destfilename.SetTextColor(TEXT_COLOR_GRAY);
+	m_static_destfilename.SetFont("Arial", FONT_SIZE, FW_NORMAL);
 	m_static_destfilename.FormatW(CNewProjDlg::m_wLanguageRes[713]);
-	m_static_destfilename.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_destfilename.SetBkColor(TEXT_BK_COLOR_BLACK, 0, CxStatic::Normal);
 
-	m_static_target.SetTextColor(RGB(200,200,200));
-	m_static_target.SetFont("Arial", 14, FW_NORMAL);
+	m_static_target.SetTextColor(TEXT_COLOR_GRAY);
+	m_static_target.SetFont("Arial", FONT_SIZE, FW_NORMAL);
 	m_static_target.FormatW(CNewProjDlg::m_wLanguageRes[160]);
-	m_static_target.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_target.SetBkColor(TEXT_BK_COLOR_BLACK, 0, CxStatic::Normal);
 
-	m_static_string1.SetTextColor(RGB(200,200,200));
-	m_static_string1.SetFont("Arial", 14, FW_NORMAL);
+	m_static_string1.SetTextColor(TEXT_COLOR_GRAY);
+	m_static_string1.SetFont("Arial", FONT_SIZE, FW_NORMAL);
 	m_static_string1.FormatW(CNewProjDlg::m_wLanguageRes[176]);
-	m_static_string1.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_string1.SetBkColor(TEXT_BK_COLOR_BLACK, 0, CxStatic::Normal);
 
-	m_static_string2.SetTextColor(RGB(200,200,200));
-	m_static_string2.SetFont("Arial", 14, FW_NORMAL);
+	m_static_string2.SetTextColor(TEXT_COLOR_GRAY);
+	m_static_string2.SetFont("Arial", FONT_SIZE, FW_NORMAL);
 	m_static_string2.FormatW(CNewProjDlg::m_wLanguageRes[176]);
-	m_static_string2.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_string2.SetBkColor(TEXT_BK_COLOR_BLACK, 0, CxStatic::Normal);
 	
 	m_checkPicFlip.FormatW(CNewProjDlg::m_wLanguageRes[175]);
 	m_checkMp4Fmt.FormatW(CNewProjDlg::m_wLanguageRes[170]);
@@ -220,36 +229,42 @@ void CAVIConverterDlg::GetFiles(CFile* p1stFile, CFile* p2ndFile)
 	m_p1st264File->Seek(ASF_FILE_HEAD_SIZE, CFile::begin);
 	
 	//m_aviFileList.SetHeadings("Channel,100; Resolution, 100; File,300");
-	m_aviFileList.InsertItem(0, _T("1"), _T("704вд480"), m_1stFilePath);
-	m_aviFileList.SetItemText(0, 1, _T("704вд480"));
+	m_aviFileList.InsertItem(0, _T("1"), _T("704 X 480"), m_1stFilePath);
+	m_aviFileList.SetItemText(0, 1, _T("704 X 480"));
 	m_aviFileList.SetItemText(0, 2, m_1stFilePath);
 	m_aviFileList.SetCheck(0, true);
+
 	char str[100];
 	memset(str, 0, sizeof(str));
 	Unichar2Ascii(CNewProjDlg::m_wLanguageRes[4], str);
+
 	CString temp = str;
 	m_cmb_selectaudio.AddString(temp + "1");
-	if(m_2ndFilePath != "")
+
+	if (m_2ndFilePath != "")
 	{
 		m_p2nd264File = p2ndFile;
 		m_2ndSpliter.Initialization(m_p2nd264File);
 		m_p2nd264File->Seek(ASF_FILE_HEAD_SIZE, CFile::begin);
-		m_aviFileList.InsertItem(1, _T("2"), _T("704вд480"), m_2ndFilePath);
-		m_aviFileList.SetItemText(1, 1, _T("704вд480"));
+		m_aviFileList.InsertItem(1, _T("2"), _T("704 X 480"), m_2ndFilePath);
+		m_aviFileList.SetItemText(1, 1, _T("704 X 480"));
 		m_aviFileList.SetItemText(1, 2, m_2ndFilePath);
 		m_aviFileList.SetCheck(1, true);
 		m_cmb_selectaudio.AddString(temp + "2");
 	}
 	m_cmb_selectaudio.SetCurSel(0);
+
 	VERIFY(m_pTimeRangeCtrl->SetTime(&CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr]));
 	m_systemTime = CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr];
 	m_systemTime.wHour = (WORD)(m_systemTime.wHour + CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr] / 3600000) % 24;
 	m_systemTime.wMinute = (WORD)(m_systemTime.wMinute + CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr] / 60000) % 60;
 	m_systemTime.wSecond = (WORD)(m_systemTime.wSecond + CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr] / 1000) % 60;
 	VERIFY(m_pToCtrl->SetTime(&m_systemTime));
+
 //	m_RadioOriginalSize.SetIcon(IDI_RADIO_ON,BS_LEFT,IDI_RADIO_OFF);
 //	m_radio4_3.SetIcon(IDI_RADIO_OFF,BS_LEFT,IDI_RADIO_ON);
 //	m_radio16_9.SetIcon(IDI_RADIO_OFF,BS_LEFT,IDI_RADIO_ON);
+
 	m_nScaleFlag = 0;
 	wchar_t buf[4];
 	CTime t;
@@ -269,6 +284,7 @@ void CAVIConverterDlg::GetFiles(CFile* p1stFile, CFile* p2ndFile)
 	m_AVIFileName = m_1stFilePath.Mid(m_1stFilePath.GetLength() - 26, 22) + temp;
 	m_edit_target.SetWindowText(m_AVIFilePath);
 }
+
 void CAVIConverterDlg::InitHeaderDatas(int nWidth, int nHeight)
 {	
 	HINSTANCE hXvidEnc = LoadLibrary(_T("xvidcore.dll"));
@@ -278,6 +294,7 @@ void CAVIConverterDlg::InitHeaderDatas(int nWidth, int nHeight)
 	HINSTANCE hXvidGlobal = LoadLibrary(_T("xvidcore.dll"));
 	m_Func_XvidGlobal = (FuncAVI_Xvid_Global)GetProcAddress(hXvidGlobal, "xvid_global");
 ////////////////////////////
+
 	ZeroMemory(&m_lpCreate, sizeof(XVID_CREATE));
 	m_lpCreate.nConst = 0x10202;
 	m_lpCreate.Unk1 = 3;
@@ -307,10 +324,10 @@ void CAVIConverterDlg::InitHeaderDatas(int nWidth, int nHeight)
 	ZeroMemory(&m_lpHandle, sizeof(XVID_HANDLE));
 	m_lpHandle.m_nWidth = nWidth;
 	m_lpHandle.m_nHeight = nHeight;
-	if(nWidth == 704) m_lpHandle.Unk1 = 0x340;
+	if (nWidth == 704) m_lpHandle.Unk1 = 0x340;
 	else m_lpHandle.Unk1 = 0x600;
 	m_lpHandle.Unk2 = 0x260;
-	if(nWidth == 704) m_lpHandle.Unk3 = 0x2C;
+	if (nWidth == 704) m_lpHandle.Unk3 = 0x2C;
 	else m_lpHandle.Unk3 = 0x58;
 	m_lpHandle.Unk4 = 0x1E;
 	m_lpHandle.Unk5 = 0x0;
@@ -332,6 +349,7 @@ void CAVIConverterDlg::InitHeaderDatas(int nWidth, int nHeight)
 	m_lpHandle.Unk21 = 0x0;
 	m_lpHandle.Unk22 = 0xFA;
 	m_lpHandle.Unk23 = 0x0;
+
 ////////////////////////////////////////
 	ZeroMemory(&m_lpState, sizeof(XVID_STATE));
 	m_lpState.nConst = 0x10202;
@@ -344,6 +362,7 @@ void CAVIConverterDlg::InitHeaderDatas(int nWidth, int nHeight)
 	m_lpState.nUnk7 = 0;
 	m_lpState.nUnk8 = 0;
 	m_lpState.nUnk9 = 0;
+
 ///////////////////////////////////////
 //	ZeroMemory(&m_lpFrame, sizeof(XVID_FRAME));
 	m_lpFrame.nConst = 0x10202;
@@ -508,105 +527,153 @@ void CAVIConverterDlg::InitHeaderDatas(int nWidth, int nHeight)
 
 	ZeroMemory(&m_SeekPosFrame, sizeof(SEEKPOS_FRAME));
 }
+
 UINT AVICnvertingThreadProc(LPVOID lParam)
 {
 	CAVIConverterDlg* pDlg = (CAVIConverterDlg*)lParam;
 	pDlg->m_bEnd = false;
-	if(pDlg->m_2ndFilePath != "")
-	{
-	if(pDlg->m_aviFileList.GetCheck(0) == FALSE && pDlg->m_aviFileList.GetCheck(1) == FALSE)
-	{
-		pDlg->m_nChannel = 0;
-		return 0;
-	}
-	if(pDlg->m_aviFileList.GetCheck(0) == TRUE && pDlg->m_aviFileList.GetCheck(1) == FALSE)
-	{
-		if(pDlg->m_bRadioOriginalSize) pDlg->InitHeaderDatas(704, 480);
-		if(pDlg->m_bradio4_3) pDlg->InitHeaderDatas(704, 528);
-		if(pDlg->m_bradio16_9) pDlg->InitHeaderDatas(704, 396);
 
-		pDlg->m_nChannel = 1;
-	}
-	if(pDlg->m_aviFileList.GetCheck(0) == FALSE && pDlg->m_aviFileList.GetCheck(1) == TRUE)
+	if (pDlg->m_2ndFilePath != "")
 	{
-		if(pDlg->m_bRadioOriginalSize) pDlg->InitHeaderDatas(704, 480);
-		if(pDlg->m_bradio4_3) pDlg->InitHeaderDatas(704, 528);
-		if(pDlg->m_bradio16_9) pDlg->InitHeaderDatas(704, 396);
-		pDlg->m_nChannel = 2;
-	}
-	if(pDlg->m_aviFileList.GetCheck(0) == TRUE && pDlg->m_aviFileList.GetCheck(1) == TRUE)
-	{
-		if(pDlg->m_bRadioOriginalSize) pDlg->InitHeaderDatas(1408, 480);
-		if(pDlg->m_bradio4_3) pDlg->InitHeaderDatas(1408, 1440);
-		if(pDlg->m_bradio16_9) pDlg->InitHeaderDatas(1408, 960);
-		pDlg->m_nChannel = 3;
-	}
-	}else{
-		if(pDlg->m_aviFileList.GetCheck(0) == FALSE) return 0;
+		if (pDlg->m_aviFileList.GetCheck(0) == FALSE && pDlg->m_aviFileList.GetCheck(1) == FALSE)
+		{
+			pDlg->m_nChannel = 0;
+			return 0;
+		}
+
+		if (pDlg->m_aviFileList.GetCheck(0) == TRUE && pDlg->m_aviFileList.GetCheck(1) == FALSE)
+		{
+			if (pDlg->m_bRadioOriginalSize) 
+				pDlg->InitHeaderDatas(704, 480);
+
+			if (pDlg->m_bradio4_3) 
+				pDlg->InitHeaderDatas(704, 528);
+
+			if (pDlg->m_bradio16_9) 
+				pDlg->InitHeaderDatas(704, 396);
+
+			pDlg->m_nChannel = 1;
+		}
+
+		if (pDlg->m_aviFileList.GetCheck(0) == FALSE && pDlg->m_aviFileList.GetCheck(1) == TRUE)
+		{
+			if (pDlg->m_bRadioOriginalSize) 
+				pDlg->InitHeaderDatas(704, 480);
+
+			if (pDlg->m_bradio4_3) 
+				pDlg->InitHeaderDatas(704, 528);
+
+			if (pDlg->m_bradio16_9) 
+				pDlg->InitHeaderDatas(704, 396);
+
+			pDlg->m_nChannel = 2;
+		}
+
+		if (pDlg->m_aviFileList.GetCheck(0) == TRUE && pDlg->m_aviFileList.GetCheck(1) == TRUE)
+		{
+			if (pDlg->m_bRadioOriginalSize) 
+				pDlg->InitHeaderDatas(1408, 480);
+
+			if (pDlg->m_bradio4_3) 
+				pDlg->InitHeaderDatas(1408, 1440);
+
+			if (pDlg->m_bradio16_9) 
+				pDlg->InitHeaderDatas(1408, 960);
+
+			pDlg->m_nChannel = 3;
+		}
+
+	} else {
+		if (pDlg->m_aviFileList.GetCheck(0) == FALSE) 
+			return 0;
 		pDlg->InitHeaderDatas(704, 480);
 		pDlg->m_nChannel = 1;
 	}
+
 	DWORD dwVideoID = 0x62643030;
 	DWORD dwAudioID = 0x62773130;
 
 	pDlg->m_1stSpliter.OpenFile("", 0);
-	if(pDlg->m_2ndFilePath != "")pDlg->m_2ndSpliter.OpenFile("", 0);
+	if (pDlg->m_2ndFilePath != "")
+		pDlg->m_2ndSpliter.OpenFile("", 0);
+
 	CString str;
-	if(!pDlg->m_AVIFile.Open(LPCTSTR(pDlg->m_AVIFilePath), CFile::modeWrite | CFile::modeCreate))
+	if (!pDlg->m_AVIFile.Open(LPCTSTR(pDlg->m_AVIFilePath), CFile::modeWrite | CFile::modeCreate))
 	{
 		MessageBox(NULL, _T("Error Create AVI FIle!"), NULL, 0);
 		return 0;
 	}
+
 	pDlg->m_AVIFile.SetLength(0);
 	pDlg->m_AVIFile.Write(&pDlg->m_Riff, sizeof(RIFF));
 	pDlg->m_AVIFile.Write(&pDlg->m_AviList, sizeof(AVI_LIST));
 	pDlg->m_AVIFile.Write(&pDlg->m_InfoList, sizeof(INFOLIST));
 	pDlg->m_AVIFile.Write(&pDlg->m_Junk, sizeof(JUNK));
 	pDlg->m_AVIFile.Write(&pDlg->m_TrackFrame, sizeof(TRACK_FRAME));
-	DWORD dwFilePos = pDlg->m_AVIFile.GetPosition();
-	if(pDlg->m_nChannel == 3) {
-		if(pDlg->m_bRadioOriginalSize) pDlg->m_lpFrame.PushData = new BYTE[0x12FC00];
-		if(pDlg->m_bradio4_3) pDlg->m_lpFrame.PushData = new BYTE[0x5CD000];
-		if(pDlg->m_bradio16_9) pDlg->m_lpFrame.PushData = new BYTE[0x3DE000];
 
+	DWORD dwFilePos = pDlg->m_AVIFile.GetPosition();
+	if (pDlg->m_nChannel == 3) 
+	{
+		if (pDlg->m_bRadioOriginalSize) 
+			pDlg->m_lpFrame.PushData = new BYTE[0x12FC00];
+
+		if (pDlg->m_bradio4_3) 
+			pDlg->m_lpFrame.PushData = new BYTE[0x5CD000];
+
+		if (pDlg->m_bradio16_9) 
+			pDlg->m_lpFrame.PushData = new BYTE[0x3DE000];
 	}
-	else {
-		if(pDlg->m_bRadioOriginalSize) pDlg->m_lpFrame.PushData = new BYTE[0x97E00];
-		if(pDlg->m_bradio4_3) pDlg->m_lpFrame.PushData = new BYTE[0xA4400];
-		if(pDlg->m_bradio16_9) pDlg->m_lpFrame.PushData = new BYTE[0x82380];
+	else 
+	{
+		if (pDlg->m_bRadioOriginalSize) 
+			pDlg->m_lpFrame.PushData = new BYTE[0x97E00];
+
+		if (pDlg->m_bradio4_3) 
+			pDlg->m_lpFrame.PushData = new BYTE[0xA4400];
+
+		if (pDlg->m_bradio16_9) 
+			pDlg->m_lpFrame.PushData = new BYTE[0x82380];
 	}
+
 	pDlg->m_lpFrame.PopData = new BYTE[0x40000]; 
 	DWORD dwGlobal[4];
 	memset(dwGlobal, 0, 16);
 	dwGlobal[0] = 0x10202;
+
 	int nCounts = 0;
 	DWORD dwRetVal = (*pDlg->m_Func_XvidGlobal)(0, 0, dwGlobal, 0);
 	dwRetVal = (*pDlg->m_Func_XvidCreate)(0, 0, &pDlg->m_lpCreate, 0);
 	dwRetVal = 1;
+
 	int		nFrmaeID = 0;
 	pDlg->m_1stSpliter.GetDatas1();
 	pDlg->m_1stSpliter.GetDatas1();
 	pDlg->m_2ndSpliter.GetDatas2();
 	pDlg->m_2ndSpliter.GetDatas2();
-	do{
+
+	do {
 		pDlg->m_progress.SetPos((int)((float)pDlg->m_1stSpliter.m_file->GetPosition() / pDlg->m_1stSpliter.m_file->GetLength() * 100));
 		pDlg->m_1stSpliter.GetDatas1();
-		if(pDlg->m_1stSpliter.m_file->GetPosition() > pDlg->m_1stSpliter.m_file->GetLength() - ASF_FILE_HEAD_SIZE - 3200 * 2) 
+
+		if (pDlg->m_1stSpliter.m_file->GetPosition() > pDlg->m_1stSpliter.m_file->GetLength() - ASF_FILE_HEAD_SIZE - 3200 * 2) 
 			break;
+
 		pDlg->m_2ndSpliter.GetDatas2();
-		if(pDlg->m_1stSpliter.m_pY == 0) continue;
-		if(pDlg->m_nChannel == 1)
+		if (pDlg->m_1stSpliter.m_pY == 0) 
+			continue;
+
+		if (pDlg->m_nChannel == 1)
 		{
-			if(pDlg->m_bRadioOriginalSize) 
+			if (pDlg->m_bRadioOriginalSize) 
 			{
 				memset(pDlg->m_lpFrame.PushData, 0x80, 0x97e00);
 				memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY, 0x52800);
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x52800), pDlg->m_1stSpliter.m_pU, 0x14A00);
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x67200), pDlg->m_1stSpliter.m_pV, 0x14A00);
 			}
-			if(pDlg->m_bradio4_3)
+
+			if (pDlg->m_bradio4_3)
 			{
-				
 				memset(pDlg->m_lpFrame.PushData, 0, 0xA4400);
 				char temp[0x4200] = {0};
 				memcpy(pDlg->m_lpFrame.PushData, temp, 0x4200);
@@ -620,29 +687,28 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x71700), temp, 0x1080);
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x72780), pDlg->m_1stSpliter.m_pV, 0x14A00);
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x87180), temp, 0x1080);
-
-
 			}
-			if(pDlg->m_bradio16_9)
+
+			if (pDlg->m_bradio16_9)
 			{
 				memset(pDlg->m_lpFrame.PushData, 0x80, 0x82380);
 				memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY, 0x44100);
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x44100), pDlg->m_1stSpliter.m_pU, 0x11040);
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x55140), pDlg->m_1stSpliter.m_pV, 0x11040);
-
 			}
-		}else if(pDlg->m_nChannel == 2)
+		} 
+		else if (pDlg->m_nChannel == 2)
 		{
-			if(pDlg->m_bRadioOriginalSize) 
+			if (pDlg->m_bRadioOriginalSize) 
 			{
 				memset(pDlg->m_lpFrame.PushData, 0x80, 0x97e00);
 				memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY, 0x52800);
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x52800), pDlg->m_1stSpliter.m_pU, 0x14A00);
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x67200), pDlg->m_1stSpliter.m_pV, 0x14A00);
 			}
-			if(pDlg->m_bradio4_3)
-			{
 
+			if (pDlg->m_bradio4_3)
+			{
 				char temp[0x4200] = {0x80};
 				memcpy(pDlg->m_lpFrame.PushData, temp, 0x4200);
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x4200), pDlg->m_1stSpliter.m_pY2, 0x52800);
@@ -655,10 +721,9 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x71700), temp, 0x1080);
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x72780), pDlg->m_1stSpliter.m_pV2, 0x14A00);
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x87180), temp, 0x1080);
-
-
 			}
-			if(pDlg->m_bradio16_9)
+
+			if (pDlg->m_bradio16_9)
 			{
 				memset(pDlg->m_lpFrame.PushData, 0x80, 0x82380);
 				memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY2, 0x44100);
@@ -666,9 +731,9 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x55140), pDlg->m_1stSpliter.m_pV2, 0x11040);
 			}
 		}
-		else if(pDlg->m_nChannel == 3)
+		else if (pDlg->m_nChannel == 3)
 		{
-			if(pDlg->m_bRadioOriginalSize)
+			if (pDlg->m_bRadioOriginalSize)
 			{
 				memset(pDlg->m_lpFrame.PushData, 0x80, 0x12FC00);
 				memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY, 0x52800);
@@ -677,6 +742,7 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 1408 * j),(char*)(pDlg->m_1stSpliter.m_pY + 704 * j), 704);
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 1408 * j + 704), (char*)(pDlg->m_1stSpliter.m_pY2 + 704 * j) , 704);
 				}
+
 				int kount = 0;
 				for(int j = 0; j < 240; j++)
 				{
@@ -684,6 +750,7 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 0xA5000 + kount + 352), (char*)(pDlg->m_1stSpliter.m_pU2 + 352 * j) , 352);
 					kount += 0x2C0;//704
 				}
+
 				kount = 0;
 				for(int j = 0; j < 240; j++)
 				{
@@ -692,7 +759,8 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 					kount += 0x2C0;//704
 				}
 			}
-			if(pDlg->m_bradio16_9)
+
+			if (pDlg->m_bradio16_9)
 			{
 				char temp[0x35A00] = {0};
 				memset(pDlg->m_lpFrame.PushData, 0x80, 0x198600);
@@ -700,6 +768,7 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 
 				/*display Y*/
 // 				memcpy(pDlg->m_lpFrame.PushData, temp, 0x35A00);
+
 				for(int j = 0; j < 480; j++)
 				{
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 2816 * j),(char*)(pDlg->m_1stSpliter.m_pY + 704 * j), 704);
@@ -707,7 +776,6 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 2816 * j + 1408), (char*)(pDlg->m_1stSpliter.m_pY + 704 * j), 704);
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 2816 * j + 2112), (char*)(pDlg->m_1stSpliter.m_pY2 + 704 * j) , 704);
-
 				}
 // 				memcpy((char*)(pDlg->m_lpFrame.PushData + 0xDAA00), temp, 0x35A00);
 
@@ -740,7 +808,8 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 					kount += 1408;
 				}
 			}
-			if(pDlg->m_bradio4_3)
+
+			if (pDlg->m_bradio4_3)
 			{
 				memset(pDlg->m_lpFrame.PushData, 0x80, 0x220800);
 				char temp[0x10800] = {0};
@@ -777,7 +846,6 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 0x1EF000 + kount + 1408),(char*)(pDlg->m_1stSpliter.m_pU + 352 * j), 352);
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 0x1EF000 + kount + 1760), (char*)(pDlg->m_1stSpliter.m_pU2 + 352 * j) , 352);
 
-
 					kount += 2112;
 				}
 //				memcpy((char*)(pDlg->m_lpFrame.PushData + 0x1C1A00), temp, 0x4200);
@@ -801,12 +869,17 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 				
 			}
 		}
+
 		memset(&pDlg->m_lpState, 0, sizeof(XVID_STATE));
 		pDlg->m_lpState.nConst = 0x10202;
 		dwRetVal = (*pDlg->m_Func_XvidEnc)((DWORD*)(pDlg->m_lpCreate.Unk21), 2, &pDlg->m_lpFrame, &pDlg->m_lpState);
 		pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwVideoID;
-		if(nCounts % 250 == 0)pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0x10;
-		else pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
+
+		if (nCounts % 250 == 0)
+			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0x10;
+		else 
+			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
+
 		pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
 		pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
 		nFrmaeID ++;
@@ -820,12 +893,14 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 		pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 		pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
 		pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-		if(pDlg->m_cmb_selectaudio.GetCurSel() == 0)
+
+		if (pDlg->m_cmb_selectaudio.GetCurSel() == 0)
 		{
 			pDlg->m_AVIFile.Write(&dwAudioID, 4);
 			pDlg->m_AVIFile.Write(&dwRetVal, 4);
 			pDlg->m_AVIFile.Write(pDlg->m_1stSpliter.m_1stOutDatas.buf_A, 320);
 			nFrmaeID ++;
+
 			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
@@ -834,6 +909,7 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 			pDlg->m_AVIFile.Write(&dwRetVal, 4);
 			pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320), 320);
 			nFrmaeID ++;
+
 			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
@@ -842,6 +918,7 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 			pDlg->m_AVIFile.Write(&dwRetVal, 4);
 			pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320 * 2), 320);
 			nFrmaeID ++;
+
 			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
@@ -850,6 +927,7 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 			pDlg->m_AVIFile.Write(&dwRetVal, 4);
 			pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320 * 3), 320);
 			nFrmaeID ++;
+
 			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
@@ -858,11 +936,14 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 			pDlg->m_AVIFile.Write(&dwRetVal, 4);
 			pDlg->m_AVIFile.Write((char*)(pDlg->m_1stSpliter.m_1stOutDatas.buf_A + 320 * 4), 320);
 			nFrmaeID ++;
-		}else{
+		}
+		else
+		{
 			pDlg->m_AVIFile.Write(&dwAudioID, 4);
 			pDlg->m_AVIFile.Write(&dwRetVal, 4);
 			pDlg->m_AVIFile.Write(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A, 320);
 			nFrmaeID ++;
+
 			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
@@ -871,6 +952,7 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 			pDlg->m_AVIFile.Write(&dwRetVal, 4);
 			pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320), 320);
 			nFrmaeID ++;
+
 			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
@@ -879,6 +961,7 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 			pDlg->m_AVIFile.Write(&dwRetVal, 4);
 			pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320 * 2), 320);
 			nFrmaeID ++;
+
 			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
@@ -887,6 +970,7 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 			pDlg->m_AVIFile.Write(&dwRetVal, 4);
 			pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320 * 3), 320);
 			nFrmaeID ++;
+
 			pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwAudioID;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 			pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
@@ -896,9 +980,15 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 			pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320 * 4), 320);
 			nFrmaeID ++;
 		}
-		if(pDlg->m_1stSpliter.m_file->GetPosition() >= pDlg->m_1stSpliter.m_file->GetLength() - 0xC80) break;
-		if(pDlg->m_bEnd == true) break;
-	}while(dwRetVal > 0);
+
+		if (pDlg->m_1stSpliter.m_file->GetPosition() >= pDlg->m_1stSpliter.m_file->GetLength() - 0xC80) 
+			break;
+
+		if (pDlg->m_bEnd == true) 
+			break;
+
+	} while(dwRetVal > 0);
+
 	dwRetVal = pDlg->m_AVIFile.GetPosition() - 0x7FC;
 	pDlg->m_AVIFile.Seek(0x7F8, CFile::begin);
 	pDlg->m_AVIFile.Write(&dwRetVal, 4);
@@ -907,11 +997,15 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 	pDlg->m_AVIFile.Write(&dwRetVal, 4);
 	dwRetVal = nFrmaeID * sizeof(SEEKPOS_FRAME);
 	pDlg->m_AVIFile.Write(&dwRetVal, 4);
-	if(pDlg->m_bEnd == false)	
-	for(int i = 0; i < nFrmaeID; i++)
+
+	if (pDlg->m_bEnd == false)	
 	{
-		pDlg->m_AVIFile.Write(&pDlg->m_SeekPosFrame[i], sizeof(SEEKPOS_FRAME));
+		for(int i = 0; i < nFrmaeID; i++)
+		{
+			pDlg->m_AVIFile.Write(&pDlg->m_SeekPosFrame[i], sizeof(SEEKPOS_FRAME));
+		}
 	}
+
 	dwRetVal = pDlg->m_AVIFile.GetPosition() - 8;
 	pDlg->m_AVIFile.Seek(4, CFile::begin);
 	pDlg->m_AVIFile.Write(&dwRetVal, 4);
@@ -919,45 +1013,55 @@ UINT AVICnvertingThreadProc(LPVOID lParam)
 	pDlg->m_AVIFile.Write(&nCounts, 4);
 	pDlg->m_AVIFile.Seek(0x8C, CFile::begin);
 	pDlg->m_AVIFile.Write(&nCounts, 4);
+
 	dwRetVal = dwRetVal / 10;
 	pDlg->m_AVIFile.Write(&dwRetVal, 4);
+
 	dwRetVal = 0;
 	pDlg->m_AVIFile.Seek(0x90,CFile::begin);
 	pDlg->m_AVIFile.Write(&dwRetVal,4);
+
 	dwRetVal = 0x100001;
 	pDlg->m_AVIFile.Seek(0x134,CFile::begin);
 	pDlg->m_AVIFile.Write(&dwRetVal,4);
 	pDlg->m_AVIFile.Close();
+
 	MessageBox(NULL, _T("AVI Conversion Success!!!"), NULL, 0);
 	pDlg->OnStartBtn();
 	pDlg->m_bEnd = false;
 	SendMessage(pDlg->GetSafeHwnd(), WM_CLOSE, (WPARAM)pDlg, NULL);
 	return 0;
 }
+
 void CAVIConverterDlg::OnStartBtn() 
 {
 	HBITMAP hBmp;
-	if(m_bStart == true)	
+	if (m_bStart == true)	
 	{
 		hBmp = ::LoadBitmap(AfxGetResourceHandle(),MAKEINTRESOURCE(IDB_BUTTON_START));
 		m_btn_Start.SetBitmap(hBmp);
 		m_progress.SetPos(0);
 		m_bEnd = true;
 		m_bStart = false;
-	}else{
-		if(m_bradio16_9 || m_bradio4_3 || m_bRadioOriginalSize) {
+	}
+	else
+	{
+		if (m_bradio16_9 || m_bradio4_3 || m_bRadioOriginalSize) 
+		{
 			AfxBeginThread(AVICnvertingThreadProc, this);
 			hBmp = ::LoadBitmap(AfxGetResourceHandle(), MAKEINTRESOURCE(IDB_BITMAP_AVI_STOP));
 			m_btn_Start.SetBitmap(hBmp);
 			m_bEnd = false;
 			m_bStart = true;
 		}
-		else {
+		else 
+		{
 			MessageBox(L"Please choose the rate options", NULL, NULL);
 		}
 	}
 	// TODO: Add your control notification handler code here
 }
+
 void CAVIConverterDlg::OnOutputOpenButton() 
 {
 	// TODO: Add your control notification handler code here
@@ -965,6 +1069,7 @@ void CAVIConverterDlg::OnOutputOpenButton()
 	m_edit_output.GetWindowText(str);
 	ShellExecute(m_hWnd, _T("explore"), str, NULL, NULL, SW_SHOWNORMAL);
 }
+
 void CAVIConverterDlg::OnTargetOpenButton() 
 {
 	// TODO: Add your control notification handler code here
@@ -973,8 +1078,8 @@ void CAVIConverterDlg::OnTargetOpenButton()
 	while (bWorking)
 	{
 		bWorking = finder.FindNextFile();
-		if(finder.IsDots()) continue;
-		if(m_AVIFileName == finder.GetFileName())
+		if (finder.IsDots()) continue;
+		if (m_AVIFileName == finder.GetFileName())
 		{
 			CString str;
 			m_edit_output.GetWindowText(str);
@@ -998,15 +1103,17 @@ void CAVIConverterDlg::OnChangeButton()
 	bi.lpszTitle = _T("Select Folder");
 	bi.ulFlags = BIF_RETURNONLYFSDIRS;
 	LPITEMIDLIST idl = SHBrowseForFolder(&bi);
-	if(idl == NULL) 
+
+	if (idl == NULL) 
 	{
 		MessageBox(_T("Retry Open Folder!!!"), NULL, 0);
 		return;
 	}
+
 	SHGetPathFromIDList(idl, str.GetBuffer(260));
 	str.ReleaseBuffer();
 	m_FolderPath = str;
-	if(str.GetAt(str.GetLength() - 1) !='\\') m_FolderPath += "\\";
+	if (str.GetAt(str.GetLength() - 1) !='\\') m_FolderPath += "\\";
 	m_edit_output.SetWindowText(m_FolderPath);
 	m_edit_target.SetWindowText(m_FolderPath + m_AVIFileName);
 	m_AVIFilePath = m_FolderPath + m_AVIFileName;
@@ -1027,8 +1134,7 @@ void CAVIConverterDlg::OnBnClickedRadio169()
 }
 
 void CAVIConverterDlg::OnBnClickedRadioOriginalSize()
-{
-	
+{	
 	m_bRadioOriginalSize = true;
 	m_bradio16_9 = false;
 	m_bradio4_3 = false;
@@ -1036,7 +1142,6 @@ void CAVIConverterDlg::OnBnClickedRadioOriginalSize()
 
 void CAVIConverterDlg::OnBnClickedRadio43()
 {
-
 	m_bRadioOriginalSize = false;
 	m_bradio16_9 = false;
 	m_bradio4_3 = true;

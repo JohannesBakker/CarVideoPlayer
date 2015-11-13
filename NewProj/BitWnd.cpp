@@ -24,7 +24,7 @@ CBitWnd::CBitWnd()
 
 CBitWnd::~CBitWnd()
 {
-	if( m_lpBit != NULL && m_bAllocFlag )
+	if ( m_lpBit != NULL && m_bAllocFlag )
 	{
 		delete m_lpBit;
 		m_lpBit = NULL;
@@ -49,7 +49,7 @@ BOOL CBitWnd::Create(UINT wStyle, CWnd * pParentWnd, UINT nID)
 	lpWndName = AfxRegisterWndClass(CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW,
 									AfxGetApp()->LoadStandardCursor(IDC_ARROW),
 									(HBRUSH)GetStockObject(BLACK_BRUSH), NULL);
-	if( lpWndName == NULL )
+	if ( lpWndName == NULL )
 		return FALSE;
 	//
 	// 2.0 Create the window directly...
@@ -59,7 +59,7 @@ BOOL CBitWnd::Create(UINT wStyle, CWnd * pParentWnd, UINT nID)
 
 void CBitWnd::ReLoadBitItem(UINT nResID, int cx, int cy)
 {
-	if( m_lpBit != NULL && m_bAllocFlag )
+	if ( m_lpBit != NULL && m_bAllocFlag )
 	{
 		delete m_lpBit;
 		m_lpBit = NULL;
@@ -87,7 +87,7 @@ BOOL CBitWnd::OnEraseBkgnd(CDC* pDC)
 
 BOOL CBitWnd::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
 {
-	if( m_hCursor != NULL )
+	if ( m_hCursor != NULL )
 	{
 		::SetCursor(m_hCursor);
 		return TRUE;
@@ -116,7 +116,7 @@ LRESULT CBitWnd::OnMouseHover(WPARAM wParam, LPARAM lParam)
 
 void CBitWnd::OnMouseMove(UINT nFlags, CPoint point) 
 {
-	if( !m_bTracking )
+	if ( !m_bTracking )
 	{
 		TRACKMOUSEEVENT tme = {0};
 		tme.cbSize = sizeof(tme);
@@ -125,7 +125,7 @@ void CBitWnd::OnMouseMove(UINT nFlags, CPoint point)
 		tme.dwHoverTime = 1;
 		m_bTracking = _TrackMouseEvent(&tme);
 	}
-	if( m_bNotify )
+	if ( m_bNotify )
 	{
 		ASSERT( GetParent() != NULL );
 		this->ClientToScreen(&point);
@@ -141,13 +141,13 @@ void CBitWnd::OnLButtonDown(UINT nFlags, CPoint point)
 	m_bMute	 = m_bCanMute ? !m_bMute : m_bMute;
 	this->Invalidate();
 
-	if( m_bLDownNotify )
+	if ( m_bLDownNotify )
 	{
 		ASSERT( GetParent() != NULL );
 		GetParent()->SendMessage(WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(), BN_CLICKED), (LPARAM)m_hWnd);
 	}
 	
-	if( m_bNotify )
+	if ( m_bNotify )
 	{
 		ASSERT( GetParent() != NULL );
 		this->ClientToScreen(&point);
@@ -158,17 +158,17 @@ void CBitWnd::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CBitWnd::OnLButtonUp(UINT nFlags, CPoint point) 
 {
-	if( !m_bMute )
+	if ( !m_bMute )
 	{
 		m_nState = (m_lpBit->GetItemNums() > 1) ? kHoverBit : kNormalBit;
 		this->Invalidate();
 	}
-	if( !m_bLDownNotify )
+	if ( !m_bLDownNotify )
 	{
 		ASSERT( GetParent() != NULL );
 		GetParent()->SendMessage(WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(), BN_CLICKED), (LPARAM)m_hWnd);
 	}
-	if( m_bNotify )
+	if ( m_bNotify )
 	{
 		ASSERT( GetParent() != NULL );
 		this->ClientToScreen(&point);

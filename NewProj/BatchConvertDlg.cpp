@@ -257,13 +257,13 @@ void CBatchConvertDlg::GetBatchFiles(CFile* p1stFile, CFile* p2ndFile)
 	wsprintf(tempStrCduration, _T("%02d:%02d:%02d"), (m_dwDuration / 3600000) % 24, (m_dwDuration / 60000) % 60, (m_dwDuration / 1000) % 60);
 	m_convertList.SetItemText(0, 7, tempStr);
 	m_convertList.SetItemText(0, 8, tempStr);
-	if(m_2ndFilePath == "") wsprintf(tempStrsize, _T("%5fM"), (float)m_p1st264File->GetLength() / 1024 / 1024);
+	if (m_2ndFilePath == "") wsprintf(tempStrsize, _T("%5fM"), (float)m_p1st264File->GetLength() / 1024 / 1024);
 	else wsprintf(tempStrsize, _T("%5fM"), (float)(m_p1st264File->GetLength() + m_p2nd264File->GetLength()) / 1024 / 1024);
 	m_convertList.SetItemText(0, 9, tempStr);
 	
 	//Unichar2Ascii(, chStr);
 	m_convertList.SetItemText(0, 10, CNewProjDlg::m_wLanguageRes[441]);
-	if(m_2ndFilePath == "") m_convertList.SetItemText(0, 11, _T("1"));
+	if (m_2ndFilePath == "") m_convertList.SetItemText(0, 11, _T("1"));
 	else m_convertList.SetItemText(0, 11, _T("2"));
 	m_convertList.DeleteAllItems();
 	//Unichar2Ascii(CNewProjDlg::m_wLanguageRes[653], chStr);
@@ -279,7 +279,7 @@ void CBatchConvertDlg::GetBatchFiles(CFile* p1stFile, CFile* p2ndFile)
 	//Unichar2Ascii(CNewProjDlg::m_wLanguageRes[4], chStr);
 	CString str = CNewProjDlg::m_wLanguageRes[4];
 	m_cmb_selectaudio.AddString(str + _T("1"));
-	if(m_2ndFilePath != "")
+	if (m_2ndFilePath != "")
 	{
 		m_p2nd264File = p2ndFile;
 		m_2ndSpliter.Initialization(m_p2nd264File);
@@ -354,10 +354,10 @@ void CBatchConvertDlg::InitHeaderDatas(int nWidth, int nHeight)
 	ZeroMemory(&m_lpHandle, sizeof(XVID_HANDLE));
 	m_lpHandle.m_nWidth = nWidth;
 	m_lpHandle.m_nHeight = nHeight;
-	if(nWidth == 704) m_lpHandle.Unk1 = 0x340;
+	if (nWidth == 704) m_lpHandle.Unk1 = 0x340;
 	else m_lpHandle.Unk1 = 0x600;
 	m_lpHandle.Unk2 = 0x260;
-	if(nWidth == 704) m_lpHandle.Unk3 = 0x2C;
+	if (nWidth == 704) m_lpHandle.Unk3 = 0x2C;
 	else m_lpHandle.Unk3 = 0x58;
 	m_lpHandle.Unk4 = 0x1E;
 	m_lpHandle.Unk5 = 0x0;
@@ -573,7 +573,7 @@ void CBatchConvertDlg::OnOutputChangeButton()
 	bi.lpszTitle = _T("Select Folder");
 	bi.ulFlags = BIF_RETURNONLYFSDIRS;
 	LPITEMIDLIST idl = SHBrowseForFolder(&bi);
-	if(idl == NULL) 
+	if (idl == NULL) 
 	{
 		MessageBox(_T("Retry Open Folder!!!"), NULL, 0);
 		return;
@@ -581,7 +581,7 @@ void CBatchConvertDlg::OnOutputChangeButton()
 	SHGetPathFromIDList(idl, str.GetBuffer(260));
 	str.ReleaseBuffer();
 	m_FolderPath = str;
-	if(str.GetAt(str.GetLength() - 1) !='\\') m_FolderPath += "\\";
+	if (str.GetAt(str.GetLength() - 1) !='\\') m_FolderPath += "\\";
 	m_edit_output.SetWindowText(m_FolderPath);
 	m_edit_target.SetWindowText(m_FolderPath + m_AVIFileName);
 	m_AVIFilePath = m_FolderPath + m_AVIFileName;
@@ -591,30 +591,30 @@ UINT BatchCnvertingThreadProc(LPVOID lParam)
 	CBatchConvertDlg* pDlg = (CBatchConvertDlg*)lParam;
 	pDlg->m_bEnd = false;
 	//FILE* fp = fopen(pDlg->m_AVIFilePath, "wb");
-	if(pDlg->m_2ndFilePath != "")
+	if (pDlg->m_2ndFilePath != "")
 	{
-	if(pDlg->m_fileList.GetCheck(0) == FALSE && pDlg->m_fileList.GetCheck(1) == FALSE)
+	if (pDlg->m_fileList.GetCheck(0) == FALSE && pDlg->m_fileList.GetCheck(1) == FALSE)
 	{
 		pDlg->m_nChannel = 0;
 		return 0;
 	}
-	if(pDlg->m_fileList.GetCheck(0) == TRUE && pDlg->m_fileList.GetCheck(1) == FALSE)
+	if (pDlg->m_fileList.GetCheck(0) == TRUE && pDlg->m_fileList.GetCheck(1) == FALSE)
 	{
 		pDlg->InitHeaderDatas(704, 480);
 		pDlg->m_nChannel = 1;
 	}
-	if(pDlg->m_fileList.GetCheck(0) == FALSE && pDlg->m_fileList.GetCheck(1) == TRUE)
+	if (pDlg->m_fileList.GetCheck(0) == FALSE && pDlg->m_fileList.GetCheck(1) == TRUE)
 	{
 		pDlg->InitHeaderDatas(704, 480);
 		pDlg->m_nChannel = 2;
 	}
-	if(pDlg->m_fileList.GetCheck(0) == TRUE && pDlg->m_fileList.GetCheck(1) == TRUE)
+	if (pDlg->m_fileList.GetCheck(0) == TRUE && pDlg->m_fileList.GetCheck(1) == TRUE)
 	{
 		pDlg->InitHeaderDatas(1408, 480);
 		pDlg->m_nChannel = 3;
 	}
 	}else{
-		if(pDlg->m_fileList.GetCheck(0) == FALSE) return 0;
+		if (pDlg->m_fileList.GetCheck(0) == FALSE) return 0;
 		pDlg->InitHeaderDatas(704, 480);
 		pDlg->m_nChannel = 1;
 	}
@@ -623,8 +623,8 @@ UINT BatchCnvertingThreadProc(LPVOID lParam)
 	DWORD dwVideoID = 0x62643030;
 	DWORD dwAudioID = 0x62773130;
 	pDlg->m_1stSpliter.OpenFile("", 0);
-	if(pDlg->m_2ndFilePath != "")pDlg->m_2ndSpliter.OpenFile("", 0);
-	if(!pDlg->m_AVIFile.Open(pDlg->m_AVIFilePath, CFile::modeWrite | CFile::modeCreate))
+	if (pDlg->m_2ndFilePath != "")pDlg->m_2ndSpliter.OpenFile("", 0);
+	if (!pDlg->m_AVIFile.Open(pDlg->m_AVIFilePath, CFile::modeWrite | CFile::modeCreate))
 	{
 		MessageBox(NULL, _T("Error Create AVI FIle!"), NULL, 0);
 		return 0;
@@ -636,7 +636,7 @@ UINT BatchCnvertingThreadProc(LPVOID lParam)
 	pDlg->m_AVIFile.Write(&pDlg->m_Junk, sizeof(JUNK));
 	pDlg->m_AVIFile.Write(&pDlg->m_TrackFrame, sizeof(TRACK_FRAME));
 	DWORD dwFilePos = pDlg->m_AVIFile.GetPosition();
-	if(pDlg->m_nChannel == 3) pDlg->m_lpFrame.PushData = new BYTE[0x12FC00];
+	if (pDlg->m_nChannel == 3) pDlg->m_lpFrame.PushData = new BYTE[0x12FC00];
 	else pDlg->m_lpFrame.PushData = new BYTE[0x97E00];
 	pDlg->m_lpFrame.PopData = new BYTE[0x40000]; 
 	DWORD dwGlobal[4];
@@ -649,7 +649,7 @@ UINT BatchCnvertingThreadProc(LPVOID lParam)
 	int		nFrmaeID = 0;
 	pDlg->m_1stSpliter.GetDatas1();
 	pDlg->m_1stSpliter.GetDatas1();
-	if(pDlg->m_2ndFilePath != "")
+	if (pDlg->m_2ndFilePath != "")
 	{
 		pDlg->m_2ndSpliter.GetDatas2();
 		pDlg->m_2ndSpliter.GetDatas2();
@@ -660,23 +660,23 @@ UINT BatchCnvertingThreadProc(LPVOID lParam)
 		wsprintf(prgtemp, _T("%d %"), pDlg->m_progress1.GetPos());
 		pDlg->m_convertList.SetItemText(0, 3, prgtemp);
 		pDlg->m_1stSpliter.GetDatas1();
-		if(pDlg->m_1stSpliter.m_file->GetPosition() > pDlg->m_1stSpliter.m_file->GetLength() - ASF_FILE_HEAD_SIZE - 3200 * 2) 
+		if (pDlg->m_1stSpliter.m_file->GetPosition() > pDlg->m_1stSpliter.m_file->GetLength() - ASF_FILE_HEAD_SIZE - 3200 * 2) 
 			break;
-		if(pDlg->m_2ndFilePath != "") pDlg->m_2ndSpliter.GetDatas2();
-		if(pDlg->m_1stSpliter.m_pY == 0) continue;
-		if(pDlg->m_nChannel == 1)
+		if (pDlg->m_2ndFilePath != "") pDlg->m_2ndSpliter.GetDatas2();
+		if (pDlg->m_1stSpliter.m_pY == 0) continue;
+		if (pDlg->m_nChannel == 1)
 		{
 			memset(pDlg->m_lpFrame.PushData, 0x80, 0x97e00);
 			memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY, 0x52800);
 			//memcpy((char*)(m_lpFrame.PushData + 0x65400), m_1stSpliter.m_pU, 0x19500);
 			//memcpy((char*)(m_lpFrame.PushData + 0x7E900), m_1stSpliter.m_pV, 0x19500);	
-		}else if(pDlg->m_nChannel == 2)
+		}else if (pDlg->m_nChannel == 2)
 		{
 			memset(pDlg->m_lpFrame.PushData, 0x80, 0x97e00);
 			memcpy(pDlg->m_lpFrame.PushData, pDlg->m_2ndSpliter.m_pY2, 0x52800);
 //				memcpy((char*)(m_lpFrame.PushData + 0x65400), m_2ndSpliter.m_pU2, 0x19500);
 //				memcpy((char*)(m_lpFrame.PushData + 0x7E900), m_2ndSpliter.m_pV2, 0x19500);	
-		}else if(pDlg->m_nChannel == 3)
+		}else if (pDlg->m_nChannel == 3)
 		{
 			memset(pDlg->m_lpFrame.PushData, 0x80, 0x12FC00);
 			
@@ -697,7 +697,7 @@ UINT BatchCnvertingThreadProc(LPVOID lParam)
 		pDlg->m_lpState.nConst = 0x10202;
 		dwRetVal = (*pDlg->m_Func_XvidEnc)((DWORD*)(pDlg->m_lpCreate.Unk21), 2, &pDlg->m_lpFrame, &pDlg->m_lpState);
 		pDlg->m_SeekPosFrame[nFrmaeID].dwFrameHeaderID = dwVideoID;
-		if(nCounts % 250 == 0)pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0x10;
+		if (nCounts % 250 == 0)pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0x10;
 		else pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 		pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
 		pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
@@ -712,7 +712,7 @@ UINT BatchCnvertingThreadProc(LPVOID lParam)
 		pDlg->m_SeekPosFrame[nFrmaeID].dwListHeaderID = 0;
 		pDlg->m_SeekPosFrame[nFrmaeID].dwSeekPos = pDlg->m_AVIFile.GetPosition();
 		pDlg->m_SeekPosFrame[nFrmaeID].dwFrameSize = dwRetVal;
-		if(pDlg->m_cmb_selectaudio.GetCurSel() == 0)
+		if (pDlg->m_cmb_selectaudio.GetCurSel() == 0)
 		{
 			pDlg->m_AVIFile.Write(&dwAudioID, 4);
 			pDlg->m_AVIFile.Write(&dwRetVal, 4);
@@ -788,8 +788,8 @@ UINT BatchCnvertingThreadProc(LPVOID lParam)
 			pDlg->m_AVIFile.Write((char*)(pDlg->m_2ndSpliter.m_2ndOutDatas.buf_A + 320 * 4), 320);
 			nFrmaeID ++;
 		}
-		if(pDlg->m_1stSpliter.m_file->GetPosition() >= pDlg->m_1stSpliter.m_file->GetLength() - 0xC80) break;
-		if(pDlg->m_bEnd == true) break;
+		if (pDlg->m_1stSpliter.m_file->GetPosition() >= pDlg->m_1stSpliter.m_file->GetLength() - 0xC80) break;
+		if (pDlg->m_bEnd == true) break;
 	}while(dwRetVal > 0);
 	dwRetVal = pDlg->m_AVIFile.GetPosition();
 	pDlg->m_AVIFile.Seek(0x7F8, CFile::begin);
@@ -799,7 +799,7 @@ UINT BatchCnvertingThreadProc(LPVOID lParam)
 	pDlg->m_AVIFile.Write(&dwRetVal, 4);
 	dwRetVal = nFrmaeID * sizeof(SEEKPOS_FRAME);
 	pDlg->m_AVIFile.Write(&dwRetVal, 4);
-	if(pDlg->m_bEnd == false)
+	if (pDlg->m_bEnd == false)
 	for(int i = 0; i < nFrmaeID; i++)
 	{
 		pDlg->m_AVIFile.Write(&pDlg->m_SeekPosFrame[i], sizeof(SEEKPOS_FRAME));
@@ -812,7 +812,7 @@ UINT BatchCnvertingThreadProc(LPVOID lParam)
 	pDlg->m_AVIFile.Write(&dwRetVal, 4);
 	dwRetVal = nFrmaeID * sizeof(SEEKPOS_FRAME);
 	pDlg->m_AVIFile.Write(&dwRetVal, 4);
-	if(pDlg->m_bEnd == false)	
+	if (pDlg->m_bEnd == false)	
 	for(int i = 0; i < nFrmaeID; i++)
 	{
 		pDlg->m_AVIFile.Write(&pDlg->m_SeekPosFrame[i], sizeof(SEEKPOS_FRAME));
@@ -843,7 +843,7 @@ void CBatchConvertDlg::OnStartButton()
 {
 	// TODO: Add your control notification handler code here
 	HBITMAP hBmp;
-	if(m_bStart == true)	
+	if (m_bStart == true)	
 	{
 		hBmp = ::LoadBitmap(AfxGetResourceHandle(),MAKEINTRESOURCE(IDB_BUTTON_START));
 		m_btn_Start.SetBitmap(hBmp);
@@ -876,8 +876,8 @@ void CBatchConvertDlg::OnTargetOpenButton()
 	while (bWorking)
 	{
 		bWorking = finder.FindNextFile();
-		if(finder.IsDots()) continue;
-		if(m_AVIFileName == finder.GetFileName())
+		if (finder.IsDots()) continue;
+		if (m_AVIFileName == finder.GetFileName())
 		{
 			CString str;
 			m_edit_output.GetWindowText(str);

@@ -144,15 +144,15 @@ void CReportCtrl::CReportHeaderCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	// determine the format for drawing the column label.
 	UINT uFormat = DT_SINGLELINE | DT_NOPREFIX | DT_NOCLIP | DT_VCENTER | DT_END_ELLIPSIS ;
 
-	if(hditem.fmt & HDF_CENTER)
+	if (hditem.fmt & HDF_CENTER)
 		uFormat |= DT_CENTER;
-	else if(hditem.fmt & HDF_RIGHT)
+	else if (hditem.fmt & HDF_RIGHT)
 		uFormat |= DT_RIGHT;
 	else
 		uFormat |= DT_LEFT;
 
 	// adjust the rect if the mouse button is pressed on it.
-	if(lpDrawItemStruct->itemState == ODS_SELECTED)
+	if (lpDrawItemStruct->itemState == ODS_SELECTED)
 	{
 		rc.left++;
 		rc.top += 2;
@@ -163,25 +163,25 @@ void CReportCtrl::CReportHeaderCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	const int iOffset = (rcIcon.bottom - rcIcon.top) / 4;
 
 	// adjust the rect further if the sort arrow is to be displayed.
-	if(lpDrawItemStruct->itemID == (UINT)m_iSortColumn)
+	if (lpDrawItemStruct->itemID == (UINT)m_iSortColumn)
 		rc.right -= 3 * iOffset;
 
 	rc.left += iOffset;
 	rc.right -= iOffset;
 
 	// draw the column label.
-	if(rc.left < rc.right)
+	if (rc.left < rc.right)
 		(void)dc.DrawText(szText, -1, rc, uFormat);
 
 	// draw the sort arrow.
-	if(lpDrawItemStruct->itemID == (UINT)m_iSortColumn)
+	if (lpDrawItemStruct->itemID == (UINT)m_iSortColumn)
 	{
 		// set up the pens to use for drawing the arrow.
 		CPen penLight(PS_SOLID, 1, GetSysColor(COLOR_3DHILIGHT));
 		CPen penShadow(PS_SOLID, 1, GetSysColor(COLOR_3DSHADOW));
 		CPen* pOldPen = dc.SelectObject(&penLight);
 
-		if(m_bSortAscending)
+		if (m_bSortAscending)
 		{
 			// draw the arrow pointing upwards.
 			dc.MoveTo(rcIcon.right - 2 * iOffset, iOffset);
@@ -282,7 +282,7 @@ BOOL CReportCtrl::SetHeadings(const CString& strHeadings)
 	{
 		// determine the paragraph ("xxx,xxx,xxx;")
 		nSemiColon = strHeadings.Find(_T(';'), nParaStart);
-		if(nSemiColon == -1)
+		if (nSemiColon == -1)
 		{
 			// reached the end of string
 			nSemiColon = strHeadings.GetLength();
@@ -298,7 +298,7 @@ BOOL CReportCtrl::SetHeadings(const CString& strHeadings)
 		// find the heading name string
 		iComma = sPara.Find(_T(','), iStart);
 
-		if(iComma == -1)
+		if (iComma == -1)
 			break;
 
 		const CString sColName = sPara.Mid(iStart, iComma - iStart);
@@ -332,7 +332,7 @@ BOOL CReportCtrl::SetHeadings(const CString& strHeadings)
 		if (iWidth < 1)
 			iWidth = 1; // width should be at least 1
 
-		if(InsertColumn(m_wndHeader.GetItemCount(), sColName, nFmt, iWidth) == -1)
+		if (InsertColumn(m_wndHeader.GetItemCount(), sColName, nFmt, iWidth) == -1)
 			return FALSE;
 	}
 
@@ -467,10 +467,10 @@ int CReportCtrl::_NumberCompare(LPCTSTR pszNumber1, LPCTSTR pszNumber2)
 	const double fNumber1 = _tcstod(pszNumber1, NULL);
 	const double fNumber2 = _tcstod(pszNumber2, NULL);
 
-	if(fNumber1 < fNumber2)
+	if (fNumber1 < fNumber2)
 		return -1;
 	
-	if(fNumber1 > fNumber2)
+	if (fNumber1 > fNumber2)
 		return 1;
 
 	return 0;
@@ -526,9 +526,9 @@ int CALLBACK CReportCtrl::_CompareFunction(LPARAM lParam1, LPARAM lParam2, LPARA
 	if (s1.IsEmpty() || s2.IsEmpty())
 		return pListCtrl->m_wndHeader.IsSortAscending() ? _StringCompare(s1, s2) : _StringCompare(s2, s1);
 
-	if(_IsNumber(s1))
+	if (_IsNumber(s1))
 		return pListCtrl->m_wndHeader.IsSortAscending() ? _NumberCompare(s1, s2) : _NumberCompare(s2, s1);
-	else if(_IsDate(s1))
+	else if (_IsDate(s1))
 		return pListCtrl->m_wndHeader.IsSortAscending() ? _DateCompare(s1, s2) : _DateCompare(s2, s1);
 	else
 		// text.
@@ -574,7 +574,7 @@ void CReportCtrl::OnDestroy()
 
 BOOL CReportCtrl::SetItemText(int nItem, int nSubItem, LPCTSTR lpszText)
 {
-	if(!CListCtrl::SetItemText(nItem, nSubItem, lpszText))
+	if (!CListCtrl::SetItemText(nItem, nSubItem, lpszText))
 		return FALSE;
 
 	ItemData* pid = reinterpret_cast<ItemData*>(CListCtrl::GetItemData(nItem));
@@ -589,7 +589,7 @@ BOOL CReportCtrl::SetItemText(int nItem, int nSubItem, LPCTSTR lpszText)
 ////////////////////////////////////////////////////////////////////////////////
 BOOL CReportCtrl::SetItemData(int nItem, DWORD dwData)
 {
-	if(!_IsValidIndex(nItem))
+	if (!_IsValidIndex(nItem))
 		return FALSE;
 
 	ItemData* pid = reinterpret_cast<ItemData*>(CListCtrl::GetItemData(nItem));
@@ -1163,8 +1163,8 @@ int CReportCtrl::GetFirstUncheckedItem(int nStartAfter) const
 void CReportCtrl::OnRButtonDown(UINT nFlags, CPoint point) 
 {
 	// TODO: Add your message handler code here and/or call default
-	if(CToolBarDlg::m_1stFile.GetFileName() == "") return;
-	if(CInfoListDlg::g_TabCurSel != 2) return;
+	if (CToolBarDlg::m_1stFile.GetFileName() == "") return;
+	if (CInfoListDlg::g_TabCurSel != 2) return;
 	CRect rt;
 	GetWindowRect(&rt);
 	CMenu menu; 
@@ -1182,7 +1182,7 @@ void CReportCtrl::OnLButtonUp(UINT nFlags, CPoint point)
 // 	}else{
 // 		CSearchDlg::m_eventType.UnCheckAllItems();
 // 	}
-// 	 if(CSearchDlg::m_eventType.IsItemChecked(0) != false) CSearchDlg::m_eventType.CheckItem(0);
+// 	 if (CSearchDlg::m_eventType.IsItemChecked(0) != false) CSearchDlg::m_eventType.CheckItem(0);
 // 	 else	CSearchDlg::m_eventType.UnCheckItem(0);
 	 
 //	CDialog::OnLButtonUp(nFlags, point);
@@ -1199,7 +1199,7 @@ void CReportCtrl::OnBatchConvert()
 {
 //	CBatchConvertDlg dlg;
 	CToolBarDlg::m_1stFile.SeekToEnd();
-	if(CToolBarDlg::m_2ndFilePath != "") CToolBarDlg::m_2ndFile.SeekToEnd();
+	if (CToolBarDlg::m_2ndFilePath != "") CToolBarDlg::m_2ndFile.SeekToEnd();
 	CTimeLineDlg::m_bTimeFlag = false;
 	
 	//dlg.Create(IDD_BATCH_CONVERT, this);
@@ -1214,7 +1214,7 @@ void CReportCtrl::OnBatchConvert()
 	CToolBarDlg::m_BatchDlg.m_systemTime.wSecond = (WORD)CToolBarDlg::m_DateTime.second;
 	CToolBarDlg::m_BatchDlg.m_dwDuration = CToolBarDlg::m_duration;
 	
-	if(CToolBarDlg::m_BatchDlg.m_2ndFilePath == "") CToolBarDlg::m_BatchDlg.GetBatchFiles(&CToolBarDlg::m_1stFile, NULL);
+	if (CToolBarDlg::m_BatchDlg.m_2ndFilePath == "") CToolBarDlg::m_BatchDlg.GetBatchFiles(&CToolBarDlg::m_1stFile, NULL);
 	else CToolBarDlg::m_BatchDlg.GetBatchFiles(&CToolBarDlg::m_1stFile, &CToolBarDlg::m_2ndFile);
 	CToolBarDlg::m_BatchDlg.ShowWindow(SW_SHOW);
 }

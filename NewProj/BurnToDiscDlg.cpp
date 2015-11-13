@@ -1084,7 +1084,7 @@ void CBurnToDiscDlg::OnLbnSelchangeBurnFileList()
 }
 void CBurnToDiscDlg::OnBnClickedAddFilesButton()
 {
-	if(m_cmb_media_type.GetCount() == 0)
+	if (m_cmb_media_type.GetCount() == 0)
 	{
 		MessageBox(_T("Cannot Get Media Type!!!"), NULL, 0);
 		return;

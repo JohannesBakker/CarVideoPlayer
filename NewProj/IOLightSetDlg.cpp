@@ -120,19 +120,19 @@ BOOL CIOLightSetDlg::OnInitDialog()
 void CIOLightSetDlg::OnOK() 
 {
 	// TODO: Add extra validation here
-	if( m_bShowIOCheck == TRUE)
+	if ( m_bShowIOCheck == TRUE)
 	{
 		CNewProjDlg::g_io_Light_Value_ST.nIO1_Signal = m_cmbSignal1.GetCurSel();
 		CNewProjDlg::g_io_Light_Value_ST.nIO2_Signal = m_cmbSignal2.GetCurSel();
 		CNewProjDlg::g_io_Light_Value_ST.nIO3_Signal = m_cmbSignal3.GetCurSel();
 	}
-	else if( m_bShowIOCheck == FALSE )
+	else if ( m_bShowIOCheck == FALSE )
 	{
 		CNewProjDlg::g_io_Light_Value_ST.nIO1_Signal = -1;
 		CNewProjDlg::g_io_Light_Value_ST.nIO2_Signal = -1;
 		CNewProjDlg::g_io_Light_Value_ST.nIO3_Signal = -1;
 	}
-	if(m_cmbSignal1.GetCurSel() == m_cmbSignal2.GetCurSel() || m_cmbSignal1.GetCurSel() == m_cmbSignal3.GetCurSel() || m_cmbSignal2.GetCurSel() == m_cmbSignal3.GetCurSel())
+	if (m_cmbSignal1.GetCurSel() == m_cmbSignal2.GetCurSel() || m_cmbSignal1.GetCurSel() == m_cmbSignal3.GetCurSel() || m_cmbSignal2.GetCurSel() == m_cmbSignal3.GetCurSel())
 	{
 		MessageBox(_T("different signals can not be set to the same IO,please re-set"), NULL, MB_OK);
 		CNewProjDlg::g_io_Light_Value_ST.nIO1_Signal = -1;

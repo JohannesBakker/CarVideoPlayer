@@ -120,7 +120,7 @@ void CAlarmGraph::OnPaint()
 		memDC.MoveTo(0, y*fixed_col_h-m_curPosY);
 		memDC.LineTo(rt.Width(), y*fixed_col_h-m_curPosY);
 
-		if(y >= IO_ALARM_SIG_NUM) continue;
+		if (y >= IO_ALARM_SIG_NUM) continue;
 		//	Draw dotlines - example : ..................................
 		memDC.SelectObject(&dotPen);
 		memDC.MoveTo(fixed_col_w+45 - m_curPosX, y * fixed_col_h+19-m_curPosY);
@@ -284,7 +284,7 @@ void CAlarmGraph::OnVScroll( UINT nSBCode, UINT nPos, CScrollBar* pScrollBar )
 		break;
 	case SB_THUMBPOSITION:	//Scroll to the absolute position. The current position is provided in nPos.
 	case SB_THUMBTRACK:		//Drag scroll box to specified position. The current position is provided in nPos.	
-		if((UINT)m_curPosY != nPos)
+		if ((UINT)m_curPosY != nPos)
 			m_curPosY = nPos;
 		break;
 	case SB_TOP:			//Scroll to top.
@@ -376,16 +376,16 @@ void CAlarmGraph::UpdateScrollSizes()
 	CRect rt;
 	GetClientRect(&rt);
 	info.nMax = 100;
-	if(rt.Width() == 0) return;
+	if (rt.Width() == 0) return;
 	int npages;
 
-	if(m_BinCount < rt.Width() && m_BinCount > rt.Width() - fixed_col_w - 45)
+	if (m_BinCount < rt.Width() && m_BinCount > rt.Width() - fixed_col_w - 45)
 		npages = m_BinCount / (rt.Width() - fixed_col_w - 45);
 	else
 		npages = m_BinCount / rt.Width();
-	if(m_BinCount % rt.Width() > 0)
+	if (m_BinCount % rt.Width() > 0)
 		npages++;
-	if(npages == 0) npages = 1;
+	if (npages == 0) npages = 1;
 	info.nPage = 100 / npages;
 	info.nPos = (int)(((float)m_curPosX / abs(m_BinCount - rt.Width())) * 100);
 	SetScrollInfo(SB_HORZ, &info);
@@ -408,7 +408,7 @@ void CAlarmGraph::UpdateScrollSizesExt()
 	CRect rt;
 	GetClientRect(&rt);
 
-	if(rt.Width() == 0) return;
+	if (rt.Width() == 0) return;
 
 	int maxX = fixed_col_w + 45 - rt.Width();
 	maxX += m_nTotalPoints * x_DataWidth;

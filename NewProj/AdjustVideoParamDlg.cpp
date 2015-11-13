@@ -243,20 +243,20 @@ void CAdjustVideoParamDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrol
 		m_hueValue = nPos;
 		CNewProjDlg::g_adjust_Value_ST.nHue = nPos;
 	}
-	else if((void *)pScrollBar == (void *)&m_sat_slider)
+	else if ((void *)pScrollBar == (void *)&m_sat_slider)
 	{
 		nPos = ((CSliderCtrl*)pScrollBar)->GetPos();
 		m_satValue = nPos;
 		CNewProjDlg::g_adjust_Value_ST.nSaturation = nPos;
 		
 	}
-	else if((void *)pScrollBar == (void *)&m_light_slider)
+	else if ((void *)pScrollBar == (void *)&m_light_slider)
 	{
 		nPos = ((CSliderCtrl*)pScrollBar)->GetPos();
 		m_lightValue = nPos;
 		CNewProjDlg::g_adjust_Value_ST.nLight = nPos;
 	}
-	else if((void *)pScrollBar == (void *)&m_cont_slider)
+	else if ((void *)pScrollBar == (void *)&m_cont_slider)
 	{
 		nPos = ((CSliderCtrl*)pScrollBar)->GetPos();
 		m_contValue = nPos;

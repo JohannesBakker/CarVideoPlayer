@@ -21,6 +21,9 @@ static char THIS_FILE[] = __FILE__;
 #define DEFAULT_LAT 40.8833
 #define DEFAULT_LON -85.0167
 
+#define OFFSET_LAT	-0.0003
+#define OFFSET_LNG	0.0000
+
 
 typedef struct {
 	int degree;
@@ -161,17 +164,17 @@ void CGPSDlg::ShowGPS_Pos(MainBinaryData * pMBDatas)
  	double dbl_Ntemp, dbl_Wtemp;
  	double dbl_NResult, dbl_WResult;
  	
-	if(pMBDatas->dwGPSW_Down < 0)
+	if (pMBDatas->dwGPSW_Down < 0)
 		pMBDatas->dwGPSW_Down + 0x100000000;
  	dbl_Wtemp = (DWORD)((double)pMBDatas->dwGPSW_Down / 3600.0 + (double)pMBDatas->byGPSW_Lw_Up / 60.0 * 10000000.0);
  	if ( pMBDatas->dwGPSN_Down < 0 )
 		pMBDatas->dwGPSN_Down = pMBDatas->dwGPSN_Down + 0x100000000;
  	dbl_Ntemp = ((double)pMBDatas->dwGPSN_Down / 3600.0 + (double)pMBDatas->byGPSN_Lw_Up / 60.0 * 10000000.0);
  	dbl_WResult = (dbl_Wtemp * 0.0000001 + (double)pMBDatas->byGPSW_Hi_Up);
-	if(pMBDatas->byEW_Flag != 0x45)
+	if (pMBDatas->byEW_Flag != 0x45)
 		dbl_WResult = -1 * dbl_WResult;
  	dbl_NResult = (dbl_Ntemp * 0.0000001 + (double)pMBDatas->byGPSN_Hi_Up);
-	if(pMBDatas->byNS_Flag != 0x57)
+	if (pMBDatas->byNS_Flag != 0x57)
 		dbl_NResult = -1 * dbl_NResult;
 	
 	int nHighSpeed = pMBDatas->speed1 / 100;
@@ -245,7 +248,10 @@ void CGPSDlg::SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId,  CString szCarIm
 	csPath.Replace('\\', '/');
 
 	CString strLatLon = L"";
-	strLatLon.Format(L"%f, %f", gpsCurInfo.fLat, gpsCurInfo.fLon);
+//	strLatLon.Format(L"%f, %f", gpsCurInfo.fLat, gpsCurInfo.fLon);
+	strLatLon.Format(L"%f, %f", gpsCurInfo.fLat + OFFSET_LAT, gpsCurInfo.fLon + OFFSET_LNG);
+
+
 	CString strHtml = L"<!DOCTYPE html><html><head><meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\"><meta charset=\"utf-8\"><title>Simple icons</title><style>html, body, #map-canvas {height: 100%;margin: 0px;padding: 0px}</style><script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp\"></script><script>function initialize() { var mapOptions = {zoom: 16,center: new google.maps.LatLng(" + strLatLon + L")}; var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions); var image = '" + csPath + L"'; var myLatLng = new google.maps.LatLng(" + strLatLon + L"); var beachMarker = new google.maps.Marker({position: myLatLng,map: map,icon: image});} google.maps.event.addDomListener(window, 'load', initialize);</script></head><body><div id=\"map-canvas\"></div></body></html>";
 	CHTMLWriter htmlWriter(m_BrowerArray[browserId]->GetControlUnknown());
 	htmlWriter.Write(strHtml);

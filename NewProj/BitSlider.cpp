@@ -77,7 +77,7 @@ void CBitSlider::OnMouseMove(UINT nFlags, CPoint point)
 
 BOOL CBitSlider::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
 {
-	if( m_hHand != NULL )
+	if ( m_hHand != NULL )
 	{
 		::SetCursor(m_hHand);
 		return TRUE;
@@ -93,14 +93,14 @@ void CBitSlider::OnPaint()
 
 void CBitSlider::DrawSlider(CDC * pDC, BOOL bPaint)
 {
-	if( m_Thumb.m_hWnd != NULL && m_lpNormal != NULL && m_lpActive != NULL )
+	if ( m_Thumb.m_hWnd != NULL && m_lpNormal != NULL && m_lpActive != NULL )
 	{
 		CRect		rcRect;
 		CRect		rcThumb;
 
 		this->GetClientRect(rcRect);
 		this->GetNewThumbRect(rcThumb);
-		if( (GetStyle() & TBS_VERT) == TBS_VERT )
+		if ( (GetStyle() & TBS_VERT) == TBS_VERT )
 		{
 			m_lpActive->CopyHoleDC(pDC, 0, 0, rcRect.Width(), bPaint ? rcThumb.bottom : rcThumb.top);
 			m_lpNormal->CopyHoleDC(pDC, 0, rcThumb.bottom, rcRect.Width(), rcRect.bottom - rcThumb.bottom, 0, rcThumb.bottom);
@@ -116,12 +116,12 @@ void CBitSlider::DrawSlider(CDC * pDC, BOOL bPaint)
 
 void CBitSlider::DestroyBackItem()
 {
-	if( m_lpActive != NULL && m_bAllocFlag )
+	if ( m_lpActive != NULL && m_bAllocFlag )
 	{
 		delete m_lpActive;
 		m_lpActive = NULL;
 	}
-	if( m_lpNormal != NULL && m_bAllocFlag )
+	if ( m_lpNormal != NULL && m_bAllocFlag )
 	{
 		delete m_lpNormal;
 		m_lpNormal = NULL;
@@ -148,7 +148,7 @@ void CBitSlider::BuildBackItem(UINT nNormalRes, UINT nActiveRes)
 
 void CBitSlider::BuildBackItem(CBitItem * lpNBit, CBitItem * lpABit)
 {
-	if( this->m_hWnd == NULL || lpNBit == NULL || lpABit == NULL )
+	if ( this->m_hWnd == NULL || lpNBit == NULL || lpABit == NULL )
 		return;
 
 	m_lpNormal	= lpNBit;
@@ -169,7 +169,7 @@ void CBitSlider::UpdateToolTips()
 
 void CBitSlider::BuildThumbItem(UINT nThumbRes, int cx, int cy)
 {
-	if( m_Thumb.m_hWnd != NULL || nThumbRes <= 0 )
+	if ( m_Thumb.m_hWnd != NULL || nThumbRes <= 0 )
 		return;
 	m_Thumb.Create(WS_CHILD | WS_VISIBLE, this, 0);
 	ASSERT( m_Thumb.m_hWnd != NULL );
@@ -185,7 +185,7 @@ void CBitSlider::BuildThumbItem(UINT nThumbRes, int cx, int cy)
 
 void CBitSlider::BuildThumbItem(CBitItem * lpBit)
 {
-	if( lpBit == NULL || m_Thumb.m_hWnd != NULL )
+	if ( lpBit == NULL || m_Thumb.m_hWnd != NULL )
 		return;
 	m_Thumb.Create(WS_CHILD | WS_VISIBLE, this, 0);
 	ASSERT( m_Thumb.m_hWnd != NULL );
@@ -206,7 +206,7 @@ void CBitSlider::GetNewThumbRect(CRect & rcThumb)
 	m_Thumb.GetClientRect(rcRect);
 	this->GetThumbRect(&rcOld);
 
-	if((GetStyle() & TBS_VERT) == TBS_VERT)		// Vertical slider...
+	if ((GetStyle() & TBS_VERT) == TBS_VERT)		// Vertical slider...
 	{
 		rcThumb.left	= m_nOffset;
 		rcThumb.right	= rcThumb.left + rcRect.Width();
@@ -224,7 +224,7 @@ void CBitSlider::GetNewThumbRect(CRect & rcThumb)
 
 BOOL CBitSlider::PreTranslateMessage(MSG* pMsg) 
 {
-	if(  m_ctlTips.m_hWnd != NULL  )
+	if (  m_ctlTips.m_hWnd != NULL  )
 		m_ctlTips.RelayEvent(pMsg);
 	
 	return CSliderCtrl::PreTranslateMessage(pMsg);

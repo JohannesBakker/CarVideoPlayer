@@ -133,7 +133,7 @@ HDIB  CxDib::Create(DWORD dwWidth, DWORD dwHeight, WORD wBitCount)
 /////////////////////////////////////////////////////////////////////
 long CxDib::Draw(HDC pDC, long xoffset, long yoffset)
 {
-	if((hDib)&&(pDC))  {
+	if ((hDib)&&(pDC))  {
 		//palette must be correctly filled
 		LPSTR lpDIB = (char*)hDib;	//set image to hdc...
 		SetStretchBltMode(pDC,COLORONCOLOR);	
@@ -148,7 +148,7 @@ long CxDib::Draw(HDC pDC, long xoffset, long yoffset)
 /////////////////////////////////////////////////////////////////////
 long CxDib::Stretch(HDC pDC, long xoffset, long yoffset, long xsize, long ysize)
 {
-	if((hDib)&&(pDC)) {
+	if ((hDib)&&(pDC)) {
 		//palette must be correctly filled
 		LPSTR lpDIB = (char*)hDib;	//set image to hdc...
 		SetStretchBltMode(pDC,COLORONCOLOR);	
@@ -652,7 +652,7 @@ void CxCheckButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	}
 	// Select the correct skin 
 	if (lpDrawItemStruct->itemState & ODS_DISABLED){	// DISABLED BUTTON
-		if(m_dDisabled.IsValid())	// paint the skin
+		if (m_dDisabled.IsValid())	// paint the skin
 			m_dDisabled.Draw(pDC->GetSafeHdc(),0,0);
 		else	// no skin selected for disabled state -> standard button
 			pDC->FillSolidRect(&r,GetSysColor(COLOR_BTNFACE));
@@ -672,7 +672,7 @@ void CxCheckButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	} else {
 //---------------------------------------------------------------------------
 		if ((lpDrawItemStruct->itemState & ODS_SELECTED)||m_Checked){ //SELECTED (DOWN) BUTTON
-			if(m_dDown.IsValid())	// paint the skin
+			if (m_dDown.IsValid())	// paint the skin
 				m_dDown.Draw(pDC->GetSafeHdc(),m_Border,m_Border);
 			else	// no skin selected for selected state -> standard button
 				pDC->FillSolidRect(&r,GetSysColor(COLOR_BTNFACE));
@@ -692,7 +692,7 @@ void CxCheckButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 			}
 		} else {
 //---------------------------------------------------------------------------
-			if(m_dNormal.IsValid()){ // paint the skin			// DEFAULT BUTTON
+			if (m_dNormal.IsValid()){ // paint the skin			// DEFAULT BUTTON
                 if ((m_tracking)&&(m_dOver.IsValid())){
 					m_dOver.Draw(pDC->GetSafeHdc(),0,0);
 				} else {
@@ -997,8 +997,8 @@ void CxCheckButton::SetIcon(UINT nIcon, UINT nIconAlign, UINT nIconDown, UINT nI
 		}
 
 		//release icon mask bitmaps (Orioli Alessandro <aorioli@temaweb.it>)
-		if( iinfo.hbmColor ) DeleteObject( iinfo.hbmColor );
-		if( iinfo.hbmMask ) DeleteObject( iinfo.hbmMask );
+		if ( iinfo.hbmColor ) DeleteObject( iinfo.hbmColor );
+		if ( iinfo.hbmMask ) DeleteObject( iinfo.hbmMask );
 
 		if (nIconDown > 0){	//load down icon
 			m_IconDown = (HICON)::LoadImage(AfxGetInstanceHandle(),
@@ -1050,9 +1050,9 @@ void CxCheckButton::SetToolTipText(CString s, CString sDown)
 	//select the down tooltip if the button is already checked <Jesper Kinnås>
 	if (m_Checked && !m_ToolTipDw.IsEmpty()) s = m_ToolTipDw;
 	
-	if(m_tooltip.m_hWnd==NULL){
-		if(m_tooltip.Create(this))	//first assignment
-			if(m_tooltip.AddTool(this, (LPCTSTR)s)){
+	if (m_tooltip.m_hWnd==NULL){
+		if (m_tooltip.Create(this))	//first assignment
+			if (m_tooltip.AddTool(this, (LPCTSTR)s)){
 				m_tooltip.Activate(1);
 				// enable multiline tooltips <Derek Lakin>
 				m_tooltip.SendMessage(TTM_SETMAXTIPWIDTH, 0, 300);
@@ -1067,7 +1067,7 @@ void CxCheckButton::RelayEvent(UINT message, WPARAM wParam, LPARAM lParam)
 // This function will create a MSG structure, fill it in a pass it to
 // the ToolTip control, m_ttip.  Note that we ensure the point is in window
 // coordinates (relative to the control's window).
-	if(NULL != m_tooltip.m_hWnd){
+	if (NULL != m_tooltip.m_hWnd){
 		MSG msg;
 		msg.hwnd = m_hWnd;
 		msg.message = message;
@@ -1348,7 +1348,7 @@ LRESULT CxCheckButton::OnRadioInfo(WPARAM wparam, LPARAM)
 {
 	if (m_Checked){	//only checked buttons need to be unchecked
 		m_Checked = false;
-		if(m_tooltip.m_hWnd!=NULL)
+		if (m_tooltip.m_hWnd!=NULL)
 			m_tooltip.UpdateTipText((LPCTSTR)m_ToolTipUp,this);
 		Invalidate();
 	}

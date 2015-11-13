@@ -43,7 +43,7 @@ END_MESSAGE_MAP()
 
 void CImageTextButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct ) 
 {
-if( lpDrawItemStruct->CtlType != ODT_BUTTON)
+if ( lpDrawItemStruct->CtlType != ODT_BUTTON)
       return;
     //To keep the text color 
     COLORREF clrText;
@@ -53,7 +53,7 @@ if( lpDrawItemStruct->CtlType != ODT_BUTTON)
     int nPosImg=0;
 
     CDC *pDC = CDC::FromHandle( lpDrawItemStruct->hDC );
-    if(!m_bLoaded)
+    if (!m_bLoaded)
     {
       m_rectBtn = lpDrawItemStruct->rcItem;
     }
@@ -66,24 +66,24 @@ if( lpDrawItemStruct->CtlType != ODT_BUTTON)
     }
 
     pDC->DrawFrameControl( &m_rectBtn ,DFC_BUTTON , DFCS_BUTTONPUSH|DFCS_PUSHED);
-    //if( m_bLoaded )
+    //if ( m_bLoaded )
     {
-      if(ODS_DISABLED & lpDrawItemStruct->itemState)
+      if (ODS_DISABLED & lpDrawItemStruct->itemState)
       {
-        if( m_bLoaded )
+        if ( m_bLoaded )
         {
-          if(3== nImgCount)
+          if (3== nImgCount)
             nPosImg = 2;
           else
             nPosImg =0;
         } 
         clrText = m_clrCptnDisabled;
       }
-      else if(ODS_SELECTED & lpDrawItemStruct->itemState)
+      else if (ODS_SELECTED & lpDrawItemStruct->itemState)
       {
-        if( m_bLoaded )
+        if ( m_bLoaded )
         {
-          if(2 <= nImgCount )
+          if (2 <= nImgCount )
           nPosImg = 1;
         else
           nPosImg =0;
@@ -92,13 +92,13 @@ if( lpDrawItemStruct->CtlType != ODT_BUTTON)
       }
       else 
       {
-        if( m_bLoaded )
+        if ( m_bLoaded )
         {
           nPosImg =0;
         }
         clrText = m_clrCptnUpDwn;
       }
-      if( m_bLoaded )
+      if ( m_bLoaded )
       {
       //Draw the image in to the DC
       m_ImageList.DrawIndirect( 
@@ -111,18 +111,18 @@ if( lpDrawItemStruct->CtlType != ODT_BUTTON)
                               );
       }
     }
-    if(!m_strText.IsEmpty())
+    if (!m_strText.IsEmpty())
     {
       pDC->SetBkMode(TRANSPARENT);
       pDC->SetTextColor( clrText);
       
       HFONT hOldFont=NULL;
      //Sets the font
-      if(m_Font.GetSafeHandle() != NULL)
+      if (m_Font.GetSafeHandle() != NULL)
       {
         hOldFont =(HFONT) pDC->SelectObject(m_Font.GetSafeHandle());
       }
-      if(m_nYpos!=-1 && m_nXpos!=-1)
+      if (m_nYpos!=-1 && m_nXpos!=-1)
       {
         pDC->TextOut(m_nXpos,m_nYpos,m_strText);
       }
@@ -131,7 +131,7 @@ if( lpDrawItemStruct->CtlType != ODT_BUTTON)
         pDC->DrawText( m_strText, m_rectBtn , m_uiPos);
       }
       //Reset the old font
-      if(hOldFont != NULL)
+      if (hOldFont != NULL)
       {
         pDC->SelectObject(hOldFont);
       }
@@ -140,13 +140,13 @@ if( lpDrawItemStruct->CtlType != ODT_BUTTON)
 void CImageTextButton::SetButtonImg(UINT uiImageIDU,UINT uiImgIDD, UINT uiImgIDX  )
 {
   CBitmap bitmapImage;
-  if( m_bLoaded )
+  if ( m_bLoaded )
   {
     m_ImageList.DeleteImageList();
     m_bLoaded = FALSE;
   }
   //Loading Bitmap
-  if( bitmapImage.LoadBitmap( uiImageIDU ) ) 
+  if ( bitmapImage.LoadBitmap( uiImageIDU ) ) 
   {
     
     //bitmapImage.GetObject( sizeof( m_bitmap ) , &m_bitmap );
@@ -154,17 +154,17 @@ void CImageTextButton::SetButtonImg(UINT uiImageIDU,UINT uiImgIDD, UINT uiImgIDX
     m_rectBtn.top =0;m_rectBtn.left =0;
     m_rectBtn.right = m_bitmap.bmWidth; m_rectBtn.bottom =m_bitmap.bmHeight;
     
-    if( m_ImageList.Create( m_bitmap.bmWidth , m_bitmap.bmHeight , ILC_COLORDDB,  1 , 2 ) ) 
+    if ( m_ImageList.Create( m_bitmap.bmWidth , m_bitmap.bmHeight , ILC_COLORDDB,  1 , 2 ) ) 
     {
 		    m_ImageList.Add( &bitmapImage ,&bitmapImage);
-        if(0 !=uiImgIDD)
+        if (0 !=uiImgIDD)
         {
           bitmapImage.DeleteObject();
           bitmapImage.LoadBitmap( uiImgIDD );
           m_ImageList.Add( &bitmapImage ,&bitmapImage);
           
         }
-        if(0 !=uiImgIDX)
+        if (0 !=uiImgIDX)
         {
           bitmapImage.DeleteObject();
           bitmapImage.LoadBitmap( uiImgIDX );

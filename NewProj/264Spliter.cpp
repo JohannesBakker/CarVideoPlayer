@@ -328,9 +328,11 @@ int C264Spliter::GetDatas1()
 	BYTE  *pByPtrFrameOut;
 	DWORD pDwFrameSize;
 	BYTE byFrameType = ReadOneFrame(pByPtrFrameOut, &pDwFrameSize);
-	if(byFrameType == 0xff) 
+
+	if (byFrameType == 0xff) 
 		return -1;
-	if((*m_Demuxer.Hi264DecFrame)(m_hDec, pByPtrFrameOut, pDwFrameSize, 0, 0, &g_Output, 0) == 0)
+	
+	if ((*m_Demuxer.Hi264DecFrame)(m_hDec, pByPtrFrameOut, pDwFrameSize, 0, 0, &g_Output, 0) == 0)
 	{
 		memcpy(m_pY, g_Output.ptr_uChY, 0x65400);
 		memcpy(m_pU, g_Output.ptr_uChU, 0x19500);
@@ -338,17 +340,22 @@ int C264Spliter::GetDatas1()
 		yuv2rgb_24(g_Output.ptr_uChY, g_Output.dwStride_y, g_Output.ptr_uChU, g_Output.ptr_uChV,
 			g_Output.dwStride_uv, g_RGB_Buf, g_Output.dwWidth, g_Output.dwHeigth, g_Output.dwStride_y);
 		
-		do{ nResult = (*m_Demuxer.Hi264DecFrame)(m_hDec, NULL, 0, 0, 0, &g_Output, 0); } while(nResult == 0);
+		do { 
+			nResult = (*m_Demuxer.Hi264DecFrame)(m_hDec, NULL, 0, 0, 0, &g_Output, 0); 
+		} while(nResult == 0);
 	}
+	
 	m_OutFrame = g_Output;
 	m_1stOutDatas.dwDTS_V = m_dwCurDTS;
 	memcpy(m_1stOutDatas.buf_V, g_RGB_Buf, 704 * 480 * 3);
 	m_1stOutDatas.bBuf = true;
 	DWORD dwAudioSize = 0;
+
 	if(m_FrameHeader.byFrameType == TYPE_AUDIO)
 	{
-	byFrameType = ReadOneFrame(pByPtrFrameOut, &pDwFrameSize);
-	if(byFrameType == 0xff) return -1;
+		byFrameType = ReadOneFrame(pByPtrFrameOut, &pDwFrameSize);
+		if (byFrameType == 0xff) 
+			return -1;
 	
 	memset(m_1stOutDatas.buf_A, 0x80, 1600);
 	if(pDwFrameSize != 0x208)

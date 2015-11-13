@@ -60,7 +60,7 @@ void CCalendarDlg::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 	// TODO: Add your message handler code here
-	if(m_bCalendarDlg)
+	if (m_bCalendarDlg)
 		GetDlgItem(IDC_CALENDAR)->MoveWindow(0, 0, cx, cy);
 }
 

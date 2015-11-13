@@ -107,7 +107,7 @@ void CSpeedGraph::OnPaint()
 	memDC.SelectObject(&speedPen);
 		for ( i = 0; i < m_BinCount; i++)
 		{
-			if(m_pSpeedBinData[i].nBinSize != 60) continue;
+			if (m_pSpeedBinData[i].nBinSize != 60) continue;
 			m_nSpeedCount ++;
 			if ( m_nSpeedCount == 1)
 			{				

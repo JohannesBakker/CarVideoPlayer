@@ -30,7 +30,7 @@ CSoundOut::CSoundOut()
 
 CSoundOut::~CSoundOut()
 {
-	if(m_bPlaying)
+	if (m_bPlaying)
 		Stop();
 	::PostQuitMessage(0);
 }
@@ -52,14 +52,14 @@ bool CSoundOut::Start(WAVEFORMATEX* format)
 {
 	MMRESULT mmReturn = 0;
 	
-	if(m_bPlaying || GetDataToSoundOut == NULL || m_pOwner == NULL)
+	if (m_bPlaying || GetDataToSoundOut == NULL || m_pOwner == NULL)
 	{
 		// already recording!
 		return FALSE;
 	}
 	else
 	{
-		if(format != NULL)		// was this function called with at specific format
+		if (format != NULL)		// was this function called with at specific format
 			m_Format = *format;
 		
 		// open wavein device
@@ -67,7 +67,7 @@ bool CSoundOut::Start(WAVEFORMATEX* format)
 		//waveOutSetPlaybackRate(m_hPlay, 0x000F8000);
 		//waveOutSetPitch(m_hPlay, 0x000F8000);
 		
-		if(mmReturn)
+		if (mmReturn)
 		{
 			waveOutErrorMsg(mmReturn, (LPCTSTR)("in start()"));
 			return FALSE;
@@ -93,11 +93,11 @@ void CSoundOut::Stop()
 {
 	MMRESULT mmReturn = 0;
 
-	if(m_bPlaying)
+	if (m_bPlaying)
 	{
 		m_bPlaying = FALSE;
 		mmReturn = ::waveOutReset(m_hPlay);
-		if(mmReturn) waveOutErrorMsg(mmReturn, (LPCTSTR)("in stop()"));
+		if (mmReturn) waveOutErrorMsg(mmReturn, (LPCTSTR)("in stop()"));
 		TRACE((LPCTSTR)("waveOutReset()\n"));
 	}
 }
@@ -109,7 +109,7 @@ void CSoundOut::OnMM_WOM_DONE(UINT parm1, LONG parm2)
 	
 	LPWAVEHDR pHdr = (LPWAVEHDR) parm2;
 	mmReturn = ::waveOutUnprepareHeader(m_hPlay, pHdr, sizeof(WAVEHDR));
-	if(mmReturn)
+	if (mmReturn)
 	{
 		waveOutErrorMsg(mmReturn, (LPCTSTR)("in OnWOM_DONE()"));
 		return;
@@ -117,14 +117,14 @@ void CSoundOut::OnMM_WOM_DONE(UINT parm1, LONG parm2)
 
 	m_QueuedBuffers--;
 
-	if(m_bPlaying)
+	if (m_bPlaying)
 	{		
 		CBuffer buf(pHdr->lpData, pHdr->dwBufferLength);
 		
 		// virtual function supplyed by user
 		GetDataToSoundOut(&buf, m_pOwner);
 		
-		if(buf.ByteLen > 0)
+		if (buf.ByteLen > 0)
 		{
 			AddOutputBufferToQueue(&buf);
 			TRACE((LPCTSTR)("WOM_DONE : refill buffer\n"));
@@ -145,10 +145,10 @@ void CSoundOut::OnMM_WOM_DONE(UINT parm1, LONG parm2)
 	delete pHdr;
 	TRACE((LPCTSTR)("WOM_DONE : remove buffer\n"));
 
-	if(m_QueuedBuffers == 0 && m_bPlaying == false)
+	if (m_QueuedBuffers == 0 && m_bPlaying == false)
 	{
 		mmReturn = ::waveOutClose(m_hPlay);
-		if(mmReturn) waveOutErrorMsg(mmReturn, (LPCTSTR)("in stop()"));
+		if (mmReturn) waveOutErrorMsg(mmReturn, (LPCTSTR)("in stop()"));
 		TRACE((LPCTSTR)("waveOutClose()\n"));
 	}
 }
@@ -159,7 +159,7 @@ int CSoundOut::AddOutputBufferToQueue(CBuffer *buffer)
 	
 	// create the header
 	LPWAVEHDR pHdr = new WAVEHDR;
-	if(pHdr == NULL) return NULL;
+	if (pHdr == NULL) return NULL;
 
 	// new a buffer
 	pHdr->lpData = buffer->ptr.c;
@@ -168,14 +168,14 @@ int CSoundOut::AddOutputBufferToQueue(CBuffer *buffer)
 	
 	// prepare it
 	mmReturn = ::waveOutPrepareHeader(m_hPlay,pHdr, sizeof(WAVEHDR));
-	if(mmReturn)
+	if (mmReturn)
 	{
 		waveOutErrorMsg(mmReturn, (LPCTSTR)("in AddOutputBufferToQueue()"));
 		return m_QueuedBuffers;
 	}
 	// write the buffer to output queue
 	mmReturn = ::waveOutWrite(m_hPlay, pHdr, sizeof(WAVEHDR));
-	if(mmReturn) waveOutErrorMsg(mmReturn, (LPCTSTR)("in AddOutputBufferToQueue()"));
+	if (mmReturn) waveOutErrorMsg(mmReturn, (LPCTSTR)("in AddOutputBufferToQueue()"));
 	// increment the number of waiting buffers
 	return m_QueuedBuffers++;
 }

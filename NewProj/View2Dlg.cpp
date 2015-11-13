@@ -101,7 +101,7 @@ BOOL CView2Dlg::OnEraseBkgnd(CDC* pDC)
 	// TODO: Add your message handler code here and/or call default
 	CRect rt;
 	GetClientRect(&rt);
-	if(CNewProjDlg::g_config_Value_ST.nSelWndID == 1) pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(0, 0, 255));
+	if (CNewProjDlg::g_config_Value_ST.nSelWndID == 1) pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(0, 0, 255));
 	else pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(255, 0, 0));
 	CDC* pdc = GetDlgItem(IDC_STATIC_VIEW2)->GetDC();
 	GetDlgItem(IDC_STATIC_VIEW2)->GetClientRect(&rt);
@@ -113,7 +113,7 @@ void CView2Dlg::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);	
 	// TODO: Add your message handler code here
-	if(m_bView2Dlg)
+	if (m_bView2Dlg)
 		GetDlgItem(IDC_STATIC_VIEW2)->MoveWindow(2, 2, cx - 4, cy - 4);
 }
 
@@ -126,7 +126,7 @@ void CView2Dlg::OnRButtonDown(UINT nFlags, CPoint point)
 	WndsBK_Paint(&CNewProjDlg::m_View1Dlg, &CNewProjDlg::m_View2Dlg, CNewProjDlg::g_config_Value_ST.nSelWndID);
 	GetClientRect(&rtThis);
 	AfxGetMainWnd()->GetWindowRect(&rt);
-	if(CNewProjDlg::g_config_Value_ST.nWndCounts == 1) 
+	if (CNewProjDlg::g_config_Value_ST.nWndCounts == 1) 
 	{
 		CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_ONE_WINDOW, MF_CHECKED);
 		CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_TWO_WINDOW, MF_UNCHECKED);
@@ -154,15 +154,15 @@ void CView2Dlg::OnRButtonDown(UINT nFlags, CPoint point)
 	default:
 		break;
 	}
-	if(CToolBarDlg::g_bView2Turn_ST == true) CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_TURNING, MF_CHECKED);
+	if (CToolBarDlg::g_bView2Turn_ST == true) CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_TURNING, MF_CHECKED);
 	else CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_TURNING, MF_UNCHECKED);
-	if(CToolBarDlg::g_bView2Updown_ST == true) CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_UP_DOWN_MIRROR, MF_CHECKED);
+	if (CToolBarDlg::g_bView2Updown_ST == true) CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_UP_DOWN_MIRROR, MF_CHECKED);
 	else CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_UP_DOWN_MIRROR, MF_UNCHECKED);
-	if(CNewProjDlg::g_config_Value_ST.bShowChanNum == true) CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_SHOW_CHAN_NUM, MF_CHECKED);
+	if (CNewProjDlg::g_config_Value_ST.bShowChanNum == true) CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_SHOW_CHAN_NUM, MF_CHECKED);
 	else CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_SHOW_CHAN_NUM, MF_UNCHECKED);
-	if(CNewProjDlg::g_config_Value_ST.bUseRGB16 == true) CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_USE_RGB16, MF_CHECKED);
+	if (CNewProjDlg::g_config_Value_ST.bUseRGB16 == true) CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_USE_RGB16, MF_CHECKED);
 	else CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_USE_RGB16, MF_UNCHECKED);
-	if(CNewProjDlg::g_config_Value_ST.bWtrmkVerify == true) CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_WMRMK_VERIFY, MF_CHECKED);
+	if (CNewProjDlg::g_config_Value_ST.bWtrmkVerify == true) CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_WMRMK_VERIFY, MF_CHECKED);
 	else CView1Dlg::m_pMenu->CheckMenuItem(ID_MENU_WMRMK_VERIFY, MF_UNCHECKED);
 	ASSERT(CView1Dlg::m_pMenu );
 	CView1Dlg::m_pMenu->TrackPopupMenu(TPM_LEFTALIGN |TPM_RIGHTBUTTON, rt.left + point.x + rtThis.Width() * (CNewProjDlg::g_config_Value_ST.nWndCounts - 1) , rt.top + point.y + 50, this, 0);
@@ -218,7 +218,7 @@ void CView2Dlg::OnMenuOneWindow()
 	CNewProjDlg::g_config_Value_ST.nSelWndID = 2;
 	CRect rt;
 	AfxGetMainWnd()->GetClientRect(&rt);
-	if(CToolBarDlg::m_bFullScreen == false)	CNewProjDlg::m_View2Dlg.MoveWindow(0, 0, rt.Width() * 2 / 3, rt.Height() * 3 / 5, TRUE);
+	if (CToolBarDlg::m_bFullScreen == false)	CNewProjDlg::m_View2Dlg.MoveWindow(0, 0, rt.Width() * 2 / 3, rt.Height() * 3 / 5, TRUE);
 	else CNewProjDlg::m_View2Dlg.MoveWindow(0, 0, rt.Width(), rt.Height(), TRUE);
 	CNewProjDlg::m_View2Dlg.ShowWindow(SW_SHOW);
 	CNewProjDlg::m_View1Dlg.ShowWindow(SW_HIDE);
@@ -231,7 +231,7 @@ void CView2Dlg::OnMenuTwoWindow()
 	CRect rt;
 	AfxGetMainWnd()->GetClientRect(&rt);
 	CNewProjDlg::g_config_Value_ST.nWndCounts = 2;
-	if(CToolBarDlg::m_bFullScreen == false)
+	if (CToolBarDlg::m_bFullScreen == false)
 	{
 		CNewProjDlg::m_View1Dlg.MoveWindow(0, 0, rt.Width() / 3, rt.Height() * 3 / 5, TRUE);
 		CNewProjDlg::m_View2Dlg.MoveWindow(rt.Width() / 3, 0, rt.Width() / 3, rt.Height() *  3 / 5, TRUE);
@@ -257,7 +257,7 @@ void CView2Dlg::OnPaint()
 	// TODO: Add your message handler code here
 	CRect rt;
 	GetClientRect(&rt);
-	if(CNewProjDlg::g_config_Value_ST.nSelWndID == 1) dc.FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(0, 0, 255));
+	if (CNewProjDlg::g_config_Value_ST.nSelWndID == 1) dc.FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(0, 0, 255));
 	else dc.FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(255, 0, 0));
 	CDC* pdc = GetDlgItem(IDC_STATIC_VIEW2)->GetDC();
 	GetDlgItem(IDC_STATIC_VIEW2)->GetClientRect(&rt);
@@ -271,28 +271,28 @@ void CView2Dlg::OnLButtonDblClk(UINT nFlags, CPoint point)
 	m_bView2DB = ! m_bView2DB;
 	CRect rt;
 	AfxGetMainWnd()->GetClientRect(&rt);
-	if(m_bView2DB && !CToolBarDlg::m_bFullScreen)
+	if (m_bView2DB && !CToolBarDlg::m_bFullScreen)
 	{	
 		CNewProjDlg::m_View1Dlg.ShowWindow(SW_HIDE);
 		CNewProjDlg::m_View2Dlg.MoveWindow(0, 0, rt.Width() * 2 / 3, rt.Height() * 3  / 5);
 		CNewProjDlg::m_View2Dlg.ShowWindow(SW_SHOW);
 		CNewProjDlg::g_config_Value_ST.nWndCounts = 1;
 	}
-	else if(!m_bView2DB && !CToolBarDlg::m_bFullScreen){
+	else if (!m_bView2DB && !CToolBarDlg::m_bFullScreen){
 		CNewProjDlg::m_View1Dlg.MoveWindow(0,0,rt.Width() * 1 / 3, rt.Height() * 3  / 5);
 		CNewProjDlg::m_View2Dlg.MoveWindow(rt.Width() * 1 / 3, 0 ,rt.Width() * 1/ 3, rt.Height() * 3 / 5);
 		CNewProjDlg::m_View1Dlg.ShowWindow(SW_SHOW);
 		CNewProjDlg::m_View2Dlg.ShowWindow(SW_SHOW);
 		CNewProjDlg::g_config_Value_ST.nWndCounts = 2;
 	}
-	if(m_bView2DB && CToolBarDlg::m_bFullScreen)
+	if (m_bView2DB && CToolBarDlg::m_bFullScreen)
 	{	
 		CNewProjDlg::m_View1Dlg.ShowWindow(SW_HIDE);
 		CNewProjDlg::m_View2Dlg.MoveWindow(0, 0, rt.Width() , rt.Height() );
 		CNewProjDlg::m_View2Dlg.ShowWindow(SW_SHOW);
 		CNewProjDlg::g_config_Value_ST.nWndCounts = 1;
 	}
-	else if(!m_bView2DB && CToolBarDlg::m_bFullScreen){
+	else if (!m_bView2DB && CToolBarDlg::m_bFullScreen){
 		CNewProjDlg::m_View1Dlg.MoveWindow(0,0,rt.Width() / 2, rt.Height());
 		CNewProjDlg::m_View2Dlg.MoveWindow(rt.Width() / 2, 0 ,rt.Width() / 2, rt.Height());
 		CNewProjDlg::m_View1Dlg.ShowWindow(SW_SHOW);
