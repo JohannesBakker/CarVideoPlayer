@@ -1,4 +1,4 @@
-﻿// AVIConverterDlg.cpp : implementation file
+// AVIConverterDlg.cpp : implementation file
 //
 
 #include "stdafx.h"

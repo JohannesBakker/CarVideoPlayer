@@ -50,6 +50,7 @@ public:
 	DWORD	m_dwFirstDTS;
 	CArray<AlarmBinData_t, AlarmBinData_t> m_arrBinData;
 	bool	m_bIoAlarmSigsON[IO_ALARM_SIG_NUM];
+	int		m_nMaxX;
 
 // Operations
 public:
@@ -57,6 +58,7 @@ public:
 	void UpdateScrollSizes();	
 	void ClearAlarmGraph();
 
+	int GetAbsolteXPos(AlarmBinData_t *pBinData);
 	void UpdateScrollSizesExt();
 
 	void setDatasWithTime(DWORD dwFristDTS, DWORD currDTS, MainBinaryData* pBinData, unsigned char alarmFlag);
