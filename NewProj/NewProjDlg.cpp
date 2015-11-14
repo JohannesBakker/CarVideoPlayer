@@ -85,6 +85,10 @@ float						CNewProjDlg::m_fSeekPos;
 CString						CNewProjDlg::m_FolderName;
 SYSTEMTIME					CNewProjDlg::m_FolderTime;
 int							CNewProjDlg::g_nPlayState;
+
+CInfoListDlg				CNewProjDlg::m_InfoListDlg;
+
+
 CNewProjDlg::CNewProjDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CNewProjDlg::IDD, pParent)
 {
@@ -208,6 +212,7 @@ BOOL CNewProjDlg::OnInitDialog()
 	m_InfoListDlg.Create(IDD_INFO_DIALOG, this);
 	m_InfoListDlg.m_bInfoList = true;
 	m_InfoListDlg.MoveWindow(cx * 2 / 3, cy * 3 / 5, cx / 3, cy * 2 / 5);
+	m_InfoListDlg.m_speedGraphWnd.SetSpeedUnit(CNewProjDlg::g_config_Value_ST.nSpeedUnitID);
 	m_InfoListDlg.ShowWindow(SW_SHOW);
 //Creation Windows
 	m_GPSDlg.Create(IDD_GPS_DIALOG, this);

@@ -69,7 +69,7 @@ CToolBarDlg m_ToolBarDlg;
 	CBurnToDiscDlg m_BurnToDiscDlg;;
 	CGPSDlg m_GPSDlg;
 	CTimeLineDlg m_TimeLineDlg;
-	CInfoListDlg	m_InfoListDlg;
+static	CInfoListDlg	m_InfoListDlg;
 //static Variables
 	static	WCHAR	m_wLanguageRes[716][100];
 	static CRect	m_AboutRt;

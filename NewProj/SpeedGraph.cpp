@@ -15,8 +15,11 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CSpeedGraph
 TempBinData CSpeedGraph::m_pSpeedBinData[100000];
+SpeedUnit_t	CSpeedGraph::m_nSpeedUnit;
+
 CSpeedGraph::CSpeedGraph()
 {
+	m_nSpeedUnit = SPEED_UNIT_KM_H;
 }
 
 CSpeedGraph::~CSpeedGraph()
@@ -43,7 +46,7 @@ void CSpeedGraph::OnPaint()
 	memDC.CreateCompatibleDC(&dc);
 	bmp.CreateCompatibleBitmap(&dc, rt.Width(), rt.Height());
 	poldbmp = memDC.SelectObject(&bmp);
-	//¹É°Ò»°°û¶®±¨ 
+
 	CBrush hBrush(RGB(47, 56, 66));
 	memDC.FillRect(&rt, &hBrush);
 	//memDC.FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(47, 57, 66));
@@ -89,7 +92,12 @@ void CSpeedGraph::OnPaint()
 		}
 		itoa(i * 20, chBuf, 10);
 		buf = chBuf;
-		buf += "km/h";
+
+		if (m_nSpeedUnit == SPEED_UNIT_KM_H)
+			buf += "km/h";
+		else
+			buf += "mph";
+
 		memDC.ExtTextOut(90, rt.Height() - 18 - i * (rt.Height() - 20) / 6, ETO_OPAQUE, CRect(0, 0, 0, 0), buf, NULL);
 	}
 	for(i = 1; i < 5; i++)
@@ -105,25 +113,38 @@ void CSpeedGraph::OnPaint()
 
 	m_nSpeedCount = 0;
 	memDC.SelectObject(&speedPen);
-		for ( i = 0; i < m_BinCount; i++)
+
+	for ( i = 0; i < m_BinCount; i++)
+	{
+		if (m_pSpeedBinData[i].nBinSize != 60) continue;
+		m_nSpeedCount ++;
+
+		// Speed : default mph
+		float speedId;
+
+		if (m_nSpeedUnit == SPEED_UNIT_MPH)
 		{
-			if (m_pSpeedBinData[i].nBinSize != 60) continue;
-			m_nSpeedCount ++;
-			if ( m_nSpeedCount == 1)
-			{				
-				float speedId = (float) m_pSpeedBinData[i].mBinData.speed1 / 100;			
-				int x	= (int)	(float) m_pSpeedBinData[i].dwCurPos * (rt.Width() - 130) / m_dura + 130;
-				int y	= (int) ((rt.Height() - (rt.Height() - 20) * speedId / 120 - 10) );
-				memDC.MoveTo(x,y);
-			}
-			else
-			{				
-				float speedId = (float) m_pSpeedBinData[i].mBinData.speed1 / 100;				
-				int x	= (int)	(float) m_pSpeedBinData[i].dwCurPos * (rt.Width() - 130) / m_dura + 130;
-				int	y	= (int) ((rt.Height() - (rt.Height() - 20) * speedId / 120 - 10) );				
-				memDC.LineTo(x,y);				
-			}
+			speedId = (float) m_pSpeedBinData[i].mBinData.speed1 / 100;
 		}
+		else
+		{
+			speedId = (float) m_pSpeedBinData[i].mBinData.speed1 * 1.609344;
+			speedId = speedId / 100;
+		}			
+
+		int x	= (int)	(float) m_pSpeedBinData[i].dwCurPos * (rt.Width() - 130) / m_dura + 130;
+		int	y	= (int) ((rt.Height() - (rt.Height() - 20) * speedId / 120 - 10) );				
+
+		if ( m_nSpeedCount == 1)
+		{
+			memDC.MoveTo(x,y);
+		}
+		else
+		{
+			memDC.LineTo(x,y);				
+		}
+	}
+
 	dc.BitBlt(rt.left, rt.top, rt.Width(), rt.Height(), &memDC, 0, 0, SRCCOPY);
 	memDC.SelectObject(poldbmp);
 	memDC.DeleteDC();
@@ -138,4 +159,9 @@ void CSpeedGraph::setDatas(DWORD dura,TempBinData* pBinData, int count )
 	m_BinCount = count;
 	m_nSpeedCount = 0;
 	//OnPaint();
+}
+
+void CSpeedGraph::SetSpeedUnit(int nSpeedUnit)
+{
+	m_nSpeedUnit = (SpeedUnit_t)nSpeedUnit;	
 }

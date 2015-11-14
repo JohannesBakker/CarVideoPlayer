@@ -750,6 +750,15 @@ void CSystemSetupDlg::OnOK()
 	}
 
 	WndsBK_Paint(&CNewProjDlg::m_View1Dlg, &CNewProjDlg::m_View2Dlg, CNewProjDlg::g_config_Value_ST.nSelWndID);
+
+
+	// Setting Params to Windows
+	{
+		// Setting param to Speed graph
+		CNewProjDlg::m_InfoListDlg.m_speedGraphWnd.SetSpeedUnit(CNewProjDlg::g_config_Value_ST.nSpeedUnitID);
+		CNewProjDlg::m_InfoListDlg.m_speedGraphWnd.Invalidate();
+	}
+
 	CNewProjDlg::g_bViewChange = true;
 	CDialog::OnOK();
 }

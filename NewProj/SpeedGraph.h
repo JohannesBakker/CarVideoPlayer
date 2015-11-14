@@ -10,6 +10,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // CSpeedGraph window
 
+typedef enum {
+	SPEED_UNIT_KM_H		= 0,
+	SPEED_UNIT_MPH,
+	SPEED_UNIT_NUM,
+} SpeedUnit_t;
+
 class CSpeedGraph : public CStatic
 {
 // Construction
@@ -22,9 +28,12 @@ public:
 	static TempBinData m_pSpeedBinData[100000];
 	int   m_BinCount;
 	int			m_nSpeedCount;
+	static SpeedUnit_t	m_nSpeedUnit;
 // Operations
 public:
 	void setDatas(DWORD dura,TempBinData* pBinData, int count );
+	void SetSpeedUnit(int nSpeedUnit);
+
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CSpeedGraph)
