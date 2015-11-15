@@ -12,6 +12,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#define TIMELINE_TIMER		20005
+
+#define TIME_TEXT_COLOR		RGB(100, 100, 100)
+#define TEXT_BK_COLOR		RGB(47, 56, 66)
+#define MIN_TEXT_COLOR		RGB(200, 200, 200)
+#define MIN_BK_COLOR_1		RGB(200, 0, 0)
+#define MIN_BK_COLOR_2		RGB(200, 200, 0)
+#define WHITE_TEXT_COLOR	RGB(255, 255, 255)
+#define RECT_COLOR_1		RGB(37, 46, 56)
+#define RECT_COLOR_2		RGB(57, 66, 76)
+#define RED_COLOR			RGB(255, 0, 0)
+#define GREEN_COLOR			RGB(0, 255, 0)
+#define BLUE_COLOR			RGB(0, 0, 255)
+
+
 /////////////////////////////////////////////////////////////////////////////
 // CTimeLineDlg dialog
 
@@ -91,9 +106,9 @@ BOOL CTimeLineDlg::OnInitDialog()
 	{		
 		m_staticTimes[i].Create(m_chBuf,SS_CENTER,CRect(i, 0, 0, 0), pWnd);
 		m_staticTimes[i].ShowWindow(SW_SHOW | SW_NORMAL);
-		m_staticTimes[i].SetTextColor(RGB(100, 100, 100));
+		m_staticTimes[i].SetTextColor(TIME_TEXT_COLOR);
 		m_staticTimes[i].SetFont("Arial", 14, FW_NORMAL);		
-		m_staticTimes[i].SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+		m_staticTimes[i].SetBkColor(TEXT_BK_COLOR, 0, CxStatic::Normal);
 	}
 	for(i = 0 ; i < 24; i++)
 	{
@@ -105,26 +120,26 @@ BOOL CTimeLineDlg::OnInitDialog()
 	{
 		m_staticMinutes[i].Create(_T("0"), SW_NORMAL, CRect(0, 0, 0, 0), this);
 		m_staticMinutes[i].ShowWindow(SW_SHOW);
-		m_staticMinutes[i].SetTextColor(RGB(200, 200, 200));
+		m_staticMinutes[i].SetTextColor(MIN_TEXT_COLOR);
 		m_staticMinutes[i].SetFont("Arial", 13, FW_NORMAL);
-		m_staticMinutes[i].SetBkColor(RGB(57, 66, 76), 0, CxStatic::Normal);
+		m_staticMinutes[i].SetBkColor(RECT_COLOR_2, 0, CxStatic::Normal);
 	}
-	m_static_hour.SetTextColor(RGB(255, 255, 255));
+	m_static_hour.SetTextColor(WHITE_TEXT_COLOR);
 	m_static_hour.SetFont("Arial", 14, FW_NORMAL);
 	m_static_hour.FormatW(CNewProjDlg::m_wLanguageRes[250]);
-	m_static_hour.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
-	m_static_minute.SetTextColor(RGB(255, 255, 255));
+	m_static_hour.SetBkColor(TEXT_BK_COLOR, 0, CxStatic::Normal);
+	m_static_minute.SetTextColor(WHITE_TEXT_COLOR);
 	m_static_minute.SetFont("Arial", 14, FW_NORMAL);
 	m_static_minute.FormatW(CNewProjDlg::m_wLanguageRes[251]);
-	m_static_minute.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
-	m_static_camera1.SetTextColor(RGB(255, 255, 255));
+	m_static_minute.SetBkColor(TEXT_BK_COLOR, 0, CxStatic::Normal);
+	m_static_camera1.SetTextColor(WHITE_TEXT_COLOR);
 	m_static_camera1.SetFont("Arial", 14, FW_NORMAL);
 	m_static_camera1.FormatW(CNewProjDlg::m_wLanguageRes[234]);
-	m_static_camera1.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
-	m_static_camera2.SetTextColor(RGB(255, 255, 255));
+	m_static_camera1.SetBkColor(TEXT_BK_COLOR, 0, CxStatic::Normal);
+	m_static_camera2.SetTextColor(WHITE_TEXT_COLOR);
 	m_static_camera2.SetFont("Arial", 14, FW_NORMAL);
 	m_static_camera2.FormatW(CNewProjDlg::m_wLanguageRes[235]);
-	m_static_camera2.SetBkColor(RGB(47, 56, 66), 0, CxStatic::Normal);
+	m_static_camera2.SetBkColor(TEXT_BK_COLOR, 0, CxStatic::Normal);
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -139,18 +154,18 @@ void CTimeLineDlg::OnPaint()
 	CRect rt;
 	GetClientRect(&rt);
 	CDC *pDC = GetDC();
-	CPen pen(PS_SOLID, 0, RGB(255, 255, 255));
+	CPen pen(PS_SOLID, 0, WHITE_TEXT_COLOR);
 	if (m_bPaint)
 	{
-		pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(47, 56, 66));
-		pDC->FillSolidRect(48, 0, rt.Width() - 50, 40, RGB(37, 46, 56));
+		pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), TEXT_BK_COLOR);
+		pDC->FillSolidRect(48, 0, rt.Width() - 50, 40, RECT_COLOR_1);
 		m_bPaint = false;
 	}
-	pDC->FillSolidRect(48, 32, rt.Width() - 50, 8, RGB(37, 46, 56));
+	pDC->FillSolidRect(48, 32, rt.Width() - 50, 8, RECT_COLOR_1);
 	pDC->SelectObject(&pen);
 
 
-		pDC->FillSolidRect(50, 17, rt.Width(), 15, RGB(57, 66, 76));
+		pDC->FillSolidRect(50, 17, rt.Width(), 15, RECT_COLOR_2);
 
 		for(i = 0; i <= 60; i++)
 		{
@@ -172,7 +187,7 @@ void CTimeLineDlg::OnPaint()
 	GetDlgItem(IDC_STATIC_TIMELINE)->GetClientRect(&rt);
 	pDC = GetDlgItem(IDC_STATIC_TIMELINE)->GetDC();
 	pDC->SelectObject(&pen);
-	pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(47, 56, 66));
+	pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), TEXT_BK_COLOR);
 	ReleaseDC(pDC);
 
 
@@ -204,13 +219,13 @@ void CTimeLineDlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	if (CNewProjDlg::m_DateTime->wDay == 0) return;
 	
-	//KillTimer(20005);
+	//KillTimer(TIMELINE_TIMER);
 	Sleep(100);
 	int i;
 	wchar_t buf[4];
 	char	temp[4];
 	// TODO: Add your message handler code here and/or call default
-	CPen pen(PS_SOLID, 0, RGB(255, 255, 255));
+	CPen pen(PS_SOLID, 0, WHITE_TEXT_COLOR);
 	float flt_X;
 	float flt_Width;
 	flt_X = (float)point.x;
@@ -223,19 +238,24 @@ void CTimeLineDlg::OnLButtonDown(UINT nFlags, CPoint point)
 	{		
 		OnPaint();
 		PaintHourMinuteLine();
-		m_staticTimes[m_nLastSelStatic].SetTextColor(RGB(100, 100, 100));
+
+		m_staticTimes[m_nLastSelStatic].SetTextColor(TIME_TEXT_COLOR);
 		m_nLastSelStatic = (int)((flt_X - 50) / ((flt_Width - 50) / 24));
-		m_staticTimes[m_nLastSelStatic].SetTextColor(RGB(255, 255, 255));
+		m_staticTimes[m_nLastSelStatic].SetTextColor(WHITE_TEXT_COLOR);
+
 		if (CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr].wHour == m_nLastSelStatic)
 		{
 			GetHourRect(CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr], CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr]);
 			pDC->MoveTo(m_HourRect.left, 40);
 			pDC->LineTo(m_HourRect.left, rt.Height());
 			m_bTimeFlag = true;
+
 			GetMinuteRect(CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr], CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr]);
 			pDC->MoveTo(m_MinuteRect.left, 17);
 			pDC->LineTo(m_MinuteRect.left, 40);
-		}else{
+		}
+		else
+		{
 			pDC->MoveTo(50 + (int)((flt_Width - 50) / 24 * m_nLastSelStatic), 40);
 			pDC->LineTo(50 + (int)((flt_Width - 50) / 24 * m_nLastSelStatic), rt.Height());
 			m_bTimeFlag = false;
@@ -244,36 +264,48 @@ void CTimeLineDlg::OnLButtonDown(UINT nFlags, CPoint point)
 			pDC->MoveTo(50, 17);
 			pDC->LineTo(50, 40);
 		}
-		if (m_nCurHour == m_nLastSelStatic) m_staticTimes[m_nCurHour].SetBkColor(RGB(200, 0, 0), 0, CxStatic::Normal);
-		else m_staticTimes[m_nCurHour].SetBkColor(RGB(200,200, 0), 0, CxStatic::Normal);
-	}else if (point.y >= 40){//hour line click
+
+		if (m_nCurHour == m_nLastSelStatic) 
+			m_staticTimes[m_nCurHour].SetBkColor(MIN_BK_COLOR_1, 0, CxStatic::Normal);
+		else 
+			m_staticTimes[m_nCurHour].SetBkColor(MIN_BK_COLOR_2, 0, CxStatic::Normal);
+	}
+	else if (point.y >= 40)		//hour line click
+	{
 		if (point.x > 50)
 		{	
 			OnPaint();
-			m_staticTimes[m_nLastSelStatic].SetTextColor(RGB(100, 100, 100));
+			m_staticTimes[m_nLastSelStatic].SetTextColor(TIME_TEXT_COLOR);
 			pDC->MoveTo(point.x, 40);
 			pDC->LineTo(point.x, rt.Height());
 			m_nLastSelStatic = (int)((flt_X - 50) / ((flt_Width - 50) / 24));
-			m_staticTimes[m_nLastSelStatic].SetTextColor(RGB(255, 255, 255));
+			m_staticTimes[m_nLastSelStatic].SetTextColor(WHITE_TEXT_COLOR);
+
 			float j = ((flt_X - 50) - ((flt_Width - 50) / 24) * m_nLastSelStatic) / ((flt_Width - 50) / 24) * (flt_Width - 60);
 			PaintHourMinuteLine();
 			pDC->MoveTo((int)j + 50, 17);
 			pDC->LineTo((int)j + 50, 40);
+
 			if (point.x >= m_HourRect.left && point.x <= m_HourRect.left + m_HourRect.right)
 				m_bTimeFlag = true;
 			else
 			{
 				m_bTimeFlag = false;
-				KillTimer(20005);
+				KillTimer(TIMELINE_TIMER);
 			}
-			if (m_nCurHour == m_nLastSelStatic) m_staticTimes[m_nCurHour].SetBkColor(RGB(200, 0, 0), 0, CxStatic::Normal);
-			else m_staticTimes[m_nCurHour].SetBkColor(RGB(200,200, 0), 0, CxStatic::Normal);
+
+			if (m_nCurHour == m_nLastSelStatic) 
+				m_staticTimes[m_nCurHour].SetBkColor(MIN_BK_COLOR_1, 0, CxStatic::Normal);
+			else 
+				m_staticTimes[m_nCurHour].SetBkColor(MIN_BK_COLOR_2, 0, CxStatic::Normal);
 		}
-	}else{//minute line click
+	}
+	else	//minute line click
+	{
 		if (point.x  > 50)
 		{
-			pDC->FillSolidRect(50, 17, rt.Width(), 15, RGB(57, 66, 76));
-			for(i = 0; i <= 60; i++)
+			pDC->FillSolidRect(50, 17, rt.Width(), 15, RECT_COLOR_2);
+			for (i = 0; i <= 60; i++)
 			{
 				pDC->MoveTo(50 + (int)((float)(rt.Width() - 60) / 60 * i), 32);
 				if (i % 5 == 0) 
@@ -283,7 +315,9 @@ void CTimeLineDlg::OnLButtonDown(UINT nFlags, CPoint point)
 					Ascii2Unichar(temp, buf);
 					m_staticMinutes[i / 5].SetWindowText(buf);
 				}
-				else pDC->LineTo(50 + (int)((float)(rt.Width() - 60) / 60 * i), 30);
+				else {
+					pDC->LineTo(50 + (int)((float)(rt.Width() - 60) / 60 * i), 30);
+				}
 			}
 			PaintHourMinuteLine();
 			pDC->MoveTo(point.x, 17);
@@ -326,32 +360,40 @@ void CTimeLineDlg::OnMouseMove(UINT nFlags, CPoint point)
 	flt_X = (float)point.x;
 	flt_Width = (float)rt.Width();
 	CDC* pDC = GetDC();
-	CPen pen(PS_SOLID, 1, RGB(255, 255, 255));
+	CPen pen(PS_SOLID, 1, WHITE_TEXT_COLOR);
 	pDC->SelectObject(&pen);
+	
 	// TODO: Add your message handler code here and/or call default
-	if (nFlags == 0) return;
+
+	if (nFlags == 0) 
+		return;
+
 	if (point.y >= 40)
 	{
 		if (point.x > 50)
 		{	
 			OnPaint();
-			m_staticTimes[m_nLastSelStatic].SetTextColor(RGB(100, 100, 100));
+			m_staticTimes[m_nLastSelStatic].SetTextColor(TIME_TEXT_COLOR);
 			pDC->MoveTo(point.x, 40);
 			pDC->LineTo(point.x, rt.Height());
 			m_nLastSelStatic = (int)((flt_X - 50) / ((flt_Width - 50) / 24));
-			m_staticTimes[m_nLastSelStatic].SetTextColor(RGB(255, 255, 255));
+			m_staticTimes[m_nLastSelStatic].SetTextColor(WHITE_TEXT_COLOR);
+
 			float j = ((flt_X - 50) - ((flt_Width - 50) / 24) * m_nLastSelStatic) / ((flt_Width - 50) / 24) * (flt_Width - 60);
 			PaintHourMinuteLine();
 			pDC->MoveTo((int)j + 50, 17);
 			pDC->LineTo((int)j + 50, 40);
-			if (m_nCurHour == m_nLastSelStatic) m_staticTimes[m_nCurHour].SetBkColor(RGB(200, 0, 0), 0, CxStatic::Normal);
-			else m_staticTimes[m_nCurHour].SetBkColor(RGB(200,200, 0), 0, CxStatic::Normal);
+
+			if (m_nCurHour == m_nLastSelStatic) 
+				m_staticTimes[m_nCurHour].SetBkColor(MIN_BK_COLOR_1, 0, CxStatic::Normal);
+			else 
+				m_staticTimes[m_nCurHour].SetBkColor(MIN_BK_COLOR_2, 0, CxStatic::Normal);
 		}
 	}else if (point.y > 16 && point.y < 40){
 		if (point.x > 50)
 		{
-			pDC->FillSolidRect(50, 17, rt.Width(), 15, RGB(57, 66, 76));
-			for(i = 0; i <= 60; i++)
+			pDC->FillSolidRect(50, 17, rt.Width(), 15, RECT_COLOR_2);
+			for (i = 0; i <= 60; i++)
 			{
 				pDC->MoveTo(50 + (int)((float)(rt.Width() - 60) / 60 * i), 32);
 				if (i % 5 == 0) 
@@ -361,8 +403,11 @@ void CTimeLineDlg::OnMouseMove(UINT nFlags, CPoint point)
 					Ascii2Unichar(temp, buf);
 					m_staticMinutes[i / 5].SetWindowText(buf);
 				}
-				else pDC->LineTo(50 + (int)((float)(rt.Width() - 60) / 60 * i), 30);
+				else {
+					pDC->LineTo(50 + (int)((float)(rt.Width() - 60) / 60 * i), 30);
+				}
 			}
+
 			PaintHourMinuteLine();
 			pDC->MoveTo(point.x, 17);
 			pDC->LineTo(point.x, 40);
@@ -385,13 +430,18 @@ void CTimeLineDlg::GetHourRect(SYSTEMTIME s_time, DWORD dwDuration)
 	float flt_Width;
 	GetClientRect(&rt);
 	flt_Width = (float)rt.Width();
-	m_HourRect.left = 50 + (int)((flt_Width - 50) / 24 * s_time.wHour + (flt_Width - 50) / 1440 * s_time.wMinute
+	m_HourRect.left = 50 + (int)((flt_Width - 50) / 24 * s_time.wHour 
+						+ (flt_Width - 50) / 1440 * s_time.wMinute
 						+ (flt_Width - 50) / 86400 * s_time.wSecond);
 	m_HourRect.top = 40;
 	m_HourRect.right = (int)((flt_Width - 50) / 86400 / 24 * (dwDuration / 1000));
-	if (m_HourRect.right < 3) m_HourRect.right = 3;
-	if (m_nChannels == 2) m_HourRect.bottom = (rt.Height() - 40) / 5 * 2;
-	else m_HourRect.bottom = (rt.Height() - 40) / 5;
+	if (m_HourRect.right < 3) 
+		m_HourRect.right = 3;
+
+	if (m_nChannels == 2) 
+		m_HourRect.bottom = (rt.Height() - 40) / 5 * 2;
+	else 
+		m_HourRect.bottom = (rt.Height() - 40) / 5;
 }
 
 void CTimeLineDlg::GetMinuteRect(SYSTEMTIME s_time, DWORD dwDuration)
@@ -409,24 +459,24 @@ void CTimeLineDlg::GetMinuteRect(SYSTEMTIME s_time, DWORD dwDuration)
 void CTimeLineDlg::InitTimeLine()
 {
 	OnPaint();
-	CPen pen(PS_SOLID, 0, RGB(255, 255, 255));
+	CPen pen(PS_SOLID, 0, WHITE_TEXT_COLOR);
 	CDC* pDC = GetDC();
 	pDC->SelectObject(&pen);
 	CRect rt;
 	GetClientRect(&rt);
 	PaintHourMinuteLine();
-	SetTimer(20005, 200, NULL);
+	SetTimer(TIMELINE_TIMER, 200, NULL);
 	m_bTimeFlag = true;
 //	pDC->FillSolidRect(m_MinuteRect.left, m_MinuteRect.top, m_MinuteRect.right, m_MinuteRect.bottom, RGB(0, 255, 0));
 	m_nLastSelStatic = CNewProjDlg::m_DateTime[0].wHour;
 	for(int i = 0; i< 24; i++)
 	{
-		m_staticTimes[i].SetTextColor(RGB(100, 100, 100));
-		m_staticTimes[i].SetBkColor(RGB(47, 56, 66),0, CxStatic::Normal);
+		m_staticTimes[i].SetTextColor(TIME_TEXT_COLOR);
+		m_staticTimes[i].SetBkColor(TEXT_BK_COLOR,0, CxStatic::Normal);
 	}
-	m_staticTimes[m_nLastSelStatic].SetTextColor(RGB(255, 255, 255));
+	m_staticTimes[m_nLastSelStatic].SetTextColor(WHITE_TEXT_COLOR);
 	m_nCurHour = m_nLastSelStatic;
-	m_staticTimes[m_nLastSelStatic].SetBkColor(RGB(200, 0, 0), 0, CxStatic::Normal);
+	m_staticTimes[m_nLastSelStatic].SetBkColor(MIN_BK_COLOR_1, 0, CxStatic::Normal);
 	GetHourRect(CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr], CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr]);
 	GetMinuteRect(CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr], CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr]);
 	pDC->MoveTo(m_HourRect.left, 40);
@@ -442,7 +492,7 @@ BOOL CTimeLineDlg::OnEraseBkgnd(CDC* pDC)
 	// TODO: Add your message handler code here and/or call default
 	CRect rt;
 	GetClientRect(&rt);
-	pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), RGB(47, 56, 66));
+	pDC->FillSolidRect(0, 0, rt.Width(), rt.Height(), TEXT_BK_COLOR);
 	ReleaseDC(pDC);
 	return TRUE;
 }
@@ -450,7 +500,7 @@ BOOL CTimeLineDlg::OnEraseBkgnd(CDC* pDC)
 void CTimeLineDlg::OnTimer(UINT nIDEvent) 
 {
 	// TODO: Add your message handler code here and/or call default
- 	if (nIDEvent == 20005 && m_bTimeFlag == true)
+ 	if (nIDEvent == TIMELINE_TIMER && m_bTimeFlag == true)
  	{
  		OnPaint();
 		
@@ -458,10 +508,12 @@ void CTimeLineDlg::OnTimer(UINT nIDEvent)
  		CRect rt;
  		GetClientRect(&rt);
  		GetHourRect(CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr], CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr]);
+
  		int xHour  = m_HourRect.left + (int)(CNewProjDlg::m_fSeekPos * m_HourRect.right);
  		GetMinuteRect(CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr], CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr]);
+
  		int xMinute = m_MinuteRect.left + (int)(CNewProjDlg::m_fSeekPos * m_MinuteRect.right);
- 		CPen pen(PS_SOLID, 0, RGB(255, 0, 0));
+ 		CPen pen(PS_SOLID, 0, RED_COLOR);
  		CDC* pDC = GetDC();
  		pDC->SelectObject(&pen);
  		pDC->MoveTo(xHour, 40);
@@ -478,18 +530,20 @@ void CTimeLineDlg::OnTimer(UINT nIDEvent)
 
 void CTimeLineDlg::PaintHourMinuteLine()
 {
-	CPen pen(PS_SOLID, 0, RGB(255, 255, 255));
+	CPen pen(PS_SOLID, 0, WHITE_TEXT_COLOR);
 	CDC* pDC = GetDC();
 	pDC->SelectObject(&pen);
 	CRect rt;
+
 	GetClientRect(&rt);
-	pDC->FillSolidRect(48, 32, rt.Width() - 50, 8, RGB(37, 46, 56));
-	for(int i = 0 ; i < CNewProjDlg::m_nPathCounts; i++)
+	pDC->FillSolidRect(48, 32, rt.Width() - 50, 8, RECT_COLOR_1);
+
+	for (int i = 0 ; i < CNewProjDlg::m_nPathCounts; i++)
 	{
 		GetMinuteRect(CNewProjDlg::m_DateTime[i], CNewProjDlg::m_dwDurations[i]);
-		pDC->FillSolidRect(m_MinuteRect.left, m_MinuteRect.top, m_MinuteRect.right, m_MinuteRect.bottom, RGB(0, 255, 0));
+		pDC->FillSolidRect(m_MinuteRect.left, m_MinuteRect.top, m_MinuteRect.right, m_MinuteRect.bottom, GREEN_COLOR);
 		GetHourRect(CNewProjDlg::m_DateTime[i], CNewProjDlg::m_dwDurations[i]);
-		pDC->FillSolidRect(m_HourRect.left, 40, m_HourRect.right, (rt.Height() - 40) / 5 * 2, RGB(0, 255, 0));
+		pDC->FillSolidRect(m_HourRect.left, 40, m_HourRect.right, (rt.Height() - 40) / 5 * 2, BLUE_COLOR);
 	}
 	pen.DeleteObject();
 	ReleaseDC(pDC);
