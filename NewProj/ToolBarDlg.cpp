@@ -294,7 +294,6 @@ void CToolBarDlg::OnPlayBtnClick()
 		return;
 
 	HBITMAP hBmp;
-	CBitmap bmp;
 	HINSTANCE hInst;
 
 	hInst = AfxFindResourceHandle(MAKEINTRESOURCE(20170), RT_BITMAP);
@@ -1231,173 +1230,13 @@ void CToolBarDlg::OnCustomdrawSliderSeek(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CToolBarDlg::OnReleasedcaptureSliderSeek(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-	//if (g_hWaveOut) waveOutReset(g_hWaveOut);
-	bool bPlayer1 = m_bPlayer1;
-	bool bPlayer2 = m_bPlayer2;
-	int prevBinDataTime = binDataNum;
-
 	if (CNewProjDlg::g_config_Value_ST.nWndCounts == 0) 
 		return;
 
-	if (m_nThreadCounts == 2) 
-	{
-		KillTimer(TIMER_PLAYER1);
-		KillTimer(TIMER_PLAYER2);
-	}
-	else {
-		KillTimer(TIMER_PLAYER1);
-	}
-
-	KillTimer(TIMER_SLIDER);
-	KillTimer(TIMER_ALARM);
-	m_pipe->StopPlayingFromFile();
-	Sleep(50);
-	//OnStop();
-	
-	m_Slider_Seek.SetPos(m_Slider_Seek.m_nRealCurPos);
-
-	int nSeekPos = m_Slider_Seek.m_nRealCurPos;
-
-	if (m_bSignal == TRUE) 
-		m_bSeekSignal = TRUE;
-
-	// TODO: Add your control notification handler code here
-	if (m_nThreadCounts == 0) 
-		return;
-	
-	if (m_nThreadCounts == 2)
-	{
-		KillTimer(TIMER_PLAYER1);
-		KillTimer(TIMER_PLAYER2);
-		m_bPlayer1 = false;
-		m_bPlayer2 = false;
-		if (m_1stSpliter.m_file->m_hFile != INVALID_HANDLE_VALUE /*0xFFFFFFFF*/)
-			m_1stSpliter.m_file->Close();
-
-		if (m_2ndSpliter.m_file->m_hFile != INVALID_HANDLE_VALUE /*0xFFFFFFFF*/)
-			m_2ndSpliter.m_file->Close();
-
-		m_nThreadCounts = 0;
-		
-		//gsi
-		for (int i = 0; i < binDataNum ; i++)
-		{
-			memset(&m_pInfoListDlg->m_pBinData[i],0,sizeof(TempBinData));
-		}
-		binDataNum = 0;
-	}
-	else if (m_nThreadCounts == 1)
-	{
-		m_bPlayer1 = false;
-		m_nThreadCounts = 0;
-		KillTimer(TIMER_PLAYER1);
-		if (m_1stSpliter.m_file->m_hFile != INVALID_HANDLE_VALUE /*0xFFFFFFFF*/)
-			m_1stSpliter.m_file->Close();
-	}
-
-	// reset info list dlg.
-	m_pInfoListDlg->ClearAlarmGraph();
-
-	float fPos = (float)nSeekPos;
-
-	if (m_2ndFilePath != "") 
-		m_nThreadCounts = 2;
-	else 
-		m_nThreadCounts = 1;
-
-	m_nOutDatasPtr = 0;
-	if (m_nThreadCounts == 2)
-	{
-		m_1stFile.Open(CNewProjDlg::m_FirstPathArrays[CNewProjDlg::m_nPathArraysPtr], CFile::modeRead);
-		m_1stSpliter.Initialization(&m_1stFile);
-		m_1stSpliter.m_file->SeekToBegin();
-		
-		m_2ndFile.Open(CNewProjDlg::m_SecondPathArrays[CNewProjDlg::m_nPathArraysPtr], CFile::modeRead);
-		m_2ndSpliter.Initialization(&m_2ndFile);
-		m_2ndSpliter.m_file->SeekToBegin();
-
-		//SetTimer(TIMER_SLIDER, 1000, NULL);
-		if (m_1stSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax()) == false) 
-			return;
-
-		if (m_2ndSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax(), m_1stSpliter.m_FrameHeader.dwDTS) == false) 
-			return;
-
-		bool bExit = false;
-		if (m_2ndSpliter.m_dw2ndSeekTime > m_1stSpliter.m_dw1stSeekTime)
-		{
-			m_2ndSpliter.m_file->Seek(ASF_FILE_HEAD_SIZE + PACKET_SIZE, CFile::begin);//-100 * PACKET_SIZE, CFile::current);
-			//m_2ndSpliter.m_file->Seek(-300 * PACKET_SIZE, CFile::current);//-100 * PACKET_SIZE, CFile::current);
-			do {
-				m_2ndSpliter.m_file->Seek(PACKET_SIZE * 2, CFile::current);
-				bExit = m_2ndSpliter.ReSeek();
-				
-			} while(!bExit);
-		}
-
-		if (m_2ndSpliter.m_dw2ndSeekTime < m_1stSpliter.m_dw1stSeekTime)
-		{
-			m_2ndSpliter.m_file->Seek(ASF_FILE_HEAD_SIZE + PACKET_SIZE, CFile::begin);
-			do {
-				m_2ndSpliter.m_file->Seek(PACKET_SIZE * 2, CFile::current);
-				bExit = m_2ndSpliter.ReSeek();
-			} while(!bExit);
-		}
-
-		if (bPlayer1 == false)
-			return;
-
-		SetTimer(TIMER_SLIDER, 1000, NULL);
-
-		m_bPlayer1 = true;
-		SetTimer(TIMER_PLAYER1, m_nSpeed / 10, NULL);
-		m_bPlayer2 = true;
-		SetTimer(TIMER_PLAYER2, m_nSpeed / 10, NULL);
-		for (int i = 0 ; i < 5; i++)
-		{
-			m_1stSpliter.GetDatas1();
-			m_1stOutDatas[m_nOutDatasPtr] = m_1stSpliter.m_1stOutDatas;
-			m_2ndSpliter.GetDatas2();
-			m_2ndOutDatas[m_nOutDatasPtr] = m_2ndSpliter.m_2ndOutDatas;
-
-			if (CNewProjDlg::g_config_Value_ST.nSelWndID == 1)
-				m_pipe->m_audioTrack[m_nOutDatasPtr] = m_1stSpliter.m_1stOutDatas.buf_A;
-			else
-				m_pipe->m_audioTrack[m_nOutDatasPtr] = m_2ndSpliter.m_2ndOutDatas.buf_A;
-			m_nOutDatasPtr ++;
-		}
-	}
-	else if (m_nThreadCounts == 1)
-	{
-		//SetTimer(TIMER_SLIDER, 1000, NULL);
-		m_1stFile.Open(CNewProjDlg::m_FirstPathArrays[CNewProjDlg::m_nPathArraysPtr], CFile::modeRead);
-		m_1stSpliter.Initialization(&m_1stFile);
-		m_1stSpliter.m_file->SeekToBegin();
-		m_1stSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax());
-		m_bPlayer1 = true;
-
-		// only playing
-		if (bPlayer1 == false)
-			return;
-
-		SetTimer(TIMER_SLIDER, 1000, NULL);
-
-		for (int i = 0; i < 5; i++)
-		{
-			m_1stSpliter.GetDatas1();
-			m_1stOutDatas[m_nOutDatasPtr] = m_1stSpliter.m_1stOutDatas;
-			m_pipe->m_audioTrack[m_nOutDatasPtr] = m_1stSpliter.m_1stOutDatas.buf_A;
-			m_nOutDatasPtr ++;
-		}
-		SetTimer(TIMER_PLAYER1, m_nSpeed / 10, NULL);
-	}
-	SetTimer(TIMER_ALARM, 100, NULL);
-	m_pipe->m_nBufPtr = 0;
-	m_pipe->StartPlayingFromFile();
-	//AfxBeginThread(SoundPlayThread, this);
-	*pResult = 0;
-
+	if (TimeSeek(false, true, 0, CNewProjDlg::m_nPathArraysPtr))
+		*pResult = 0;
 }
+
 
 void CToolBarDlg::OnOutofmemorySliderSeek(NMHDR* pNMHDR, LRESULT* pResult) 
 {
@@ -2584,10 +2423,12 @@ UINT AviRecordThreadProc(LPVOID pParam)
 	return 0;
 }
 
-void CToolBarDlg::TimeSeek(float fSeekPos, int nCurPath)
+bool CToolBarDlg::TimeSeek(bool bSetPos, bool bPlayEnable, float fSeekPos, int nCurPath)
 {
-	
-	m_Slider_Seek.SetPos((int)fSeekPos * m_Slider_Seek.GetRangeMax());
+	bool bPlayer1 = m_bPlayer1;
+	bool bPlayer2 = m_bPlayer2;
+	int prevBinDataTime = binDataNum;
+
 	if (m_nThreadCounts == 2) 
 	{
 		KillTimer(TIMER_PLAYER1);
@@ -2600,35 +2441,56 @@ void CToolBarDlg::TimeSeek(float fSeekPos, int nCurPath)
 
 	KillTimer(TIMER_SLIDER);
 	KillTimer(TIMER_ALARM);
+
 	m_pipe->StopPlayingFromFile();
 	Sleep(50);
 	//OnStop();
-	
-	m_Slider_Seek.SetPos(m_Slider_Seek.m_nRealCurPos);
 
-	int nSeekPos = (fSeekPos * m_Slider_Seek.GetRangeMax());
+	
+	HINSTANCE hInst = AfxFindResourceHandle(MAKEINTRESOURCE(20170), RT_BITMAP);;
+	HBITMAP hBmpPlay = (HBITMAP)::LoadImage(hInst, MAKEINTRESOURCE(IDB_BITMAP_PLAY), IMAGE_BITMAP, 0, 0, 0);
+	HBITMAP hBmpPause = (HBITMAP)::LoadImage(hInst, MAKEINTRESOURCE(IDB_BITMAP_PAUSE), IMAGE_BITMAP, 0, 0, 0);
+
+	// mean pause state
+	m_btn_Play.SetBitmap(hBmpPlay);
+	SetDlgItemText(IDC_PLAY, _T("Play"));
+	
+	
+
+	
+
+	int nSeekPos;
+
+	if (bSetPos) {
+		m_Slider_Seek.SetPos((int)fSeekPos * m_Slider_Seek.GetRangeMax());
+		nSeekPos = (fSeekPos * m_Slider_Seek.GetRangeMax());
+	}
+	else {
+		m_Slider_Seek.SetPos(m_Slider_Seek.m_nRealCurPos);
+		nSeekPos = m_Slider_Seek.m_nRealCurPos;
+	}
 
 	if (m_bSignal == TRUE) 
 		m_bSeekSignal = TRUE;
-	
+
 	// TODO: Add your control notification handler code here
 	if (m_nThreadCounts == 0) 
-		return;
-	
+		return false;
+
 	if (m_nThreadCounts == 2)
 	{
 		KillTimer(TIMER_PLAYER1);
 		KillTimer(TIMER_PLAYER2);
-		
+
 		m_bPlayer1 = false;
 		m_bPlayer2 = false;
 
 		if (m_1stSpliter.m_file->m_hFile != INVALID_HANDLE_VALUE /*0xFFFFFFFF*/)
 			m_1stSpliter.m_file->Close();
-		
+
 		if (m_2ndSpliter.m_file->m_hFile != INVALID_HANDLE_VALUE /*0xFFFFFFFF*/)
 			m_2ndSpliter.m_file->Close();
-		
+
 		m_nThreadCounts = 0;
 
 		//gsi
@@ -2646,6 +2508,9 @@ void CToolBarDlg::TimeSeek(float fSeekPos, int nCurPath)
 		if (m_1stSpliter.m_file->m_hFile != INVALID_HANDLE_VALUE /*0xFFFFFFFF*/)
 			m_1stSpliter.m_file->Close();
 	}
+
+	// reset info list dlg
+	m_pInfoListDlg->ClearAlarmGraph();
 
 	float fPos = (float)nSeekPos;
 	if (m_2ndFilePath != "") 
@@ -2665,12 +2530,46 @@ void CToolBarDlg::TimeSeek(float fSeekPos, int nCurPath)
 		m_2ndSpliter.Initialization(&m_2ndFile);
 		m_2ndSpliter.m_file->SeekToBegin();
 
-		SetTimer(TIMER_SLIDER, 1000, NULL);
+		// SetTimer(TIMER_SLIDER, 1000, NULL);
 		if (m_1stSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax()) == false) 
-			return;
+			return false;
 
 		if (m_2ndSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax(), m_1stSpliter.m_FrameHeader.dwDTS) == false) 
-			return;
+			return false;
+
+		bool bExit = false;
+		if (m_2ndSpliter.m_dw2ndSeekTime > m_1stSpliter.m_dw1stSeekTime)
+		{
+			m_2ndSpliter.m_file->Seek(ASF_FILE_HEAD_SIZE + PACKET_SIZE, CFile::begin);//-100 * PACKET_SIZE, CFile::current);
+			//m_2ndSpliter.m_file->Seek(-300 * PACKET_SIZE, CFile::current);//-100 * PACKET_SIZE, CFile::current);
+			do {
+				m_2ndSpliter.m_file->Seek(PACKET_SIZE * 2, CFile::current);
+				bExit = m_2ndSpliter.ReSeek();
+
+			} while(!bExit);
+		}
+
+		if (m_2ndSpliter.m_dw2ndSeekTime < m_1stSpliter.m_dw1stSeekTime)
+		{
+			m_2ndSpliter.m_file->Seek(ASF_FILE_HEAD_SIZE + PACKET_SIZE, CFile::begin);
+			do {
+				m_2ndSpliter.m_file->Seek(PACKET_SIZE * 2, CFile::current);
+				bExit = m_2ndSpliter.ReSeek();
+			} while(!bExit);
+		}
+
+		if (bPlayEnable)
+		{
+			if (bPlayer1 == false)
+				return true;
+		}
+
+		// Play button change
+		m_btn_Play.SetBitmap(hBmpPause);
+		SetDlgItemText(IDC_PLAY, _T("Pause"));
+		
+
+		SetTimer(TIMER_SLIDER, 1000, NULL);
 
 		m_bPlayer1 = true;
 		SetTimer(TIMER_PLAYER1, m_nSpeed / 10, NULL);
@@ -2690,17 +2589,27 @@ void CToolBarDlg::TimeSeek(float fSeekPos, int nCurPath)
 				m_pipe->m_audioTrack[m_nOutDatasPtr] = m_2ndSpliter.m_2ndOutDatas.buf_A;
 			m_nOutDatasPtr ++;
 		}
-
-
 	}
 	else if (m_nThreadCounts == 1)
 	{
-		SetTimer(TIMER_SLIDER, 1000, NULL);
+		//SetTimer(TIMER_SLIDER, 1000, NULL);
 		m_1stFile.Open(CNewProjDlg::m_FirstPathArrays[CNewProjDlg::m_nPathArraysPtr], CFile::modeRead);
 		m_1stSpliter.Initialization(&m_1stFile);
 		m_1stSpliter.m_file->SeekToBegin();
 		m_1stSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax());
 		m_bPlayer1 = true;
+
+		if (bPlayEnable)
+		{
+			if (bPlayer1 == false)
+				return true;
+		}
+
+		// Play button change
+		m_btn_Play.SetBitmap(hBmpPause);
+		SetDlgItemText(IDC_PLAY, _T("Pause"));
+
+		SetTimer(TIMER_SLIDER, 1000, NULL);
 
 		for (int i = 0; i < 5; i++)
 		{
@@ -2712,29 +2621,17 @@ void CToolBarDlg::TimeSeek(float fSeekPos, int nCurPath)
 		SetTimer(TIMER_PLAYER1, m_nSpeed / 10, NULL);
 	}
 
-#if 0	// comment for No sound error 
-	waveOutClose(g_hWaveOut);
-	Sleep(150);
-	g_bSoundPlay = true;
-	if (g_hWaveOut) waveOutClose(g_hWaveOut);
-	m_nPlayPtr = 0;
-	WAVEFORMATEX wFormat;
-	wFormat.wFormatTag = WAVE_FORMAT_1M08;
-	wFormat.nChannels = 1;
-	wFormat.nSamplesPerSec = 8000;
-	wFormat.nAvgBytesPerSec = 16000;
-	wFormat.nBlockAlign = 2;
-	wFormat.wBitsPerSample = 16;
-	wFormat.cbSize = 0;
-	waveOutOpen(&g_hWaveOut, WAVE_MAPPER, &wFormat, (DWORD)NULL, (DWORD)this, CALLBACK_NULL);
-#else
-//	g_bSoundPlay = true;
-//	m_nPlayPtr = 0;
 	m_pipe->m_nBufPtr = 0;
 	m_pipe->StartPlayingFromFile();
-#endif
-	//AfxBeginThread(SoundPlayThread, this);
-	CTimeLineDlg::m_bTimeFlag = true;
+
+	SetTimer(TIMER_ALARM, 100, NULL);
+	return true;
+}
+
+void CToolBarDlg::TimeSeek(float fSeekPos, int nCurPath)
+{
+	if (TimeSeek(true, false, fSeekPos, nCurPath))
+		CTimeLineDlg::m_bTimeFlag = true;
 }
 
 void CToolBarDlg::OnDestroy()

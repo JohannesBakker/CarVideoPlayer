@@ -64,6 +64,7 @@ public:
 	RGBQUAD RGBtoHSL(RGBQUAD lRGBColor);
 	RGBQUAD HSLtoRGB(RGBQUAD lHSLColor);
 	WORD HueToRGB(WORD n1,WORD n2,WORD hue);
+	bool TimeSeek(bool, bool, float, int);
 	void TimeSeek(float, int);
 	
 	
