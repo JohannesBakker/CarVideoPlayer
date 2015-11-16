@@ -165,6 +165,9 @@ void CToolBarDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STOP, m_btn_Stop);
 	DDX_Control(pDX, IDC_PLAY, m_btn_Play);
 	DDX_Control(pDX, IDC_STATUS_STATIC, m_Status_Static);
+	
+	
+
 	//}}AFX_DATA_MAP
 	
 }
@@ -313,6 +316,10 @@ void CToolBarDlg::OnPlayBtnClick()
 		SetDlgItemText(IDC_PLAY, _T("Pause"));
 		hBmp = (HBITMAP)::LoadImage(hInst, MAKEINTRESOURCE(IDB_BITMAP_PAUSE), IMAGE_BITMAP, 0, 0, 0);
 		m_btn_Play.SetBitmap(hBmp);
+
+		
+		m_pToolTip->UpdateTipText(_T("Pause"), GetDlgItem(IDC_PLAY));
+
 		if (m_nThreadCounts == 2)
 		{
 			if (m_1stSpliter.Seek(fPos / m_Slider_Seek.GetRangeMax()) == false) return;
@@ -369,6 +376,9 @@ void CToolBarDlg::OnPlayBtnClick()
 		SetDlgItemText(IDC_PLAY, _T("Play"));
 		hBmp = (HBITMAP)::LoadImage(hInst, MAKEINTRESOURCE(IDB_BITMAP_PLAY), IMAGE_BITMAP, 0, 0, 0);
 		m_btn_Play.SetBitmap(hBmp);
+
+		m_pToolTip->UpdateTipText(_T("Play"), GetDlgItem(IDC_PLAY));
+
 		g_bSoundPlay = false;
 		CTimeLineDlg::m_bTimeFlag = false;
 
@@ -440,6 +450,35 @@ BOOL CToolBarDlg::OnInitDialog()
 
 	// init record alarm
 	m_bAlarmOn = false;
+	
+	// init tooltip control
+	m_pToolTip = new CToolTipCtrl;
+	if (!m_pToolTip->Create(this))
+		return TRUE;
+
+	m_pToolTip->AddTool(GetDlgItem(IDC_PLAY), GetToolTipText(IDC_PLAY));
+	m_pToolTip->AddTool(GetDlgItem(IDC_STOP), GetToolTipText(IDC_STOP));
+	m_pToolTip->AddTool(GetDlgItem(IDC_SLOW), GetToolTipText(IDC_SLOW));
+	m_pToolTip->AddTool(GetDlgItem(IDC_NORMAL), GetToolTipText(IDC_NORMAL));
+	m_pToolTip->AddTool(GetDlgItem(IDC_FAST), GetToolTipText(IDC_FAST));
+	m_pToolTip->AddTool(GetDlgItem(IDC_FORWARD), GetToolTipText(IDC_FORWARD));
+	m_pToolTip->AddTool(GetDlgItem(IDC_BACK), GetToolTipText(IDC_BACK));
+	m_pToolTip->AddTool(GetDlgItem(IDC_PREV_SEG), GetToolTipText(IDC_PREV_SEG));
+	m_pToolTip->AddTool(GetDlgItem(IDC_NEXT_SEG), GetToolTipText(IDC_NEXT_SEG));
+	m_pToolTip->AddTool(GetDlgItem(IDC_RECORD_BEGIN), GetToolTipText(IDC_RECORD_BEGIN));
+	m_pToolTip->AddTool(GetDlgItem(IDC_RECORD_END), GetToolTipText(IDC_RECORD_END));
+	m_pToolTip->AddTool(GetDlgItem(IDC_START_CUT), GetToolTipText(IDC_START_CUT));
+	m_pToolTip->AddTool(GetDlgItem(IDC_END_CUT), GetToolTipText(IDC_END_CUT));
+	m_pToolTip->AddTool(GetDlgItem(IDC_1FRAME), GetToolTipText(IDC_1FRAME));
+	m_pToolTip->AddTool(GetDlgItem(IDC_2FRAME), GetToolTipText(IDC_2FRAME));
+
+	m_pToolTip->AddTool(GetDlgItem(IDC_SNAPSHOT), GetToolTipText(IDC_SNAPSHOT));
+	m_pToolTip->AddTool(GetDlgItem(IDC_AVI), GetToolTipText(IDC_AVI));
+	m_pToolTip->AddTool(GetDlgItem(IDC_ADJUST), GetToolTipText(IDC_ADJUST));
+	m_pToolTip->AddTool(GetDlgItem(IDC_FULLSCREEN), GetToolTipText(IDC_FULLSCREEN));
+	m_pToolTip->AddTool(GetDlgItem(IDC_REPAIR_FILE), GetToolTipText(IDC_REPAIR_FILE));
+
+	m_pToolTip->Activate(TRUE);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
@@ -2608,6 +2647,7 @@ bool CToolBarDlg::TimeSeek(bool bSetPos, bool bPlayEnable, float fSeekPos, int n
 		// Play button change
 		m_btn_Play.SetBitmap(hBmpPause);
 		SetDlgItemText(IDC_PLAY, _T("Pause"));
+		
 
 		SetTimer(TIMER_SLIDER, 1000, NULL);
 
@@ -2824,3 +2864,118 @@ void CToolBarDlg::OnAlarmSwitch(bool bON)
 		m_number3.SetBitmap(IDB_NUMBER_THREE_WHITE);
 	}
 }
+
+
+BOOL CToolBarDlg::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO: Add your specialized code here and/or call the base class
+	if(pMsg->message== WM_LBUTTONDOWN ||
+		pMsg->message== WM_LBUTTONUP ||
+		pMsg->message== WM_MOUSEMOVE) 
+	{	
+		m_pToolTip->RelayEvent(pMsg);
+	}
+	return CDialog::PreTranslateMessage(pMsg);
+}
+
+CString CToolBarDlg::GetToolTipText(UINT uId)
+{
+	CString txtTip = _T("");
+	switch (uId)
+	{
+	case IDC_PLAY:
+		{
+			wchar_t buf[5];			
+			GetDlgItemText(IDC_PLAY,buf, 5);
+			if (buf[1] == 'a')
+				txtTip = _T("Pause");
+			else
+				txtTip = _T("Play");
+		}
+		break;
+	
+	case IDC_STOP:
+		txtTip = _T("Stop");
+		break;
+
+	case IDC_SLOW:
+		txtTip = _T("Slow Play");
+		break;
+
+	case IDC_NORMAL:
+		txtTip = _T("Normal Play");
+		break;
+
+	case IDC_FAST:
+		txtTip = _T("Fast Play");
+		break;
+
+	case IDC_FORWARD:
+		txtTip = _T("Play forward");
+		break;
+
+	case IDC_BACK:
+		txtTip = _T("Play back");
+		break;
+
+	case IDC_PREV_SEG:
+		txtTip = _T("Play prev segment");
+		break;
+
+	case IDC_NEXT_SEG:
+		txtTip = _T("Play next segment");
+		break;
+
+	case IDC_RECORD_BEGIN:
+		txtTip = _T("Record begin");
+		break;
+
+	case IDC_RECORD_END:
+		txtTip = _T("Record end");
+		break;
+
+	case IDC_START_CUT:
+		txtTip = _T("Start cut");
+		break;
+
+	case IDC_END_CUT:
+		txtTip = _T("End cut");
+		break;
+
+	case IDC_1FRAME:
+		txtTip = _T("1");
+		break;
+
+	case IDC_2FRAME:
+		txtTip = _T("2");
+		break;
+
+	case IDC_SNAPSHOT:
+		txtTip = _T("Snapshot");
+		break;
+
+	case IDC_AVI:
+		txtTip = _T("AVI");
+		break;
+
+	case IDC_ADJUST:
+		txtTip = _T("Adjust video display parameters");
+		break;
+
+	case IDC_FULLSCREEN:
+		txtTip = _T("Full Screen");
+		break;
+
+	case IDC_REPAIR_FILE:
+		txtTip = _T("Repair file");
+		break;
+
+	default:
+		break;
+	}
+
+	return txtTip;
+}
+
+
+

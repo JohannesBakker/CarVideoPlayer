@@ -239,10 +239,13 @@ public:
 	bool m_bIoAlarmSignals[IO_SIGNALS_NUM];
 	
 	long m_2ndBeginSecs;
+
 static	int m_n2ndRecordStopPos;
-	
+
+	CToolTipCtrl* m_pToolTip;
 
 	void OnAlarmSwitch(bool bON);
+	CString GetToolTipText(UINT uId);
 
 	afx_msg void OnOneWindow();
 	//afx_msg void OnMM_WOM_DONE(UINT parm1, LONG parm2);
@@ -251,10 +254,7 @@ static	int m_n2ndRecordStopPos;
 	afx_msg void OnBnClickedPrevSeg();
 	afx_msg void OnBnClickedNextSeg();
 	afx_msg void OnBnClickedRepairFile();
-
-
-
-
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
 //{{AFX_INSERT_LOCATION}}
