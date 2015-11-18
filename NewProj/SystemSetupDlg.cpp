@@ -761,12 +761,16 @@ void CSystemSetupDlg::OnOK()
 	}
 
 	CNewProjDlg::g_bViewChange = true;
+
+	g_bEnableQuitApplication = TRUE;
 	CDialog::OnOK();
 }
 
 void CSystemSetupDlg::OnCancel() 
 {
 	// TODO: Add extra cleanup here
+	g_bEnableQuitApplication = TRUE;
+
 	CDialog::OnCancel();
 }
 // HBRUSH CSystemSetupDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor) 

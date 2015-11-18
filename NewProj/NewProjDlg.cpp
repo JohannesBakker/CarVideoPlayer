@@ -606,6 +606,9 @@ void CNewProjDlg::OnSettings()
 	else m_SystemSetupDlg.m_rgb16Btn.SetCheck(0);
 	if (CNewProjDlg::g_config_Value_ST.bWtrmkVerify == true) m_SystemSetupDlg.m_waterMarkBtn.SetCheck(1);
 	else m_SystemSetupDlg.m_waterMarkBtn.SetCheck(0);
+
+	g_bEnableQuitApplication = FALSE;
+
 	m_SystemSetupDlg.ShowWindow(SW_SHOW);
 }
 
@@ -827,3 +830,5 @@ void CNewProjDlg::OnClose()
 
 	CDialog::OnClose();
 }
+
+

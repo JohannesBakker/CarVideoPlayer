@@ -2982,5 +2982,3 @@ CString CToolBarDlg::GetToolTipText(UINT uId)
 	return txtTip;
 }
 
-
-

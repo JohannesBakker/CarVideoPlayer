@@ -21,6 +21,8 @@
 
 #define CONFIG_FILE_PATH	"config.sav"
 
+extern BOOL g_bEnableQuitApplication;
+
 class CNewProjApp : public CWinApp
 {
 public:
@@ -40,6 +42,7 @@ public:
 		//    DO NOT EDIT what you see in these blocks of generated code !
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
 
