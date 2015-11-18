@@ -253,25 +253,50 @@ void CGPSDlg::SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId,  CString szCarIm
 
 
 #if 1
-	CString strHtml = L"<!DOCTYPE html><html><head>";
-
-	strHtml += L"<meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\">";
-	strHtml += L"<meta charset=\"utf-8\"><title>Simple icons</title>";
+	CString strHtml = L"<!DOCTYPE html><html>";
+	strHtml += L"<head>";
+	strHtml += L"<meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\"><meta charset=\"utf-8\">";
+	strHtml += L"<title>Simple icons</title>";
 	strHtml += L"<style>html, body, #map-canvas {height: 100%;margin: 0px;padding: 0px}</style>";
-	strHtml += L"<script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp\"></script>";
-	strHtml += L"<script>function initialize() ";
-	strHtml += L"{ var mapOptions = {zoom: 16,center: new google.maps.LatLng(" + strLatLon + L")}; ";
-	strHtml += L"var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions); ";
-	strHtml += L"var image = '" + csPath + L"'; var myLatLng = new google.maps.LatLng(" + strLatLon + L"); ";
-	strHtml += L"var beachMarker = new google.maps.Marker({position: myLatLng,map: map,icon: image});} ";
-	strHtml += L"google.maps.event.addDomListener(window, 'load', initialize);</script>";
-	strHtml += L"</head>";
 	
+	strHtml += L"<script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp\"></script>";
+
+	strHtml += L"<script>function initialize() { ";
+	strHtml += L"var mapOptions = {zoom: 16,center: new google.maps.LatLng(" + strLatLon + L")}; ";
+	strHtml += L"var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions); ";
+	strHtml += L"var image = '" + csPath + L"'; ";
+	strHtml += L"var myLatLng = new google.maps.LatLng(" + strLatLon + L"); ";
+	strHtml += L"var beachMarker = new google.maps.Marker({position: myLatLng,map: map,icon: image});";
+
+
+	strHtml += L"var infowindow = new google.maps.InfoWindow( {";
+	strHtml += L"content: \"Test Project\"";
+	strHtml += L"} );";
+
+	strHtml += L"beachMarker.addListener('click', function() {";
+	strHtml += L"infowindow.open(map, beachMarker);";
+	strHtml += L"} );";
+
+
+	// always show info window
+	strHtml += L"infowindow.open(map, beachMarker);";
+	
+
+
+	strHtml += L"} ";
+	
+	strHtml += L"google.maps.event.addDomListener(window, 'load', initialize);";
+	
+	
+
+	strHtml += L"</script>";
+	strHtml += L"</head>";
 	
 	strHtml += L"<body>";
 	strHtml += L"<div id=\"map-canvas\"></div>";
-	strHtml += L"</body>";
-	strHtml += L"</html>";
+	
+	strHtml += L"</body></html>";
+
 #else
 	CString strHtml = L"<!DOCTYPE html><html><head><meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\"><meta charset=\"utf-8\"><title>Simple icons</title><style>html, body, #map-canvas {height: 100%;margin: 0px;padding: 0px}</style><script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp\"></script><script>function initialize() { var mapOptions = {zoom: 16,center: new google.maps.LatLng(" + strLatLon + L")}; var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions); var image = '" + csPath + L"'; var myLatLng = new google.maps.LatLng(" + strLatLon + L"); var beachMarker = new google.maps.Marker({position: myLatLng,map: map,icon: image});} google.maps.event.addDomListener(window, 'load', initialize);</script></head><body><div id=\"map-canvas\"></div></body></html>";
 #endif
