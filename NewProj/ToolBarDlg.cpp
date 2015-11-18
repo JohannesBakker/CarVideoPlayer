@@ -2692,6 +2692,18 @@ void CToolBarDlg::OnBnClickedPrevSeg()
 {
 	// TODO: Add your control notification handler code here
 	CNewProjDlg::m_nPathArraysPtr --;
+
+	// add for error removing 
+	if (CNewProjDlg::m_nPathArraysPtr < 0) {
+		CNewProjDlg::m_nPathArraysPtr = 0;
+		return;
+	}
+
+	if (CNewProjDlg::m_nPathCounts <= 0) {
+		return;
+	}
+
+
 	CNewProjDlg::m_nPathArraysPtr = (CNewProjDlg::m_nPathArraysPtr + CNewProjDlg::m_nPathCounts) % CNewProjDlg::m_nPathCounts;
 
 	for (int i = 0 ; i < CNewProjDlg::m_nPathCounts; i++)
@@ -2705,6 +2717,17 @@ void CToolBarDlg::OnBnClickedPrevSeg()
 void CToolBarDlg::OnBnClickedNextSeg()
 {
 	// TODO: Add your control notification handler code here
+
+	// add for error removing 
+	if (CNewProjDlg::m_nPathArraysPtr < 0) {
+		CNewProjDlg::m_nPathArraysPtr = 0;
+		return;
+	}
+
+	if (CNewProjDlg::m_nPathCounts <= 0) {
+		return;
+	}
+
 	CNewProjDlg::m_nPathArraysPtr ++;
 	CNewProjDlg::m_nPathArraysPtr = CNewProjDlg::m_nPathArraysPtr % CNewProjDlg::m_nPathCounts;
 
