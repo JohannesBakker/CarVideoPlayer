@@ -756,6 +756,7 @@ void CSystemSetupDlg::OnOK()
 	{
 		// Setting param to Speed graph
 		CNewProjDlg::m_InfoListDlg.m_speedGraphWnd.SetSpeedUnit(CNewProjDlg::g_config_Value_ST.nSpeedUnitID);
+		CNewProjDlg::m_GPSDlg.SetSpeedUnit(CNewProjDlg::g_config_Value_ST.nSpeedUnitID);
 		CNewProjDlg::m_InfoListDlg.m_speedGraphWnd.Invalidate();
 	}
 

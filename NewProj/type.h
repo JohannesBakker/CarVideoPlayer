@@ -1,6 +1,13 @@
 #ifndef __TYPE_H_
 #define __TYPE_H_
 
+typedef enum {
+	SPEED_UNIT_KM_H		= 0,
+	SPEED_UNIT_MPH,
+	SPEED_UNIT_NUM,
+} SpeedUnit_t;
+
+
 struct Config_Datas
 {
 	bool	bDateTimeWnd;

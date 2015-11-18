@@ -18,7 +18,9 @@ static char THIS_FILE[] = __FILE__;
 #define x_DataWidth		5
 #define x_DataHeight	20
 
+// Time step unit : ms
 #define TIME_STEP		500
+
 
 #define X_AXIS_END_OFFSET	100
 
@@ -217,7 +219,7 @@ void CAlarmGraph::setDatas(DWORD dura,TempBinData* pBinData, int count )
 }
 
 
-void CAlarmGraph::setDatasWithTime(DWORD dwFristDTS, DWORD currDTS, MainBinaryData* pBinData, unsigned char alarmFlag)
+void CAlarmGraph::setDatasWithTime(DWORD dwFirstDTS, DWORD currDTS, MainBinaryData* pBinData, unsigned char alarmFlag)
 {
 	AlarmBinData_t newAlarm;
 
@@ -228,7 +230,7 @@ void CAlarmGraph::setDatasWithTime(DWORD dwFristDTS, DWORD currDTS, MainBinaryDa
 	m_arrBinData.Add(newAlarm);
 	m_BinCount = m_arrBinData.GetSize();
 
-	m_dwFirstDTS = dwFristDTS;
+	m_dwFirstDTS = dwFirstDTS;
 	m_nTotalPoints = (newAlarm.alarmOffsetTime - m_dwFirstDTS) / TIME_STEP;
 
 	UpdateScrollSizesExt();

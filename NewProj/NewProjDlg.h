@@ -67,7 +67,7 @@ CToolBarDlg m_ToolBarDlg;
 	CIOLightSetDlg m_IOLightSetDlg;
 	CSearchDlg m_SearchDlg;
 	CBurnToDiscDlg m_BurnToDiscDlg;;
-	CGPSDlg m_GPSDlg;
+static	CGPSDlg m_GPSDlg;
 	CTimeLineDlg m_TimeLineDlg;
 static	CInfoListDlg	m_InfoListDlg;
 //static Variables

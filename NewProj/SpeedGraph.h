@@ -7,14 +7,9 @@
 // SpeedGraph.h : header file
 //
 #include "264Spliter.h"
+#include "type.h"
 /////////////////////////////////////////////////////////////////////////////
 // CSpeedGraph window
-
-typedef enum {
-	SPEED_UNIT_KM_H		= 0,
-	SPEED_UNIT_MPH,
-	SPEED_UNIT_NUM,
-} SpeedUnit_t;
 
 class CSpeedGraph : public CStatic
 {
@@ -28,7 +23,7 @@ public:
 	static TempBinData m_pSpeedBinData[100000];
 	int   m_BinCount;
 	int			m_nSpeedCount;
-	static SpeedUnit_t	m_nSpeedUnit;
+	SpeedUnit_t	m_nSpeedUnit;
 // Operations
 public:
 	void setDatas(DWORD dura,TempBinData* pBinData, int count );

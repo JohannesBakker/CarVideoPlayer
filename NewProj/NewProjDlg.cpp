@@ -87,6 +87,8 @@ SYSTEMTIME					CNewProjDlg::m_FolderTime;
 int							CNewProjDlg::g_nPlayState;
 
 CInfoListDlg				CNewProjDlg::m_InfoListDlg;
+CGPSDlg 					CNewProjDlg::m_GPSDlg;
+
 
 
 CNewProjDlg::CNewProjDlg(CWnd* pParent /*=NULL*/)
@@ -243,6 +245,7 @@ BOOL CNewProjDlg::OnInitDialog()
 	m_GPSDlg.m_bGPSDlg = true;
 	m_GPSDlg.MoveWindow(cx * 2 / 3, 0, cx / 3, cy * 3 / 5);
 	m_GPSDlg.ShowWindow(SW_SHOW);
+	m_GPSDlg.SetSpeedUnit(CNewProjDlg::g_config_Value_ST.nSpeedUnitID);
 
 	// Set the icon for this dialog.  The framework does this automatically
 	//  when the application's main window is not a dialog

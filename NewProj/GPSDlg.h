@@ -10,6 +10,7 @@
 #include "EditTrans.h"
 #include "264Spliter.h"
 #include "explorer1.h"
+#include "type.h"
 /////////////////////////////////////////////////////////////////////////////
 // CGPSDlg dialog
 //typedef DWORD		(_cdecl* FuncMAP_FixGps)(double, double, int, int);
@@ -18,13 +19,16 @@ struct GPS_INFO
 	float fLat;
 	float fLon;
 	float fSpeed;
+
+	DWORD			dwOffsetSecs;
+	unsigned char	alarmFlags;
 };
 
 class CGPSDlg : public CDialog
 {
 // Construction
 public:
-	void	ShowGPS_Pos(MainBinaryData*);
+	void	ShowGPS_Pos(MainBinaryData*, DWORD, DWORD, unsigned char);
 	CGPSDlg(CWnd* pParent = NULL);   // standard constructor
 
 // Dialog Data
@@ -75,6 +79,10 @@ public:
 	GPS_INFO m_gpsInitInfo;
 	bool m_bInitedGpsInfo;
 	CString m_szImageName;
+	SpeedUnit_t	m_nSpeedUnit;
+
+	DWORD m_dwFirstDTS;
+	SYSTEMTIME m_VideoDateTime;
 
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 
@@ -87,6 +95,9 @@ public:
 	CString GetCarImageName(int degree);
 	void ResetGpsInfo();
 	int GetNextWinId(int currentWinId, int offset, bool bNext);
+
+	void SetSpeedUnit(int nSpeedUnit);
+	void SetVideoDateTime(SYSTEMTIME *pVideoDateTime);
 };
 
 //{{AFX_INSERT_LOCATION}}

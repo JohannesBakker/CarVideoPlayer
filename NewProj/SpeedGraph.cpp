@@ -15,7 +15,6 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CSpeedGraph
 TempBinData CSpeedGraph::m_pSpeedBinData[100000];
-SpeedUnit_t	CSpeedGraph::m_nSpeedUnit;
 
 CSpeedGraph::CSpeedGraph()
 {

@@ -317,8 +317,11 @@ void CToolBarDlg::OnPlayBtnClick()
 		hBmp = (HBITMAP)::LoadImage(hInst, MAKEINTRESOURCE(IDB_BITMAP_PAUSE), IMAGE_BITMAP, 0, 0, 0);
 		m_btn_Play.SetBitmap(hBmp);
 
+		// Set video start date and time to GPS dialog
+		CNewProjDlg::m_GPSDlg.SetVideoDateTime(&(CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr]));
+
 		
-		m_pToolTip->UpdateTipText(_T("Pause"), GetDlgItem(IDC_PLAY));
+		m_pToolTip->UpdateTipText(GetToolTipText(IDC_PLAY), GetDlgItem(IDC_PLAY));
 
 		if (m_nThreadCounts == 2)
 		{
@@ -377,7 +380,7 @@ void CToolBarDlg::OnPlayBtnClick()
 		hBmp = (HBITMAP)::LoadImage(hInst, MAKEINTRESOURCE(IDB_BITMAP_PLAY), IMAGE_BITMAP, 0, 0, 0);
 		m_btn_Play.SetBitmap(hBmp);
 
-		m_pToolTip->UpdateTipText(_T("Play"), GetDlgItem(IDC_PLAY));
+		m_pToolTip->UpdateTipText(GetToolTipText(IDC_PLAY), GetDlgItem(IDC_PLAY));
 
 		g_bSoundPlay = false;
 		CTimeLineDlg::m_bTimeFlag = false;
@@ -799,21 +802,23 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 		m_1stSpliter.m_1stOutDatas.bBuf = false;
 		if (m_1stSpliter.m_1stOutDatas.nB_Size == 60 && m_bDrawSeek ==FALSE)
 		{
-			m_pGpsDlg->ShowGPS_Pos(&m_1stSpliter.m_1stOutDatas.mB_Data);
-			m_pInfoListDlg->m_pBinData[binDataNum].mBinData =   m_1stSpliter.m_1stOutDatas.mB_Data;
-			m_pInfoListDlg->m_pBinData[binDataNum].nBinSize =   m_1stSpliter.m_1stOutDatas.nB_Size;
-			m_pInfoListDlg->m_pBinData[binDataNum].dwCurPos =   m_Slider_Seek.GetPos();
-			binDataNum ++;
-			m_pInfoListDlg->m_BinDataCount = binDataNum;
-			m_pInfoListDlg->m_dura = m_duration;
-
 			unsigned char alarmFlag = 0;
 			for (int i = 0; i < IO_ALARM_SIG_NUM; i++) {
 				if (m_bIoAlarmSignals[i] == true) {
 					alarmFlag |= (1 << i);
 				}
 			}
-			 
+			
+			// show GPS location 
+			m_pGpsDlg->ShowGPS_Pos(&m_1stSpliter.m_1stOutDatas.mB_Data, nDwFirstDTS, nMiliSecs, alarmFlag);
+			m_pInfoListDlg->m_pBinData[binDataNum].mBinData =   m_1stSpliter.m_1stOutDatas.mB_Data;
+			m_pInfoListDlg->m_pBinData[binDataNum].nBinSize =   m_1stSpliter.m_1stOutDatas.nB_Size;
+			m_pInfoListDlg->m_pBinData[binDataNum].dwCurPos =   m_Slider_Seek.GetPos();
+			binDataNum ++;
+			m_pInfoListDlg->m_BinDataCount = binDataNum;
+			m_pInfoListDlg->m_dura = m_duration;
+			
+			// draw Graphs (Speed, alarm lines, and etc)
 			m_pInfoListDlg->DrawGraph(&m_1stSpliter.m_1stOutDatas.mB_Data,
 				m_Slider_Seek.GetPos(),
 				CNewProjDlg::m_dwDurations[CNewProjDlg::m_nPathArraysPtr],

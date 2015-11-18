@@ -61,7 +61,7 @@ public:
 	int GetAbsolteXPos(AlarmBinData_t *pBinData);
 	void UpdateScrollSizesExt();
 
-	void setDatasWithTime(DWORD dwFristDTS, DWORD currDTS, MainBinaryData* pBinData, unsigned char alarmFlag);
+	void setDatasWithTime(DWORD dwFirstDTS, DWORD currDTS, MainBinaryData* pBinData, unsigned char alarmFlag);
 
 // Overrides
 	// ClassWizard generated virtual function overrides

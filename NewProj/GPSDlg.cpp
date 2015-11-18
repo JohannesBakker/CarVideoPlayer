@@ -53,6 +53,10 @@ CGPSDlg::CGPSDlg(CWnd* pParent /*=NULL*/)
 
 	m_nCurrentBrowserId = 0;
 	m_nLastGpsWinId = 0;
+
+	m_nSpeedUnit = SPEED_UNIT_MPH;
+
+	GetSystemTime(&m_VideoDateTime);
 }
 
 void CGPSDlg::DoDataExchange(CDataExchange* pDX)
@@ -158,7 +162,7 @@ BOOL CGPSDlg::OnInitDialog()
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CGPSDlg::ShowGPS_Pos(MainBinaryData * pMBDatas)
+void CGPSDlg::ShowGPS_Pos(MainBinaryData * pMBDatas, DWORD dwFirstDTS, DWORD dwCurrDTS, unsigned char alarmFlag)
 {
 	WCHAR buf[40];
  	double dbl_Ntemp, dbl_Wtemp;
@@ -183,6 +187,9 @@ void CGPSDlg::ShowGPS_Pos(MainBinaryData * pMBDatas)
 	m_gpsCurInfo.fLat = dbl_NResult;
 	m_gpsCurInfo.fLon = dbl_WResult;
 	m_gpsCurInfo.fSpeed = (float)pMBDatas->speed1 / 100.0f;
+
+	m_gpsCurInfo.dwOffsetSecs = (dwCurrDTS - dwFirstDTS) / 1000;
+	m_gpsCurInfo.alarmFlags = alarmFlag;
 
 	if (memcmp(&m_gpsCurInfo, &m_gpsOldInfo, sizeof(GPS_INFO)))
 	{
@@ -244,12 +251,54 @@ void CGPSDlg::SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId,  CString szCarIm
 		csPath.Empty();
 	}
 
-	csPath = L"file://" + csPath + L"/bmp2/" + szCarImageName;
+	csPath = L"file://" + csPath + L"/bmp2/Car/";
+	if (gpsCurInfo.alarmFlags == 0)
+		csPath += L"online/" + szCarImageName;
+	else
+		csPath += L"alarm/" + szCarImageName;
+
 	csPath.Replace('\\', '/');
 
 	CString strLatLon = L"";
-//	strLatLon.Format(L"%f, %f", gpsCurInfo.fLat, gpsCurInfo.fLon);
 	strLatLon.Format(L"%f, %f", gpsCurInfo.fLat + OFFSET_LAT, gpsCurInfo.fLon + OFFSET_LNG);
+
+	CString strTime = L"", strCurrTime = L"", strSpeed = L"";
+
+	int nOffsetDay, nOffsetHours, nOffsetMins, nOffsetSecs;
+	DWORD dwSecs = gpsCurInfo.dwOffsetSecs;
+
+	nOffsetDay = dwSecs / (3600 * 24);
+	dwSecs = dwSecs - (nOffsetDay * 3600 * 24);
+
+	nOffsetHours = dwSecs / 3600;
+	dwSecs = dwSecs - (nOffsetHours * 3600);
+
+	nOffsetMins = dwSecs / 60;
+	dwSecs = dwSecs - (nOffsetMins * 60);
+
+	nOffsetSecs = dwSecs % 60;
+
+	if (nOffsetHours > 0)
+		strTime.Format(L"%02d:%02d:%02d", nOffsetHours, nOffsetMins, nOffsetSecs);
+	else
+		strTime.Format(L"%02d:%02d", nOffsetMins, nOffsetSecs);
+
+	CTime currTime(m_VideoDateTime, 0);
+	currTime += CTimeSpan(nOffsetDay, nOffsetHours, nOffsetMins, nOffsetSecs);
+
+	strCurrTime.Format(L"%04d-%02d-%02d %02d:%02d:%02d", 
+		currTime.GetYear(), currTime.GetMonth(), currTime.GetDay(), 
+		currTime.GetHour(), currTime.GetMinute(), currTime.GetSecond());
+
+	float fSpeed = gpsCurInfo.fSpeed;
+	if (m_nSpeedUnit == SPEED_UNIT_KM_H)
+		fSpeed = fSpeed * 1.609344;
+	strSpeed.Format(L"%.1f ", fSpeed);
+
+	if (m_nSpeedUnit == SPEED_UNIT_KM_H)
+		strSpeed += L"km/h";
+	else
+		strSpeed += L"mph";
 
 
 #if 1
@@ -257,10 +306,13 @@ void CGPSDlg::SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId,  CString szCarIm
 	strHtml += L"<head>";
 	strHtml += L"<meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\"><meta charset=\"utf-8\">";
 	strHtml += L"<title>Simple icons</title>";
-	strHtml += L"<style>html, body, #map-canvas {height: 100%;margin: 0px;padding: 0px}</style>";
-	
-	strHtml += L"<script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp\"></script>";
+	strHtml += L"<style>html, body {height: 100%;margin: 0px;padding: 0px} #map-canvas {height: 100%;margin: 0px;padding: 0px}</style>";	
+	strHtml += L"</head>";
 
+	strHtml += L"<body>";
+	strHtml += L"<div id=\"map-canvas\"></div>";
+
+	strHtml += L"<script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp\"></script>";
 	strHtml += L"<script>function initialize() { ";
 	strHtml += L"var mapOptions = {zoom: 16,center: new google.maps.LatLng(" + strLatLon + L")}; ";
 	strHtml += L"var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions); ";
@@ -268,11 +320,26 @@ void CGPSDlg::SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId,  CString szCarIm
 	strHtml += L"var myLatLng = new google.maps.LatLng(" + strLatLon + L"); ";
 	strHtml += L"var beachMarker = new google.maps.Marker({position: myLatLng,map: map,icon: image});";
 
+	// define infoWindow content
+	strHtml += L"var contentString = '<div id=\"content\">'+";
+	strHtml += L"'<div id=\"siteNotice\">'+";
+	strHtml += L"'</div>'+";
+	strHtml += L"'<div id=\"bodyContent\">'+";
+	strHtml += L"'<b>TIME</b> : " + strTime + L"<br/>' + ";
+	strHtml += L"'<b>Current Time</b> : " + strCurrTime + L"<br/>' + ";
+	strHtml += L"'<b>SPEED</b> : " + strSpeed + L"<br/>' + ";
+	strHtml += L"'</div>'+";
+	strHtml += L"'</div>';";
 
+
+	// define info window
 	strHtml += L"var infowindow = new google.maps.InfoWindow( {";
-	strHtml += L"content: \"Test Project\"";
+	strHtml += L"content: contentString,";
+	strHtml += L"maxWidth: 220";
+
 	strHtml += L"} );";
 
+	// add info window to marker
 	strHtml += L"beachMarker.addListener('click', function() {";
 	strHtml += L"infowindow.open(map, beachMarker);";
 	strHtml += L"} );";
@@ -280,20 +347,14 @@ void CGPSDlg::SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId,  CString szCarIm
 
 	// always show info window
 	strHtml += L"infowindow.open(map, beachMarker);";
-	
 
-
+	// end of function 
 	strHtml += L"} ";
-	
+
+	// register function for starting	
 	strHtml += L"google.maps.event.addDomListener(window, 'load', initialize);";
-	
-	
 
 	strHtml += L"</script>";
-	strHtml += L"</head>";
-	
-	strHtml += L"<body>";
-	strHtml += L"<div id=\"map-canvas\"></div>";
 	
 	strHtml += L"</body></html>";
 
@@ -359,15 +420,15 @@ int CGPSDlg::GetBearingLocation(float pos1Lat, float pos1Lng, float pos2Lat, flo
 CString CGPSDlg::GetCarImageName(int degree)
 {
 	static AngleImage arrAngleImages[] = {
-		{0,		_T("car-1.png")},
-		{-45,	_T("car-2.png")},
-		{-90,	_T("car-3.png")},
-		{-135,	_T("car-4.png")},
-		{-179,	_T("car-5.png")},
-		{179,	_T("car-5.png")},
-		{135,	_T("car-6.png")},
-		{90,	_T("car-7.png")},
-		{45,	_T("car-8.png")},
+		{0,		_T("1.png")},
+		{-45,	_T("2.png")},
+		{-90,	_T("3.png")},
+		{-135,	_T("4.png")},
+		{-179,	_T("5.png")},
+		{179,	_T("5.png")},
+		{135,	_T("6.png")},
+		{90,	_T("7.png")},
+		{45,	_T("8.png")},
 	};
 
 	int i;
@@ -426,5 +487,16 @@ int CGPSDlg::GetRealNextBrowserId(int currBrowserId)  {
 	}
 
 	return nNextId;
+}
+
+void CGPSDlg::SetSpeedUnit(int nSpeedUnit)
+{
+	m_nSpeedUnit = (SpeedUnit_t)nSpeedUnit;
+}
+
+void CGPSDlg::SetVideoDateTime(SYSTEMTIME *pVideoDateTime)
+{
+	if (pVideoDateTime)
+		memcpy(&m_VideoDateTime, pVideoDateTime, sizeof(SYSTEMTIME));
 }
 
