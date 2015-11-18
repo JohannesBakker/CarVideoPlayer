@@ -390,8 +390,13 @@ UINT AVI_SpliterProc(LPVOID lParam)
 	//fclose(fp);
 	DWORD dwVideoID = 0x62643030;
 	DWORD dwAudioID = 0x62773130;
-	if(pDlg->m_1stFile != NULL)pDlg->m_1stSpliter.OpenFile("", 0);
-	if(pDlg->m_2ndFile != NULL)pDlg->m_2ndSpliter.OpenFile("", 0);
+	
+	if(pDlg->m_1stFile != NULL)
+		pDlg->m_1stSpliter.OpenFile("", 0);
+	
+	if(pDlg->m_2ndFile != NULL)
+		pDlg->m_2ndSpliter.OpenFile("", 0);
+	
 	if(!pDlg->m_AVIFile.Open(pDlg->m_AVIFilePath, CFile::modeWrite | CFile::modeCreate))
 	{
 		MessageBox(NULL, _T("Error Create AVI FIle!"), NULL, 0);
@@ -404,10 +409,15 @@ UINT AVI_SpliterProc(LPVOID lParam)
 	pDlg->m_AVIFile.Write(&pDlg->m_InfoList, sizeof(INFOLIST));
 	pDlg->m_AVIFile.Write(&pDlg->m_Junk, sizeof(JUNK));
 	pDlg->m_AVIFile.Write(&pDlg->m_TrackFrame, sizeof(TRACK_FRAME));
+	
 	DWORD dwFilePos = pDlg->m_AVIFile.GetPosition();
-	if(pDlg->m_nChannel == 3) pDlg->m_lpFrame.PushData = new BYTE[0x12FC00];
-	else pDlg->m_lpFrame.PushData = new BYTE[0x97E00];
-	pDlg->m_lpFrame.PopData = new BYTE[0x20000]; 
+	if (pDlg->m_nChannel == 3) 
+		pDlg->m_lpFrame.PushData = new BYTE[0x12FC00];
+	else 
+		pDlg->m_lpFrame.PushData = new BYTE[0x97E00];
+	
+//	pDlg->m_lpFrame.PopData = new BYTE[0x20000]; 
+	pDlg->m_lpFrame.PopData = new BYTE[0x40000]; 
 	DWORD dwGlobal[4];
 	memset(dwGlobal, 0, 16);
 	dwGlobal[0] = 0x10202;
@@ -416,6 +426,7 @@ UINT AVI_SpliterProc(LPVOID lParam)
 	DWORD dwRetVal = (*pDlg->m_Func_XvidGlobal)(0, 0, dwGlobal, 0);
 	dwRetVal = (*pDlg->m_Func_XvidCreate)(0, 0, &pDlg->m_lpCreate, 0);
 	dwRetVal = 1;
+	
 	int		nFrmaeID = 0;
 	pDlg->m_1stSpliter.GetDatas1();
 	pDlg->m_1stSpliter.GetDatas1();
@@ -438,15 +449,19 @@ UINT AVI_SpliterProc(LPVOID lParam)
 		{
 			memset(pDlg->m_lpFrame.PushData, 0x80, 0x97e00);
 			memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY, 0x52800);
-			//memcpy((char*)(m_lpFrame.PushData + 0x65400), m_1stSpliter.m_pU, 0x19500);
-			//memcpy((char*)(m_lpFrame.PushData + 0x7E900), m_1stSpliter.m_pV, 0x19500);	
+
+			// save U, V data for color video
+			memcpy((char*)(pDlg->m_lpFrame.PushData + 0x52800), pDlg->m_1stSpliter.m_pU, 0x14A00);
+			memcpy((char*)(pDlg->m_lpFrame.PushData + 0x67200), pDlg->m_1stSpliter.m_pV, 0x14A00);
 		} 
 		else if(pDlg->m_nChannel == 2)
 		{
 			memset(pDlg->m_lpFrame.PushData, 0x80, 0x97e00);
 			memcpy(pDlg->m_lpFrame.PushData, pDlg->m_2ndSpliter.m_pY2, 0x52800);
-//				memcpy((char*)(m_lpFrame.PushData + 0x65400), m_2ndSpliter.m_pU2, 0x19500);
-//				memcpy((char*)(m_lpFrame.PushData + 0x7E900), m_2ndSpliter.m_pV2, 0x19500);	
+
+			// save U, V data for color video
+			memcpy((char*)(pDlg->m_lpFrame.PushData + 0x52800), pDlg->m_1stSpliter.m_pU2, 0x14A00);
+			memcpy((char*)(pDlg->m_lpFrame.PushData + 0x67200), pDlg->m_1stSpliter.m_pV2, 0x14A00);
 		} 
 		else if(pDlg->m_nChannel == 3)
 		{
@@ -454,7 +469,8 @@ UINT AVI_SpliterProc(LPVOID lParam)
 			
 			memcpy(pDlg->m_lpFrame.PushData, pDlg->m_1stSpliter.m_pY, 0x52800);
 
-			if (bEnableFillPattern == true) {
+			if (bEnableFillPattern == true) 
+			{
 				for(int j = 0; j < 480; j++)
 				{
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 1408 * j), (char*)(pDlg->m_1stSpliter.m_pY + 704 * j), 704);
@@ -462,12 +478,35 @@ UINT AVI_SpliterProc(LPVOID lParam)
 					// second video fill with pattern
 					memset((char*)(pDlg->m_lpFrame.PushData + 1408 * j + 704), (char)VIDEO_FILL_PATTERN, 704);
 				}
-			} else {
+			} 
+			else 
+			{
+				// save Y information
 				for(int j = 0; j < 480; j++)
 				{
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 1408 * j), (char*)(pDlg->m_1stSpliter.m_pY + 704 * j), 704);
 					memcpy((char*)(pDlg->m_lpFrame.PushData + 1408 * j + 704), (char*)(pDlg->m_1stSpliter.m_pY2 + 704 * j), 704);
 				}
+
+
+				// save U information
+				int kount = 0;
+				for(int j = 0; j < 240; j++)
+				{
+					memcpy((char*)(pDlg->m_lpFrame.PushData + 0xA5000 + kount),(char*)(pDlg->m_1stSpliter.m_pU + 352 * j), 352);
+					memcpy((char*)(pDlg->m_lpFrame.PushData + 0xA5000 + kount + 352), (char*)(pDlg->m_1stSpliter.m_pU2 + 352 * j) , 352);
+					kount += 0x2C0;//704
+				}
+
+				// save Y information
+				kount = 0;
+				for(int j = 0; j < 240; j++)
+				{
+					memcpy((char*)(pDlg->m_lpFrame.PushData + 0xCE400 + kount),(char*)(pDlg->m_1stSpliter.m_pV + 352 * j), 352);
+					memcpy((char*)(pDlg->m_lpFrame.PushData + 0xCE400 + kount + 352), (char*)(pDlg->m_1stSpliter.m_pV2 + 352 * j) , 352);
+					kount += 0x2C0;//704
+				}
+
 			}
 				
 			//memcpy((char*)(m_lpFrame.PushData + 0xCA800), m_1stSpliter.m_pU, 0x19500);

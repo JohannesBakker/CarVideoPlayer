@@ -2693,7 +2693,7 @@ void CToolBarDlg::OnBnClickedPrevSeg()
 	// TODO: Add your control notification handler code here
 	CNewProjDlg::m_nPathArraysPtr --;
 
-	// add for error removing 
+	// add for crash removing 
 	if (CNewProjDlg::m_nPathArraysPtr < 0) {
 		CNewProjDlg::m_nPathArraysPtr = 0;
 		return;
@@ -2718,7 +2718,7 @@ void CToolBarDlg::OnBnClickedNextSeg()
 {
 	// TODO: Add your control notification handler code here
 
-	// add for error removing 
+	// add for crash removing 
 	if (CNewProjDlg::m_nPathArraysPtr < 0) {
 		CNewProjDlg::m_nPathArraysPtr = 0;
 		return;
