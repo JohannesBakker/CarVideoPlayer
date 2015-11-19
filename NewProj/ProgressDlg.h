@@ -26,6 +26,7 @@ public:
 	
 	void Init_ConvertHeader(int, int);
 	void Init_AVI_Convert(CFile*, CFile*, float, float, float, float, float);
+	void Init_AVI_ConvertExt(CFile *, CFile *, DWORD, DWORD, DWORD, DWORD, DWORD);
 	
 	bool WriteFile();
 	FuncAVI_Xvid_EnCore			m_Func_XvidEnc;
@@ -65,6 +66,9 @@ static	XVID_STATE			m_lpState;
 	CButton	m_btn_Stop;
 	CProgressCtrl	m_progress;
 	//}}AFX_DATA
+
+	// add for stop video
+	DWORD				m_dwMidStopPos;
 
 
 // Overrides

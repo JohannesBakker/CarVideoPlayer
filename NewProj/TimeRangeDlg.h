@@ -29,6 +29,8 @@ public:
 	bool					m_bRecordCurFlag;
 	float					m_flt_1stStartPos, m_flt_1stEndPos, m_flt_2ndStartPos, m_flt_2ndEndPos, m_flt_2ndStopPos;
 	DWORD					m_dw1stStartPos, m_dw1stEndPos, m_dw2ndStartPos, m_dw2ndEndPos;
+	DWORD					m_dw2ndStopPos;
+	
 // Dialog Data
 	//{{AFX_DATA(CTimeRangeDlg)
 	enum { IDD = IDD_TIME_RANGE };

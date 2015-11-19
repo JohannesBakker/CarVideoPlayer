@@ -284,6 +284,7 @@ void CGPSDlg::SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId,  CString szCarIm
 		strTime.Format(L"%02d:%02d", nOffsetMins, nOffsetSecs);
 
 	CTime currTime(m_VideoDateTime, 0);
+	currTime -= CTimeSpan(0, 0, 0, 30);
 	currTime += CTimeSpan(nOffsetDay, nOffsetHours, nOffsetMins, nOffsetSecs);
 
 	strCurrTime.Format(L"%04d-%02d-%02d %02d:%02d:%02d", 

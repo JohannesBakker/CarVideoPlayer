@@ -78,6 +78,40 @@ void CTimeRangeDlg::OnCancel()
 	CDialog::OnCancel();
 }
 
+#if 1
+void CTimeRangeDlg::OnOk() 
+{
+	// TODO: Add your control notification handler code here
+	if(m_bRecordCurFlag == true)
+	{
+		wchar_t		szFilter[]= _T("AVI Files(*.avi)|*.avi|");
+		CFileDialog	dlg(FALSE,NULL,NULL,OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT, szFilter);
+		CString path;
+		if(dlg.DoModal() ==IDOK)
+		{
+			path = dlg.GetPathName();
+			path += _T(".avi");
+			m_ProgressDlg.m_AVIFilePath = path;
+
+			if(CNewProjDlg::g_config_Value_ST.nWndCounts == 2)
+				m_ProgressDlg.Init_AVI_ConvertExt(m_1stFile, m_2ndFile, m_dw1stStartPos, m_dw1stEndPos, m_dw2ndStartPos, m_dw2ndEndPos, m_dw2ndStopPos);
+			else if(CNewProjDlg::g_config_Value_ST.nWndCounts == 1 && CNewProjDlg::g_config_Value_ST.nSelWndID == 1)
+				m_ProgressDlg.Init_AVI_ConvertExt(m_1stFile, m_2ndFile, m_dw1stStartPos, m_dw1stEndPos, 0, 0, 0);
+			else if(CNewProjDlg::g_config_Value_ST.nWndCounts == 1 && CNewProjDlg::g_config_Value_ST.nSelWndID == 2)
+				m_ProgressDlg.Init_AVI_ConvertExt(NULL, m_2ndFile, 0, 0, m_dw2ndStartPos, m_dw2ndEndPos, m_dw2ndStopPos);
+		}
+		m_ProgressDlg.ShowWindow(SW_SHOW | SW_SHOWNORMAL);
+	}else{
+		m_ProgressDlg.m_1stDestFilePath = m_1stFilePath;
+		m_ProgressDlg.m_2ndDestFilePath = m_2ndFilePath;
+		if(CNewProjDlg::g_config_Value_ST.nWndCounts == 2)
+			m_ProgressDlg.Init_Progress(m_1stFile, m_2ndFile, m_dw1stStartPos, m_dw1stEndPos, m_dw2ndStartPos, m_dw2ndEndPos);
+		else if(CNewProjDlg::g_config_Value_ST.nWndCounts == 1)
+			m_ProgressDlg.Init_Progress(m_1stFile, NULL, m_dw1stStartPos, m_dw1stEndPos, 0, 0);
+	}
+	CDialog::OnOK();
+}
+#else
 void CTimeRangeDlg::OnOk() 
 {
 	// TODO: Add your control notification handler code here
@@ -97,6 +131,7 @@ void CTimeRangeDlg::OnOk()
 				m_ProgressDlg.Init_AVI_Convert(m_1stFile, NULL, m_flt_1stStartPos, m_flt_1stEndPos, 0, 0, 0);
 			else if(CNewProjDlg::g_config_Value_ST.nWndCounts == 1 && CNewProjDlg::g_config_Value_ST.nSelWndID == 2)
 				m_ProgressDlg.Init_AVI_Convert(NULL, m_2ndFile, 0, 0, m_flt_2ndStartPos, m_flt_2ndEndPos, m_flt_2ndEndPos);
+
 		}
 		m_ProgressDlg.ShowWindow(SW_SHOW | SW_SHOWNORMAL);
 	}else{
@@ -109,6 +144,8 @@ void CTimeRangeDlg::OnOk()
 	}
 	CDialog::OnOK();
 }
+#endif
+
 void CTimeRangeDlg::UpdateWnd()
 {
 	wchar_t str[10];
