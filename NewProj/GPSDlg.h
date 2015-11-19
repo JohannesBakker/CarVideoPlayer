@@ -24,11 +24,29 @@ struct GPS_INFO
 	unsigned char	alarmFlags;
 };
 
+typedef struct GpsLocation {
+	float fLat;
+	float fLon;
+	float fSpeed;		// Unit : MPH
+} GpsLocation_t;
+
+typedef struct GpsMapInfo {
+	GpsLocation_t	stGpsPos;			// GPS location information
+	
+	DWORD			dwOffsetSecs;		// Seconds from video played
+	unsigned char	ubAlarmState;		// alarm state, bit[0] : Alarm-1, bit[1]: alarm-2, bit[2]:alarm-3,  other bits : reserved
+	CString			strCarImageName;	// car image Name : 1.png ~  8.png
+} GpsMapInfo_t;
+
+// Alarm state value
+#define		ALARM_STATE_NO_ALARM	0
+
+
 class CGPSDlg : public CDialog
 {
 // Construction
 public:
-	void	ShowGPS_Pos(MainBinaryData*, DWORD, DWORD, unsigned char);
+	void	DisplayGpsMap(MainBinaryData*, DWORD, DWORD, unsigned char);
 	CGPSDlg(CWnd* pParent = NULL);   // standard constructor
 
 // Dialog Data
@@ -58,46 +76,56 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:
-	CExplorer1 m_WebBrowser;
-	CExplorer1 m_WebBrowser2;
-	CExplorer1 m_WebBrowser3;
-	CExplorer1 m_WebBrowser4;
-	CExplorer1 m_WebBrowser5;
 
-#define BROWSER_LIST_SIZE	5
-
-	CExplorer1* m_BrowerArray[BROWSER_LIST_SIZE];
-	int m_BrowserIdArray[BROWSER_LIST_SIZE];
-	int m_nCurrentBrowserId;
-	int m_nLastGpsWinId;
 	bool m_bInitComplete;
 
 	int m_nWindowWidth;
 	int m_nWindowHeight;
 
-	bool m_bViewUpdatedArray[BROWSER_LIST_SIZE];
-	GPS_INFO m_gpsInitInfo;
-	bool m_bInitedGpsInfo;
-	CString m_szImageName;
 	SpeedUnit_t	m_nSpeedUnit;
-
-	DWORD m_dwFirstDTS;
 	SYSTEMTIME m_VideoDateTime;
+
+
+
+#define	GPS_BROWSER_NUMBER	3
+	CExplorer1		m_arrMapBrowser[GPS_BROWSER_NUMBER];
+	int				m_arrBrowserId[GPS_BROWSER_NUMBER];
+
+	int				m_nCurrMapBrowserId;	// 0 ~ 2
+
+	GpsMapInfo_t	m_stInitGpsInfo;	// init GPS information
+	GpsMapInfo_t	m_stPrevGpsInfo;	// previous GPS information
+	GpsMapInfo_t	m_stCurrGpsInfo;	// current GPS information
+	
+	bool			m_bTimerRunning;	// true : timer running
+	
+	
 
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 
-	void SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId, CString szCarImageName);
-	int GetRealNextBrowserId(int currBrowserId);
-	void SetActiveBrowser(int browserId);
-	void ResetMapInfo(bool bResetMap);
 
 	int GetBearingLocation(float pos1Lat, float pos1Lng, float pos2Lat, float pos2Lng);
 	CString GetCarImageName(int degree);
-	void ResetGpsInfo();
-	int GetNextWinId(int currentWinId, int offset, bool bNext);
-
+	
 	void SetSpeedUnit(int nSpeedUnit);
 	void SetVideoDateTime(SYSTEMTIME *pVideoDateTime);
+
+	void ResetGpsMapInfo(GpsMapInfo_t *pInfo);
+	void SetGpsMapInfo(GpsMapInfo_t *pInfo, 
+			float fLat, float fLon, float fSpeed,
+			DWORD dwOffsetSecs, unsigned char ubAlarmState, CString strCarImageName);	
+	void SetGpsMapInfo(GpsMapInfo_t *pDstInfo, GpsMapInfo_t *pSrcInfo);
+
+	int GetNextBrowserId(int nCurrentId, int nBrowserNum);
+	void SetBrowserContents(int nBrowserId, GpsMapInfo_t *pGpsMapInfo);
+	void SetBrowserDefaultContents(int nBrowserId);
+	void ShowBrowser(int nBrowserId);
+
+	void TimerStart();
+	void TimerStop();
+
+	void ResetGpsDialog(bool bResetMap);
+		
 };
 
 //{{AFX_INSERT_LOCATION}}

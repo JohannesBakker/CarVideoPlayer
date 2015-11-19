@@ -2,8 +2,8 @@
 #define __TYPE_H_
 
 typedef enum {
-	SPEED_UNIT_KM_H		= 0,
-	SPEED_UNIT_MPH,
+	SPEED_UNIT_KMH		= 0,	// km/h
+	SPEED_UNIT_MPH,				// MPH
 	SPEED_UNIT_NUM,
 } SpeedUnit_t;
 

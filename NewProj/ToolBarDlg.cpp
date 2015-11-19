@@ -35,8 +35,22 @@ static char THIS_FILE[] = __FILE__;
 
 // Total time calculate before 30 secs
 // because displayed video delay 30 secs than recording
-//#define TOTAL_SECONDS_PER_DAY		(3600*24 + 30)
-#define TOTAL_SECONDS_PER_DAY		(3600*10 + 60*29 + 30 + 30)
+
+#if 0	// for testing
+#define MIDNIGHT_HOUR	10
+#define MIDNIGHT_MIN	29
+#define MIDNIGHT_SEC	30
+
+#else
+#define MIDNIGHT_HOUR	24
+#define MIDNIGHT_MIN	00
+#define MIDNIGHT_SEC	00
+#endif
+
+#define VIDEO_DELAY_SEC		30
+
+
+#define TOTAL_SECONDS_PER_DAY	(3600*(MIDNIGHT_HOUR) + 60*(MIDNIGHT_MIN) + (MIDNIGHT_SEC) + (VIDEO_DELAY_SEC))
 
 
 HWAVEOUT		g_hWaveOut;
@@ -386,6 +400,8 @@ void CToolBarDlg::OnPlayBtnClick()
 
 		g_bSoundPlay = false;
 		CTimeLineDlg::m_bTimeFlag = false;
+
+		CNewProjDlg::m_GPSDlg.ResetGpsDialog(false);
 
 		if (m_nThreadCounts == 2)
 		{
@@ -812,7 +828,7 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 			}
 			
 			// show GPS location 
-			m_pGpsDlg->ShowGPS_Pos(&m_1stSpliter.m_1stOutDatas.mB_Data, nDwFirstDTS, nMiliSecs, alarmFlag);
+			m_pGpsDlg->DisplayGpsMap(&m_1stSpliter.m_1stOutDatas.mB_Data, nDwFirstDTS, nMiliSecs, alarmFlag);
 			m_pInfoListDlg->m_pBinData[binDataNum].mBinData =   m_1stSpliter.m_1stOutDatas.mB_Data;
 			m_pInfoListDlg->m_pBinData[binDataNum].nBinSize =   m_1stSpliter.m_1stOutDatas.nB_Size;
 			m_pInfoListDlg->m_pBinData[binDataNum].dwCurPos =   m_Slider_Seek.GetPos();
@@ -947,7 +963,10 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 				OnPlayBtnClick();
 			}
 
-			m_pGpsDlg->ResetMapInfo(false);
+#if 1
+			m_pGpsDlg->ResetGpsDialog(false);
+#endif
+			
 		}
 	}
 
@@ -1725,7 +1744,8 @@ void CToolBarDlg::OnStop()
 	
 	binDataNum = 0;
 
-	m_pGpsDlg->ResetMapInfo(true);
+	// reset GPS dialog
+	m_pGpsDlg->ResetGpsDialog(m_bClickedStop);
 
 	if (m_bClickedStop) 
 	{

@@ -18,7 +18,7 @@ TempBinData CSpeedGraph::m_pSpeedBinData[100000];
 
 CSpeedGraph::CSpeedGraph()
 {
-	m_nSpeedUnit = SPEED_UNIT_KM_H;
+	m_nSpeedUnit = SPEED_UNIT_KMH;
 }
 
 CSpeedGraph::~CSpeedGraph()
@@ -92,7 +92,7 @@ void CSpeedGraph::OnPaint()
 		itoa(i * 20, chBuf, 10);
 		buf = chBuf;
 
-		if (m_nSpeedUnit == SPEED_UNIT_KM_H)
+		if (m_nSpeedUnit == SPEED_UNIT_KMH)
 			buf += "km/h";
 		else
 			buf += "mph";

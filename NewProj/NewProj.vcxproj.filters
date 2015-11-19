@@ -102,9 +102,6 @@
     <ClCompile Include="FileObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GPSDlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HTMLWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -187,6 +184,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ColorEdit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GPSDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -289,9 +289,6 @@
     <ClInclude Include="FileObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GPSDlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HTMLWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -380,6 +377,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColorEdit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GPSDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

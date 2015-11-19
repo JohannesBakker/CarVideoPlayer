@@ -13,16 +13,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define VIEW_DIFF	3
 #define TIMER_INTERVAL	1500
 //#define DEFAULT_IMAGE_NAME	_T("car-1.png")
 #define DEFAULT_IMAGE_NAME	_T("")
 
-#define DEFAULT_LAT 40.8833
-#define DEFAULT_LON -85.0167
-
 #define OFFSET_LAT	-0.0003
 #define OFFSET_LNG	0.0000
+
+#define TIMER_GPS_MAP	30000
+
+#define DEFAULT_MAP_BROWSER_ID	0
+
+#define IGNORE_GPS_INFO_NUM		2
 
 
 typedef struct {
@@ -45,30 +47,23 @@ CGPSDlg::CGPSDlg(CWnd* pParent /*=NULL*/)
 	m_nWindowWidth = 0;
 	m_nWindowHeight = 0;
 
-	for (int i = 0; i < BROWSER_LIST_SIZE; i++)
-		m_bViewUpdatedArray[i] = false;
-
-	m_szImageName = DEFAULT_IMAGE_NAME;
-	ResetGpsInfo();
-
-	m_nCurrentBrowserId = 0;
-	m_nLastGpsWinId = 0;
-
 	m_nSpeedUnit = SPEED_UNIT_MPH;
 
 	GetSystemTime(&m_VideoDateTime);
+
+	m_bTimerRunning = false;
 }
+
+
 
 void CGPSDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CGPSDlg)
 	//}}AFX_DATA_MAP
-	DDX_Control(pDX, IDC_EXPLORER1, m_WebBrowser);
-	DDX_Control(pDX, IDC_EXPLORER2, m_WebBrowser2);
-	DDX_Control(pDX, IDC_EXPLORER3, m_WebBrowser3);
-	DDX_Control(pDX, IDC_EXPLORER4, m_WebBrowser4);
-	DDX_Control(pDX, IDC_EXPLORER5, m_WebBrowser5);
+	DDX_Control(pDX, IDC_EXPLORER1, m_arrMapBrowser[0]);
+	DDX_Control(pDX, IDC_EXPLORER2, m_arrMapBrowser[1]);
+	DDX_Control(pDX, IDC_EXPLORER3, m_arrMapBrowser[2]);
 }
 
 
@@ -90,79 +85,58 @@ void CGPSDlg::OnSize(UINT nType, int cx, int cy)
 	m_nWindowWidth = cx;
 	m_nWindowHeight = cy;
 	
-	if (m_bInitComplete) {
-		for (int i = 0; i < BROWSER_LIST_SIZE; i++) {
-			if (i == m_nCurrentBrowserId) {
-				GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, cx, cy);
+	if (m_bInitComplete) 
+	{
+		for (int i = 0; i < GPS_BROWSER_NUMBER; i++) {
+			if (i == m_nCurrMapBrowserId) {
+				GetDlgItem(m_arrBrowserId[i])->MoveWindow(0, 0, cx, cy);
 			}
 			else {
-				GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, 0, 0);
+				GetDlgItem(m_arrBrowserId[i])->MoveWindow(0, 0, 0, 0);
 			}
 		}
 	}
 }
+
+
 
 BOOL CGPSDlg::OnInitDialog() 
 {	
 	CDialog::OnInitDialog();
 	// TODO: Add extra initialization here
 
-	m_BrowerArray[0] = &m_WebBrowser;
-	m_BrowerArray[1] = &m_WebBrowser2;
-	m_BrowerArray[2] = &m_WebBrowser3;
-	m_BrowerArray[3] = &m_WebBrowser4;
-	m_BrowerArray[4] = &m_WebBrowser5;
+	// init browser id array
+	m_arrBrowserId[0] = IDC_EXPLORER1;
+	m_arrBrowserId[1] = IDC_EXPLORER2;
+	m_arrBrowserId[2] = IDC_EXPLORER3;
 
-	m_BrowserIdArray[0] = IDC_EXPLORER1;
-	m_BrowserIdArray[1] = IDC_EXPLORER2;
-	m_BrowserIdArray[2] = IDC_EXPLORER3;
-	m_BrowserIdArray[3] = IDC_EXPLORER4;
-	m_BrowserIdArray[4] = IDC_EXPLORER5;
-
-	ResetGpsInfo();
-
-	// init GPS window Id
-	m_nLastGpsWinId = 0;
-
-	// init GpsInfo flag
-	m_bInitedGpsInfo = false;
-
-	// init browsers 
-	for (int i = 0; i < BROWSER_LIST_SIZE; i++) 
-	{		
-		int width = 0, height = 0;
-
-		if (i == m_nCurrentBrowserId) {
-			width = m_nWindowWidth;
-			height = m_nWindowHeight;
-		}
-
-		m_BrowerArray[i]->Navigate(_T("about:blank"), NULL, NULL, NULL, NULL);
-		m_BrowerArray[i]->ShowScrollBar(SB_VERT, false);
-		m_BrowerArray[i]->ShowScrollBar(SB_HORZ, false);
-		GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, width, height, true);
+	// Hide all browsers
+	for (int i = 0; i < GPS_BROWSER_NUMBER; i++) {
+		m_arrMapBrowser[i].Navigate(_T("about:blank"), NULL, NULL, NULL, NULL);
+		m_arrMapBrowser[i].ShowScrollBar(SB_VERT, false);
+		m_arrMapBrowser[i].ShowScrollBar(SB_HORZ, false);
 	}
 
-	// setting default GpsWindow data 
-	CHTMLWriter htmlWriter(m_BrowerArray[m_nLastGpsWinId]->GetControlUnknown());
-	htmlWriter.Write(L"<!DOCTYPE html><html><head><style type=\"text/css\">html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}</style><script type=\"text/javascript\"src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyA1bMjkIhG61jnA6MefByFaSVglbR5kvjw\"></script><script type=\"text/javascript\">function initialize() {var mapOptions = {center: { lat: 40.8833, lng: -85.0167},zoom: 5};var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);}google.maps.event.addDomListener(window, 'load', initialize);</script></head><body><div id=\"map-canvas\"></div></body></html>");
+	// Reset Gps information variables
+	ResetGpsMapInfo(&m_stInitGpsInfo);
+	ResetGpsMapInfo(&m_stPrevGpsInfo);
+	ResetGpsMapInfo(&m_stCurrGpsInfo);
+
+	m_nCurrMapBrowserId = DEFAULT_MAP_BROWSER_ID;
 	
-	m_bViewUpdatedArray[m_nLastGpsWinId] = true;
-
-	// init Active Window Id
-	m_nCurrentBrowserId = GetRealNextBrowserId(m_nLastGpsWinId);
-
-	
-
-	SetTimer(0, TIMER_INTERVAL, NULL);
-
 	m_bInitComplete = true;
 
+	ShowBrowser(m_nCurrMapBrowserId);
+
+	// setting default GpsWindow data 
+	SetBrowserDefaultContents(m_nCurrMapBrowserId);
+	
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CGPSDlg::ShowGPS_Pos(MainBinaryData * pMBDatas, DWORD dwFirstDTS, DWORD dwCurrDTS, unsigned char alarmFlag)
+
+void CGPSDlg::DisplayGpsMap(MainBinaryData * pMBDatas, DWORD dwFirstDTS, DWORD dwCurrDTS, unsigned char alarmFlag)
 {
 	WCHAR buf[40];
  	double dbl_Ntemp, dbl_Wtemp;
@@ -181,229 +155,81 @@ void CGPSDlg::ShowGPS_Pos(MainBinaryData * pMBDatas, DWORD dwFirstDTS, DWORD dwC
 	if (pMBDatas->byNS_Flag != 0x57)
 		dbl_NResult = -1 * dbl_NResult;
 	
-	int nHighSpeed = pMBDatas->speed1 / 100;
-	int nlowSpeed = pMBDatas->speed1 % 100;
+	// save current GPS info to prev GPS info
+	SetGpsMapInfo(&m_stPrevGpsInfo, &m_stCurrGpsInfo);
 
-	m_gpsCurInfo.fLat = dbl_NResult;
-	m_gpsCurInfo.fLon = dbl_WResult;
-	m_gpsCurInfo.fSpeed = (float)pMBDatas->speed1 / 100.0f;
+	// set current GPS information
+	m_stCurrGpsInfo.stGpsPos.fLat = dbl_NResult;
+	m_stCurrGpsInfo.stGpsPos.fLon = dbl_WResult;
+	m_stCurrGpsInfo.stGpsPos.fSpeed = (float)pMBDatas->speed1 / 100.0f;
+	m_stCurrGpsInfo.dwOffsetSecs = (dwCurrDTS - dwFirstDTS) / 1000;
+	m_stCurrGpsInfo.ubAlarmState = alarmFlag;
 
-	m_gpsCurInfo.dwOffsetSecs = (dwCurrDTS - dwFirstDTS) / 1000;
-	m_gpsCurInfo.alarmFlags = alarmFlag;
+	m_stCurrGpsInfo.strCarImageName = m_stPrevGpsInfo.strCarImageName;
 
-	if (memcmp(&m_gpsCurInfo, &m_gpsOldInfo, sizeof(GPS_INFO)))
+	if (memcmp(&m_stCurrGpsInfo.stGpsPos, &m_stPrevGpsInfo.stGpsPos, sizeof(GpsLocation_t)))
 	{
-		if (m_gpsOldInfo.fLat == 0 && m_gpsOldInfo.fLon == 0) {
-
+		GpsLocation_t *pPrevGps = &m_stPrevGpsInfo.stGpsPos;
+		GpsLocation_t *pCurrGps = &m_stCurrGpsInfo.stGpsPos;
+		
+		if (pPrevGps->fLat == 0 && pPrevGps->fLon == 0)
+		{
 		}
-		else {
-			int deg = GetBearingLocation(m_gpsOldInfo.fLat, m_gpsOldInfo.fLon, m_gpsCurInfo.fLat, m_gpsCurInfo.fLon);
+		else
+		{
+			static int nCount = 0;
+			nCount ++;
+
+			if (nCount <= IGNORE_GPS_INFO_NUM)
+				return;
+
+
+			int deg = GetBearingLocation(pPrevGps->fLat, pPrevGps->fLon, pCurrGps->fLat, pCurrGps->fLon);
 			CString szImageName = GetCarImageName(deg);
 
 			if (!szImageName.IsEmpty())
-				m_szImageName = szImageName;
+				m_stCurrGpsInfo.strCarImageName = szImageName;
 		}
 
-		m_gpsOldInfo = m_gpsCurInfo;
-		m_bGPSUpdated = true;
-
-		if (m_bInitedGpsInfo == false)
+		// set GPS init information
+		if (m_stInitGpsInfo.stGpsPos.fLat == 0 && m_stInitGpsInfo.stGpsPos.fLon == 0)
 		{
-			m_gpsInitInfo = m_gpsCurInfo;
-			m_bInitedGpsInfo = true;
+			SetGpsMapInfo(&m_stInitGpsInfo, &m_stCurrGpsInfo);
+			
+
+			int nNewDataBrowser = GetNextBrowserId(m_nCurrMapBrowserId, GPS_BROWSER_NUMBER);
+
+			// save current gps location infomation to next browser
+			SetBrowserContents(nNewDataBrowser, &m_stCurrGpsInfo);
 		}
-
-		m_nLastGpsWinId = GetNextWinId(m_nLastGpsWinId, 1, true);
-
-		SetGpsBrowser(m_gpsCurInfo, m_nLastGpsWinId, m_szImageName);
 	}
-}
 
+	if (m_bTimerRunning == false)
+	{
+		// Start Map browser timer
+		TimerStart();
+	}
+		
+}
 
 void CGPSDlg::OnTimer(UINT_PTR nIDEvent)
 {
-	static int prevWinId = 0;
+	if (nIDEvent == TIMER_GPS_MAP)
+	{	
 
-	if (m_bGPSUpdated == true)
-	{
-		m_bGPSUpdated = false;
+		m_nCurrMapBrowserId = GetNextBrowserId(m_nCurrMapBrowserId, GPS_BROWSER_NUMBER);
+		
+		int nNewDataBrowser = GetNextBrowserId(m_nCurrMapBrowserId, GPS_BROWSER_NUMBER);
 
-		if (prevWinId != m_nCurrentBrowserId) {
-			SetActiveBrowser(m_nCurrentBrowserId);
-			prevWinId = m_nCurrentBrowserId;
-		}
+		// show browser
+		ShowBrowser(m_nCurrMapBrowserId);
+
+		// save current gps location infomation to next browser
+		SetBrowserContents(nNewDataBrowser, &m_stCurrGpsInfo);
 	}
 	CDialog::OnTimer(nIDEvent);
 }
 
-
-void CGPSDlg::SetGpsBrowser(GPS_INFO gpsCurInfo, int browserId,  CString szCarImageName)
-{
-	TCHAR szPath[_MAX_PATH];
-	VERIFY(::GetModuleFileName(AfxGetApp()->m_hInstance, szPath, _MAX_PATH));
-
-	CString csPath(szPath);
-	int nIndex  = csPath.ReverseFind(_T('\\'));
-	if (nIndex > 0) {
-		csPath = csPath.Left(nIndex);
-	}
-	else {
-		csPath.Empty();
-	}
-
-	csPath = L"file://" + csPath + L"/bmp2/Car/";
-	if (gpsCurInfo.alarmFlags == 0)
-		csPath += L"online/" + szCarImageName;
-	else
-		csPath += L"alarm/" + szCarImageName;
-
-	csPath.Replace('\\', '/');
-
-	CString strLatLon = L"";
-	strLatLon.Format(L"%f, %f", gpsCurInfo.fLat + OFFSET_LAT, gpsCurInfo.fLon + OFFSET_LNG);
-
-	CString strTime = L"", strCurrTime = L"", strSpeed = L"";
-
-	int nOffsetDay, nOffsetHours, nOffsetMins, nOffsetSecs;
-	DWORD dwSecs = gpsCurInfo.dwOffsetSecs;
-
-	nOffsetDay = dwSecs / (3600 * 24);
-	dwSecs = dwSecs - (nOffsetDay * 3600 * 24);
-
-	nOffsetHours = dwSecs / 3600;
-	dwSecs = dwSecs - (nOffsetHours * 3600);
-
-	nOffsetMins = dwSecs / 60;
-	dwSecs = dwSecs - (nOffsetMins * 60);
-
-	nOffsetSecs = dwSecs % 60;
-
-	if (nOffsetHours > 0)
-		strTime.Format(L"%02d:%02d:%02d", nOffsetHours, nOffsetMins, nOffsetSecs);
-	else
-		strTime.Format(L"%02d:%02d", nOffsetMins, nOffsetSecs);
-
-	CTime currTime(m_VideoDateTime, 0);
-	currTime -= CTimeSpan(0, 0, 0, 30);
-	currTime += CTimeSpan(nOffsetDay, nOffsetHours, nOffsetMins, nOffsetSecs);
-
-	strCurrTime.Format(L"%04d-%02d-%02d %02d:%02d:%02d", 
-		currTime.GetYear(), currTime.GetMonth(), currTime.GetDay(), 
-		currTime.GetHour(), currTime.GetMinute(), currTime.GetSecond());
-
-	float fSpeed = gpsCurInfo.fSpeed;
-	if (m_nSpeedUnit == SPEED_UNIT_KM_H)
-		fSpeed = fSpeed * 1.609344;
-	strSpeed.Format(L"%.1f ", fSpeed);
-
-	if (m_nSpeedUnit == SPEED_UNIT_KM_H)
-		strSpeed += L"km/h";
-	else
-		strSpeed += L"mph";
-
-
-#if 1
-	CString strHtml = L"<!DOCTYPE html><html>";
-	strHtml += L"<head>";
-	strHtml += L"<meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\"><meta charset=\"utf-8\">";
-	strHtml += L"<title>Simple icons</title>";
-	strHtml += L"<style>html, body {height: 100%;margin: 0px;padding: 0px} #map-canvas {height: 100%;margin: 0px;padding: 0px}</style>";	
-	strHtml += L"</head>";
-
-	strHtml += L"<body>";
-	strHtml += L"<div id=\"map-canvas\"></div>";
-
-	strHtml += L"<script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp\"></script>";
-	strHtml += L"<script>function initialize() { ";
-	strHtml += L"var mapOptions = {zoom: 16,center: new google.maps.LatLng(" + strLatLon + L")}; ";
-	strHtml += L"var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions); ";
-	strHtml += L"var image = '" + csPath + L"'; ";
-	strHtml += L"var myLatLng = new google.maps.LatLng(" + strLatLon + L"); ";
-	strHtml += L"var beachMarker = new google.maps.Marker({position: myLatLng,map: map,icon: image});";
-
-	// define infoWindow content
-	strHtml += L"var contentString = '<div id=\"content\">'+";
-	strHtml += L"'<div id=\"siteNotice\">'+";
-	strHtml += L"'</div>'+";
-	strHtml += L"'<div id=\"bodyContent\">'+";
-	strHtml += L"'<b>TIME</b> : " + strTime + L"<br/>' + ";
-	strHtml += L"'<b>Current Time</b> : " + strCurrTime + L"<br/>' + ";
-	strHtml += L"'<b>SPEED</b> : " + strSpeed + L"<br/>' + ";
-	strHtml += L"'</div>'+";
-	strHtml += L"'</div>';";
-
-
-	// define info window
-	strHtml += L"var infowindow = new google.maps.InfoWindow( {";
-	strHtml += L"content: contentString,";
-	strHtml += L"maxWidth: 220";
-
-	strHtml += L"} );";
-
-	// add info window to marker
-	strHtml += L"beachMarker.addListener('click', function() {";
-	strHtml += L"infowindow.open(map, beachMarker);";
-	strHtml += L"} );";
-
-
-	// always show info window
-	strHtml += L"infowindow.open(map, beachMarker);";
-
-	// end of function 
-	strHtml += L"} ";
-
-	// register function for starting	
-	strHtml += L"google.maps.event.addDomListener(window, 'load', initialize);";
-
-	strHtml += L"</script>";
-	
-	strHtml += L"</body></html>";
-
-#else
-	CString strHtml = L"<!DOCTYPE html><html><head><meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\"><meta charset=\"utf-8\"><title>Simple icons</title><style>html, body, #map-canvas {height: 100%;margin: 0px;padding: 0px}</style><script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp\"></script><script>function initialize() { var mapOptions = {zoom: 16,center: new google.maps.LatLng(" + strLatLon + L")}; var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions); var image = '" + csPath + L"'; var myLatLng = new google.maps.LatLng(" + strLatLon + L"); var beachMarker = new google.maps.Marker({position: myLatLng,map: map,icon: image});} google.maps.event.addDomListener(window, 'load', initialize);</script></head><body><div id=\"map-canvas\"></div></body></html>";
-#endif
-
-
-	CHTMLWriter htmlWriter(m_BrowerArray[browserId]->GetControlUnknown());
-	htmlWriter.Write(strHtml);
-
-	
-	m_bViewUpdatedArray[browserId] = true;
-
-	int nNewtBrowserId = GetRealNextBrowserId(browserId);	
-	SetActiveBrowser(nNewtBrowserId);
-}
-
-
-void CGPSDlg::SetActiveBrowser(int browserId)
-{
-	for (int i = 0; i < BROWSER_LIST_SIZE; i++) {
-		if (i == browserId) {
-			GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, m_nWindowWidth, m_nWindowHeight);
-		}
-		else {
-			GetDlgItem(m_BrowserIdArray[i])->MoveWindow(0, 0, 0, 0);
-		}
-	}
-	m_nCurrentBrowserId = browserId;
-}
-
-void CGPSDlg::ResetMapInfo(bool bResetMap)
-{
-	if (bResetMap) {
-		
-		for (int i = 0; i < BROWSER_LIST_SIZE; i++) {		
-			m_bViewUpdatedArray[i] = false;
-		}
-
-		if (m_bInitedGpsInfo == false) {
-			m_bViewUpdatedArray[m_nCurrentBrowserId] = true;
-		}
-
-		m_szImageName.Empty();
-
-	}
-}
 
 int CGPSDlg::GetBearingLocation(float pos1Lat, float pos1Lng, float pos2Lat, float pos2Lng)
 {
@@ -452,43 +278,6 @@ CString CGPSDlg::GetCarImageName(int degree)
 	return imageName;
 }
 
-void CGPSDlg::ResetGpsInfo()
-{
-	memset(&m_gpsOldInfo, 0, sizeof(GPS_INFO));
-	memset(&m_gpsCurInfo, 0, sizeof(GPS_INFO));
-
-	if (m_bInitedGpsInfo == false)
-		memset(&m_gpsInitInfo, 0, sizeof(GPS_INFO));
-
-	for (int i = 0; i < BROWSER_LIST_SIZE; i++)
-		m_bViewUpdatedArray[i] = false;
-
-}
-
-int CGPSDlg::GetNextWinId(int currentWinId, int offset, bool bNext)
-{
-	int nextWinId = 0;
-
-	nextWinId = currentWinId + BROWSER_LIST_SIZE;
-	if (bNext)
-		nextWinId += offset;
-	else
-		nextWinId -= offset;
-
-	nextWinId = nextWinId % BROWSER_LIST_SIZE;
-
-	return nextWinId;
-}
-
-int CGPSDlg::GetRealNextBrowserId(int currBrowserId)  {
-	int nNextId = GetNextWinId(currBrowserId, VIEW_DIFF, false);
-
-	while (m_bViewUpdatedArray[nNextId] == false && nNextId != currBrowserId) {
-		nNextId = GetNextWinId(nNextId, 1, true);
-	}
-
-	return nNextId;
-}
 
 void CGPSDlg::SetSpeedUnit(int nSpeedUnit)
 {
@@ -500,4 +289,251 @@ void CGPSDlg::SetVideoDateTime(SYSTEMTIME *pVideoDateTime)
 	if (pVideoDateTime)
 		memcpy(&m_VideoDateTime, pVideoDateTime, sizeof(SYSTEMTIME));
 }
+
+void CGPSDlg::ResetGpsMapInfo(GpsMapInfo_t *pInfo)
+{
+	if (pInfo)
+	{
+		pInfo->stGpsPos.fLat = 0;
+		pInfo->stGpsPos.fLon = 0;
+		pInfo->stGpsPos.fSpeed = 0;
+		pInfo->dwOffsetSecs = 0;
+		pInfo->ubAlarmState = ALARM_STATE_NO_ALARM;
+		pInfo->strCarImageName = _T("");
+	}
+}
+
+void CGPSDlg::SetGpsMapInfo(GpsMapInfo_t *pInfo, float fLat, float fLon, float fSpeed,
+			DWORD dwOffsetSecs, unsigned char ubAlarmState, CString strCarImageName)
+{
+	if (pInfo)
+	{
+		pInfo->stGpsPos.fLat = fLat;
+		pInfo->stGpsPos.fLon = fLon;
+		pInfo->stGpsPos.fSpeed = fSpeed;
+		pInfo->dwOffsetSecs = dwOffsetSecs;
+		pInfo->ubAlarmState = ubAlarmState;
+		pInfo->strCarImageName = strCarImageName;
+	}
+}
+
+void CGPSDlg::SetGpsMapInfo(GpsMapInfo_t *pDstInfo, GpsMapInfo_t *pSrcInfo)
+{
+	if (pDstInfo && pSrcInfo)
+	{
+		pDstInfo->stGpsPos.fLat 	= pSrcInfo->stGpsPos.fLat;
+		pDstInfo->stGpsPos.fLon 	= pSrcInfo->stGpsPos.fLon;
+		pDstInfo->stGpsPos.fSpeed 	= pSrcInfo->stGpsPos.fSpeed;
+		
+		pDstInfo->dwOffsetSecs 		= pSrcInfo->dwOffsetSecs;
+		pDstInfo->ubAlarmState 		= pSrcInfo->ubAlarmState;
+		pDstInfo->strCarImageName 	= pSrcInfo->strCarImageName;
+	}
+}
+
+int CGPSDlg::GetNextBrowserId(int nCurrentId, int nBrowserNum)
+{
+	int nNextId = (nCurrentId + 1) % nBrowserNum;
+	return nNextId;
+}
+
+void CGPSDlg::ShowBrowser(int nBrowserId)
+{
+	for (int i = 0; i < GPS_BROWSER_NUMBER; i++)
+	{
+		if (i == nBrowserId) {
+			GetDlgItem(m_arrBrowserId[i])->MoveWindow(0, 0, m_nWindowWidth, m_nWindowHeight);
+		}
+		else {
+			GetDlgItem(m_arrBrowserId[i])->MoveWindow(0, 0, 0, 0);
+		}
+	}	
+}
+
+void CGPSDlg::SetBrowserContents(int nBrowserId, GpsMapInfo_t *pGpsMapInfo)
+{
+	if (pGpsMapInfo == NULL)
+		return;
+
+	GpsMapInfo_t mapInfo;
+	bool bImageUsed = true;
+
+	SetGpsMapInfo(&mapInfo, pGpsMapInfo);
+	
+	
+	TCHAR szPath[_MAX_PATH];
+	VERIFY(::GetModuleFileName(AfxGetApp()->m_hInstance, szPath, _MAX_PATH));
+
+	if (pGpsMapInfo->strCarImageName.IsEmpty())
+		bImageUsed = false;
+	
+	CString csPath(szPath);
+	int nIndex  = csPath.ReverseFind(_T('\\'));
+	if (nIndex > 0) {
+		csPath = csPath.Left(nIndex);
+	}
+	else {
+		csPath.Empty();
+	}	
+
+	csPath = L"file://" + csPath + L"/bmp2/Car/";
+	if (mapInfo.ubAlarmState == ALARM_STATE_NO_ALARM)
+		csPath += L"online/" + mapInfo.strCarImageName;
+	else
+		csPath += L"alarm/" + mapInfo.strCarImageName;
+
+	csPath.Replace('\\', '/');
+
+	CString strLatLon = L"";
+	strLatLon.Format(L"%f, %f", mapInfo.stGpsPos.fLat + OFFSET_LAT, mapInfo.stGpsPos.fLon + OFFSET_LNG);
+
+	CString strTime = L"", strCurrTime = L"", strSpeed = L"";
+
+	int nOffsetDay, nOffsetHours, nOffsetMins, nOffsetSecs;
+	DWORD dwSecs = mapInfo.dwOffsetSecs;
+
+	nOffsetDay = dwSecs / (3600 * 24);
+	dwSecs = dwSecs - (nOffsetDay * 3600 * 24);
+
+	nOffsetHours = dwSecs / 3600;
+	dwSecs = dwSecs - (nOffsetHours * 3600);
+
+	nOffsetMins = dwSecs / 60;
+	dwSecs = dwSecs - (nOffsetMins * 60);
+
+	nOffsetSecs = dwSecs % 60;
+
+	if (nOffsetHours > 0)
+		strTime.Format(L"%02d:%02d:%02d", nOffsetHours, nOffsetMins, nOffsetSecs);
+	else
+		strTime.Format(L"%02d:%02d", nOffsetMins, nOffsetSecs);
+
+	CTime currTime(m_VideoDateTime, 0);
+	currTime -= CTimeSpan(0, 0, 0, 30);
+	currTime += CTimeSpan(nOffsetDay, nOffsetHours, nOffsetMins, nOffsetSecs);
+
+	strCurrTime.Format(L"%04d-%02d-%02d %02d:%02d:%02d", 
+		currTime.GetYear(), currTime.GetMonth(), currTime.GetDay(), 
+		currTime.GetHour(), currTime.GetMinute(), currTime.GetSecond());
+
+	float fSpeed = mapInfo.stGpsPos.fSpeed;
+	if (m_nSpeedUnit == SPEED_UNIT_KMH)
+		fSpeed = fSpeed * 1.609344;
+	strSpeed.Format(L"%.1f ", fSpeed);
+
+	if (m_nSpeedUnit == SPEED_UNIT_KMH)
+		strSpeed += L"km/h";
+	else
+		strSpeed += L"mph";
+
+
+	CString strHtml = L"<!DOCTYPE html><html>";
+	strHtml += L"<head>";
+	strHtml += L"<meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\"><meta charset=\"utf-8\">";
+	strHtml += L"<title>Simple icons</title>";
+	strHtml += L"<style>html, body {height: 100%;margin: 0px;padding: 0px} #map-canvas {height: 100%;margin: 0px;padding: 0px}</style>";	
+	strHtml += L"</head>";
+
+	strHtml += L"<body>";
+	strHtml += L"<div id=\"map-canvas\"></div>";
+
+	strHtml += L"<script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp\"></script>";
+	strHtml += L"<script>function initialize() { ";
+	strHtml += L"var mapOptions = {zoom: 16,center: new google.maps.LatLng(" + strLatLon + L")}; ";
+	strHtml += L"var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions); ";
+	strHtml += L"var image = '" + csPath + L"'; ";
+	strHtml += L"var myLatLng = new google.maps.LatLng(" + strLatLon + L"); ";
+	strHtml += L"var beachMarker = new google.maps.Marker({position: myLatLng,map: map,icon: image});";
+
+	if (bImageUsed) 
+	{
+		// define infoWindow content
+		strHtml += L"var contentString = '<div id=\"content\">'+";
+		strHtml += L"'<div id=\"siteNotice\">'+";
+		strHtml += L"'</div>'+";
+		strHtml += L"'<div id=\"bodyContent\">'+";
+		strHtml += L"'<b>TIME</b> : " + strTime + L"<br/>' + ";
+		strHtml += L"'<b>Current Time</b> : " + strCurrTime + L"<br/>' + ";
+		strHtml += L"'<b>SPEED</b> : " + strSpeed + L"<br/>' + ";
+		strHtml += L"'</div>'+";
+		strHtml += L"'</div>';";
+		
+		
+		// define info window
+		strHtml += L"var infowindow = new google.maps.InfoWindow( {";
+		strHtml += L"content: contentString,";
+		strHtml += L"maxWidth: 220";
+		
+		strHtml += L"} );";
+		
+		// add info window to marker
+		strHtml += L"beachMarker.addListener('click', function() {";
+		strHtml += L"infowindow.open(map, beachMarker);";
+		strHtml += L"} );";
+		
+		
+		// always show info window
+		strHtml += L"infowindow.open(map, beachMarker);";		
+	}
+	
+
+	// end of function 
+	strHtml += L"} ";
+
+	// register function for starting	
+	strHtml += L"google.maps.event.addDomListener(window, 'load', initialize);";
+
+	strHtml += L"</script>";
+	
+	strHtml += L"</body></html>";
+
+
+	CHTMLWriter htmlWriter(m_arrMapBrowser[nBrowserId].GetControlUnknown());
+	htmlWriter.Write(strHtml);
+}
+
+void CGPSDlg::TimerStart()
+{
+	if (m_bTimerRunning == false)
+		SetTimer(TIMER_GPS_MAP, TIMER_INTERVAL, NULL);
+	m_bTimerRunning = true;
+}
+
+void CGPSDlg::TimerStop()
+{
+	KillTimer(TIMER_GPS_MAP);
+	m_bTimerRunning = false;
+}
+
+void CGPSDlg::ResetGpsDialog(bool bResetMap)
+{
+	// stop GPS browser timer
+	TimerStop();
+
+	if (bResetMap)
+	{
+		// Reset Gps information variables
+		ResetGpsMapInfo(&m_stInitGpsInfo);
+		ResetGpsMapInfo(&m_stPrevGpsInfo);
+		ResetGpsMapInfo(&m_stCurrGpsInfo);
+
+		m_nCurrMapBrowserId = DEFAULT_MAP_BROWSER_ID;
+
+		SetBrowserDefaultContents(m_nCurrMapBrowserId);
+
+		ShowBrowser(m_nCurrMapBrowserId);
+	}
+}
+
+void CGPSDlg::SetBrowserDefaultContents(int nBrowserId)
+{
+	// setting default GpsWindow data 
+	CHTMLWriter htmlWriter(m_arrMapBrowser[nBrowserId].GetControlUnknown());
+	htmlWriter.Write(L"<!DOCTYPE html><html><head><style type=\"text/css\">html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}</style><script type=\"text/javascript\"src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyA1bMjkIhG61jnA6MefByFaSVglbR5kvjw\"></script><script type=\"text/javascript\">function initialize() {var mapOptions = {center: { lat: 40.8833, lng: -85.0167},zoom: 5};var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);}google.maps.event.addDomListener(window, 'load', initialize);</script></head><body><div id=\"map-canvas\"></div></body></html>");
+}
+
+
+
+
+
 

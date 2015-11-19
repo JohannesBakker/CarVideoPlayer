@@ -342,6 +342,7 @@ void CNewProjDlg::OnFileOpen()
 	CString strInfo = "";
 	m_FirstFilePath = "";
 	m_SecondFilePath = "";
+
 	BROWSEINFO bi;
 	ZeroMemory(&bi,sizeof(bi));
 	bi.hwndOwner = NULL;
@@ -361,6 +362,7 @@ void CNewProjDlg::OnFileOpen()
 		CNewProjDlg::g_config_Value_ST.nWndCounts = 0;
 		return;
 	}
+
 	SHGetPathFromIDList(idl, str.GetBuffer(260));
 	str.ReleaseBuffer();
 	CString timeTemp;
@@ -384,19 +386,26 @@ void CNewProjDlg::OnFileOpen()
 
 	file.Write(&CNewProjDlg::g_config_Value_ST, sizeof(CNewProjDlg::g_config_Value_ST));
 	file.Close();
+
 	strInfo ="D264\\mdvr.log"; 
-	if (str.GetAt(str.GetLength() - 1) !='\\') m_FolderPath += "\\";
+	if (str.GetAt(str.GetLength() - 1) !='\\') 
+		m_FolderPath += "\\";
+
 	CString strTempPath[40];
 	int i;
 	for(i = 0; i < 40; i++)
 		strTempPath[i] = "";
+
 	CFileFind finder;
 	BOOL bWorking = finder.FindFile(m_FolderPath + "*.*");
 	int FileCount = 0;
+
 	while (bWorking)
 	{
 		bWorking = finder.FindNextFile();
-		if (finder.IsDots()) continue;
+		if (finder.IsDots()) 
+			continue;
+
 		if (m_FirstFilePath == "")
 		{
 			CString strFileName;
@@ -408,7 +417,9 @@ void CNewProjDlg::OnFileOpen()
 			}
 		}
 	}
+	
 	finder.Close();
+
 	if (FileCount == 0) 
 	{
 		MessageBox(_T("No Exist 264 Files!"), NULL, 0);
@@ -428,10 +439,13 @@ void CNewProjDlg::OnFileOpen()
 		m_SecondPathArrays[i] = "";
 		ZeroMemory(&m_DateTime[i], sizeof(SYSTEMTIME));
 	}
+
 	m_nPathCounts = 0;
+
 	bool bf = false;
 	int j = 0;
-	do{
+
+	do {
 		if (strTempPath[j].Mid(strTempPath[j].GetLength() - 8, 4) == "A1A0")
 		{
 			m_nPathCounts++;
@@ -443,9 +457,14 @@ void CNewProjDlg::OnFileOpen()
 			m_DateTime[m_nPathCounts - 1].wMinute = wtoi(strTempPath[j].Mid(strTempPath[j].GetLength() - 14, 2));
 			m_DateTime[m_nPathCounts - 1].wSecond = wtoi(strTempPath[j].Mid(strTempPath[j].GetLength() - 12, 2));
 			bf = true;
-		}else{
-			if (bf == false) m_nPathCounts++;
+		}
+		else
+		{
+			if (bf == false) 
+				m_nPathCounts++;
+
 			m_SecondPathArrays[m_nPathCounts - 1] = strTempPath[j];
+			
 			if (bf == false)
 			{
 				m_DateTime[m_nPathCounts - 1].wYear = wtoi(strTempPath[j].Mid(strTempPath[j].GetLength() - 25, 4));
@@ -455,50 +474,79 @@ void CNewProjDlg::OnFileOpen()
 				m_DateTime[m_nPathCounts - 1].wMinute = wtoi(strTempPath[j].Mid(strTempPath[j].GetLength() - 14, 2));
 				m_DateTime[m_nPathCounts - 1].wSecond = wtoi(strTempPath[j].Mid(strTempPath[j].GetLength() - 12, 2))-1;
 			}
+			
 			bf = false;
 		}
+
 		j++;
-	}while(j < FileCount);
+	} while (j < FileCount);
+
 	m_ToolBarDlg.m_1stFilePath = m_FirstPathArrays[0];
 	m_ToolBarDlg.m_2ndFilePath = m_SecondPathArrays[0];
 	m_ToolBarDlg.m_pTimeLineDlg = &m_TimeLineDlg;
-	if (m_FirstPathArrays[0] == "" && m_SecondPathArrays[0] == "") m_ToolBarDlg.m_nThreadCounts = 0;
-	if ((m_FirstPathArrays[0] != "" && m_SecondPathArrays[0] == "") || (m_FirstPathArrays[0] == "" && m_SecondPathArrays[0] != "")) m_ToolBarDlg.m_nThreadCounts = 1;
-	if (m_FirstPathArrays[0] != "" && m_SecondPathArrays[0] != "") m_ToolBarDlg.m_nThreadCounts = 2;
+	
+	if (m_FirstPathArrays[0] == "" && m_SecondPathArrays[0] == "") 
+		m_ToolBarDlg.m_nThreadCounts = 0;
+
+	if ((m_FirstPathArrays[0] != "" && m_SecondPathArrays[0] == "") || (m_FirstPathArrays[0] == "" && m_SecondPathArrays[0] != "")) 
+		m_ToolBarDlg.m_nThreadCounts = 1;
+
+	if (m_FirstPathArrays[0] != "" && m_SecondPathArrays[0] != "") 
+		m_ToolBarDlg.m_nThreadCounts = 2;
+
 	m_ToolBarDlg.m_bCheckChannel = true;
 	memcpy(&m_ToolBarDlg.m_DateTime, &m_DateTime[0], sizeof(SYSTEMTIME));
-	if (bFirstOpen) bFirstOpen = false;
-	else m_InfoListDlg.m_fileList.DeleteAllItems();
+	
+	if (bFirstOpen) 
+		bFirstOpen = false;
+	else 
+		m_InfoListDlg.m_fileList.DeleteAllItems();
+
 	for(i = m_nPathCounts-1; i >=0 ; i--)
 	{
 		m_InfoListDlg.load_event_list(strInfo,m_DateTime[i]);
+	
 		CFile file;
 		if (m_FirstPathArrays[i] != "")
 		{
 			
-			if (!file.Open(m_FirstPathArrays[i], CFile::modeRead)) return;
+			if (!file.Open(m_FirstPathArrays[i], CFile::modeRead)) 
+				return;
+
 			m_dwDurations[i] = GetDuration(&file);
 			if (m_SecondPathArrays[i] != "")
 			{
 				CFile _2ndFile;
-				if (!_2ndFile.Open(m_SecondPathArrays[i], CFile ::modeRead)) return;
+
+				if (!_2ndFile.Open(m_SecondPathArrays[i], CFile ::modeRead)) 
+					return;
+
 				char temp[256];
 				sprintf(temp, " %d-%02d-%02d \n", m_DateTime[i].wYear, m_DateTime[i].wMonth, m_DateTime[i].wDay);
 				m_InfoListDlg.load_file_list(m_dwDurations[i], m_DateTime[i], 2, file.GetLength(), _2ndFile.GetLength(), i);
 				_2ndFile.Close();
-			}else m_InfoListDlg.load_file_list(m_dwDurations[i], m_DateTime[i], 1, file.GetLength(), 0, i);
+			}
+			else 
+				m_InfoListDlg.load_file_list(m_dwDurations[i], m_DateTime[i], 1, file.GetLength(), 0, i);
+
 			file.Close();
-		}else{ 
-			if (!file.Open(m_SecondPathArrays[0], CFile::modeRead)) return;
+		}
+		else
+		{ 
+			if (!file.Open(m_SecondPathArrays[0], CFile::modeRead)) 
+				return;
 			m_dwDurations[i] = GetDuration(&file);
 			m_InfoListDlg.load_file_list(m_dwDurations[i], m_DateTime[i], 1, 0, file.GetLength(), i);
 			file.Close();
 		}
 	}
+
 	m_nPathArraysPtr = 0;
 	m_ToolBarDlg.ReSet();
+
 	CRect rt;
 	GetClientRect(&rt);
+
 	CNewProjDlg::g_config_Value_ST.nWndCounts = 0;
 	if (m_FirstPathArrays[0] == "")
 	{
@@ -507,23 +555,30 @@ void CNewProjDlg::OnFileOpen()
 		m_ToolBarDlg.Init_VideoOut(&m_View1Dlg, &m_View2Dlg);
 		CNewProjDlg::g_config_Value_ST.nWndCounts = 1;
 	}
+
 	if (m_SecondPathArrays[0] == "")
 	{	
 		m_View2Dlg.ShowWindow(SW_HIDE);
 		m_View1Dlg.MoveWindow(0, 0, rt.Width() * 2 / 3, rt.Height() * 3 / 5);
 		m_ToolBarDlg.Init_VideoOut(&m_View1Dlg, &m_View2Dlg);
 		CNewProjDlg::g_config_Value_ST.nWndCounts = 1;
-	}else{
+	}
+	else
+	{
 		m_View1Dlg.MoveWindow(0, 0, rt.Width() / 3, rt.Height() * 3 / 5);
 		m_View2Dlg.MoveWindow(rt.Width() / 3, 0, rt.Width() / 3, rt.Height() * 3 / 5);
 		m_View2Dlg.ShowWindow(SW_SHOW);
 		m_ToolBarDlg.Init_VideoOut(&m_View1Dlg, &m_View2Dlg);
 		CNewProjDlg::g_config_Value_ST.nWndCounts = 2;
 	}
+
 	for(int i = 0 ; i < CNewProjDlg::m_nPathCounts; i++)
 		m_ToolBarDlg.m_pInfoListDlg->m_fileList.UnSelectItem(i);
+
 	m_ToolBarDlg.m_pInfoListDlg->m_fileList.SelectItem(CNewProjDlg::m_nPathArraysPtr, true);
 	m_InfoListDlg.m_fileList.SetItemText(0, 7, _T("Played"));
+
+	m_GPSDlg.ResetGpsDialog(true);
 }
 
 void CNewProjDlg::OnExit() 
