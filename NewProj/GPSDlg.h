@@ -101,7 +101,7 @@ public:
 	
 	
 
-	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent); 
 
 
 	int GetBearingLocation(float pos1Lat, float pos1Lng, float pos2Lat, float pos2Lng);
