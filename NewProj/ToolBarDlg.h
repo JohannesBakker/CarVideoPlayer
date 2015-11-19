@@ -241,6 +241,8 @@ public:
 	long m_2ndBeginSecs;
 
 static	int m_n2ndRecordStopPos;
+static	DWORD m_dw2ndRecordStopPos;
+
 
 	CToolTipCtrl* m_pToolTip;
 

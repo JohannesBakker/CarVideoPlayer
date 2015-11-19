@@ -35,8 +35,8 @@ static char THIS_FILE[] = __FILE__;
 
 // Total time calculate before 30 secs
 // because displayed video delay 30 secs than recording
-#define TOTAL_SECONDS_PER_DAY		(3600*24 + 30)
-//#define TOTAL_SECONDS_PER_DAY		(3600*10 + 60*29 + 30 + 30)
+//#define TOTAL_SECONDS_PER_DAY		(3600*24 + 30)
+#define TOTAL_SECONDS_PER_DAY		(3600*10 + 60*29 + 30 + 30)
 
 
 HWAVEOUT		g_hWaveOut;
@@ -94,6 +94,8 @@ bool						CToolBarDlg::g_ErrRead;
 //bool						CToolBarDlg::g_bAudioThread;
 
 int						CToolBarDlg::m_n2ndRecordStopPos;
+DWORD 					CToolBarDlg::m_dw2ndRecordStopPos;
+
 
 
 CToolBarDlg::CToolBarDlg(CWnd* pParent /*=NULL*/)
@@ -994,6 +996,17 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 			if (nRecStartSec < TOTAL_SECONDS_PER_DAY && nRecCurrSec >= TOTAL_SECONDS_PER_DAY)
 				m_n2ndRecordStopPos = currPos;
 		}
+
+		if (m_dw2ndRecordStopPos == 0)
+		{
+			DWORD currPos = m_1stSpliter.m_file->GetPosition();
+			DWORD dwPlayedDTS = m_1stSpliter.m_1stOutDatas.dwDTS_V - m_dwFirstDTS;
+			DWORD dwCurrTime = m_2ndBeginSecs + (dwPlayedDTS / 1000);
+
+			// check rec start previous day, and recording continue next day
+			if (m_2ndBeginSecs < TOTAL_SECONDS_PER_DAY && dwCurrTime >= TOTAL_SECONDS_PER_DAY)
+				m_dw2ndRecordStopPos = currPos;
+		}
 	}
 	CDialog::OnTimer(nIDEvent);
 }
@@ -1340,6 +1353,7 @@ void CToolBarDlg::OnRecordBegin()
 	m_2ndBeginSecs = recStartTime.wHour * 3600 + recStartTime.wMinute * 60 + recStartTime.wSecond;
 
 	m_n2ndRecordStopPos = -1;
+	m_dw2ndRecordStopPos = 0;
 }
 
 int k = 0;
@@ -1406,11 +1420,16 @@ void CToolBarDlg::OnRecordEnd()
 	// set start/end pos with file position
 	m_TimeRangeDlg.m_dw1stStartPos = m_dw1stStartPos;
 	m_TimeRangeDlg.m_dw2ndStartPos = m_dw2ndStartPos;
+	
 
 	m_TimeRangeDlg.m_dw1stEndPos = m_1stSpliter.m_file->GetPosition();
 
 	if (m_2ndSpliter.m_file != NULL)
 		m_TimeRangeDlg.m_dw2ndEndPos = m_2ndSpliter.m_file->GetPosition();
+
+	if (m_dw2ndRecordStopPos == 0)
+		m_dw2ndRecordStopPos = m_TimeRangeDlg.m_dw1stEndPos;
+	m_TimeRangeDlg.m_dw2ndStopPos = m_dw2ndRecordStopPos;
 
 
 	m_TimeRangeDlg.ShowWindow(SW_SHOW);

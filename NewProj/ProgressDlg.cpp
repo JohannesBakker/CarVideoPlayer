@@ -657,7 +657,7 @@ UINT AVI_SpliterProcExt(LPVOID lParam)
 		
 		if(pDlg->m_1stFile != NULL)
 		{	
-#if 0			
+#if 1			
 			// check 2nd video pattern filling
 			if (bEnableFillPattern == false) {
 				if(pDlg->m_1stSpliter.m_file->GetPosition() >= pDlg->m_dwMidStopPos) 
