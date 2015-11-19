@@ -419,12 +419,26 @@ void CGPSDlg::SetBrowserContents(int nBrowserId, GpsMapInfo_t *pGpsMapInfo)
 	float fSpeed = mapInfo.stGpsPos.fSpeed;
 	if (m_nSpeedUnit == SPEED_UNIT_KMH)
 		fSpeed = fSpeed * 1.609344;
-	strSpeed.Format(L"%.1f ", fSpeed);
 
-	if (m_nSpeedUnit == SPEED_UNIT_KMH)
-		strSpeed += L"km/h";
+	if (fSpeed < 1)
+	{
+		fSpeed = 0;
+		if (m_nSpeedUnit == SPEED_UNIT_KMH)
+			strSpeed = L"0 km/h";
+		else
+			strSpeed = L"0 mph";
+	}
 	else
-		strSpeed += L"mph";
+	{
+		strSpeed.Format(L"%.1f ", fSpeed);
+
+		if (m_nSpeedUnit == SPEED_UNIT_KMH)
+			strSpeed += L"km/h";
+		else
+			strSpeed += L"mph";
+	}
+		
+	
 
 
 	CString strHtml = L"<!DOCTYPE html><html>";
