@@ -16,6 +16,7 @@ public:
 	~CHTMLWriter( void );
 	bool Write( LPCTSTR pszHTMLContent );
 	bool Add( LPCTSTR pszHTMLContent );
+	bool RunScript(LPCTSTR pszHTMLContent);
 
 private:
 	CHTMLWriter( void ) {};

@@ -216,7 +216,136 @@ void CGPSDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	if (nIDEvent == TIMER_GPS_MAP)
 	{	
+		{
+#if 0
+			static int nCounter = 0;
 
+			nCounter ++;
+
+
+			if (nCounter % 4 == 0)
+			{
+				CString strHtml = L"Javascript:displayAlert(); ";
+
+				CHTMLWriter htmlWriter(m_arrMapBrowser[m_nCurrMapBrowserId].GetControlUnknown());
+				htmlWriter.RunScript(strHtml);
+
+				CDialog::OnTimer(nIDEvent);
+
+				KillTimer(TIMER_GPS_MAP);
+				return;
+			}
+
+			if (nCounter > 20)
+				nCounter = 0;
+#endif			
+
+			GpsMapInfo_t mapInfo;
+			bool bImageUsed = true;
+
+			static bool bCalled = false;
+
+			if (bCalled == false)
+			{
+				static int nCallCounter = 0;
+				if (++nCallCounter > 5) {
+					bCalled = true;
+
+					CString strHtml = L"Javascript:initMaps(); " ;
+
+					CHTMLWriter htmlWriter(m_arrMapBrowser[m_nCurrMapBrowserId].GetControlUnknown());
+					htmlWriter.RunScript(strHtml);
+
+					CDialog::OnTimer(nIDEvent);
+					return;
+				}
+			}
+
+			if (bCalled == true)
+			{
+				SetGpsMapInfo(&mapInfo, &m_stCurrGpsInfo);
+			
+			
+				TCHAR szPath[_MAX_PATH];
+				VERIFY(::GetModuleFileName(AfxGetApp()->m_hInstance, szPath, _MAX_PATH));
+
+				if (mapInfo.strCarImageName.IsEmpty())
+					bImageUsed = false;
+				
+				CString csPath(szPath);
+				int nIndex  = csPath.ReverseFind(_T('\\'));
+				if (nIndex > 0) {
+					csPath = csPath.Left(nIndex);
+				}
+				else {
+					csPath.Empty();
+				}	
+
+				csPath = L"file://" + csPath + L"/bmp2/Car/";
+				if (mapInfo.ubAlarmState == ALARM_STATE_NO_ALARM)
+					csPath += L"online/" + mapInfo.strCarImageName;
+				else
+					csPath += L"alarm/" + mapInfo.strCarImageName;
+
+				csPath.Replace('\\', '/');
+
+				CString strLatLon = L"";
+				strLatLon.Format(L"%f, %f", mapInfo.stGpsPos.fLat + OFFSET_LAT, mapInfo.stGpsPos.fLon + OFFSET_LNG);
+
+				CString strLat = L"";
+				strLat.Format(L"%f", mapInfo.stGpsPos.fLat + OFFSET_LAT);
+
+				CString strLon = L"";
+				strLon.Format(L"%f", mapInfo.stGpsPos.fLon + OFFSET_LNG);
+				
+				ShowBrowser(m_nCurrMapBrowserId);
+
+				CString strTime, strCurrTime, strSpeed;
+				strTime = L"10:20";
+				strCurrTime = L"2015-11-21 11:22:33";
+
+				static int i = 0;
+				strSpeed.Format(L"%d km/h", ++i);
+
+				CString strInfoContents = L"";
+				strInfoContents += L"'<div id=\"content\">'+";
+				strInfoContents += L"'<div id=\"siteNotice\">'+";
+				strInfoContents += L"'</div>'+";
+				strInfoContents += L"'<div id=\"bodyContent\">'+";
+//				strInfoContents += L"'<b>TIME</b> : " + strTime + L"<br/>' + ";
+//				strInfoContents += L"'<b>Current Time</b> : " + strCurrTime + L"<br/>' + ";
+//				strInfoContents += L"'<b>SPEED</b> : " + strSpeed + L"<br/>' + ";
+				strInfoContents += L"'</div>'+";
+				strInfoContents += L"'</div>'";
+
+				strInfoContents = L"'<div id=\"content\">' '<div id=\"siteNotice\">' '</div>' '<div id=\"bodyContent\">' '</div>' '</div>'";
+				//				strInfoContents += L"'<b>TIME</b> : " + strTime + L"<br/>' + ";
+				//				strInfoContents += L"'<b>Current Time</b> : " + strCurrTime + L"<br/>' + ";
+				//				strInfoContents += L"'<b>SPEED</b> : " + strSpeed + L"<br/>' + ";
+//				strInfoContents += L"'</div>'+";
+//				strInfoContents += L"'</div>'";
+#if 0
+				CString strHtml = L"Javascript:setMarker(\"" + strLat + L"\", \"" + strLon + L"\", \"" + csPath + L"\"); ";
+#else 
+
+				strInfoContents = L"My Project";
+				// CString strHtml = L"Javascript:displayMarker(\"" + strLat + L"\", \"" + strLon + L"\", \"" + csPath + L"\"); ";
+				CString strHtml = L"Javascript:setMarker(\"" + strLat + L"\", \"" + strLon + L"\", \"" + csPath + L"\", ";
+				strHtml += "\"" + strTime + L"\", \"" + strCurrTime + L"\", \"" + strSpeed + L"\"";
+				strHtml += L"); ";
+#endif;
+				
+				
+				CHTMLWriter htmlWriter(m_arrMapBrowser[m_nCurrMapBrowserId].GetControlUnknown());
+				htmlWriter.RunScript(strHtml);
+				
+				CDialog::OnTimer(nIDEvent);
+				return;
+			}
+
+		}
+
+	
 		m_nCurrMapBrowserId = GetNextBrowserId(m_nCurrMapBrowserId, GPS_BROWSER_NUMBER);
 		
 		int nNewDataBrowser = GetNextBrowserId(m_nCurrMapBrowserId, GPS_BROWSER_NUMBER);
@@ -452,6 +581,134 @@ void CGPSDlg::SetBrowserContents(int nBrowserId, GpsMapInfo_t *pGpsMapInfo)
 	strHtml += L"<div id=\"map-canvas\"></div>";
 
 	strHtml += L"<script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp\"></script>";
+
+#if 0	// add alert function for testing
+	strHtml += L"<script> function displayAlert() { ";
+	strHtml += L"alert(\"My project\");";
+	strHtml += L"}";
+	strHtml += L"</script>";
+#endif
+
+#if 0	// map setting function
+	{
+		CString szMarkerHtml = L"<script>";
+
+		szMarkerHtml += L"function displayMarker(strLat, strLon, csPath) { ";
+
+
+		szMarkerHtml += L"var mapOptions = {zoom: 16,center: new google.maps.LatLng(strLat, strLon)}; ";
+		szMarkerHtml += L"var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions); ";
+		szMarkerHtml += L"var image = csPath; ";
+		szMarkerHtml += L"var myLatLng = new google.maps.LatLng(strLat, strLon); ";	
+		szMarkerHtml += L"var beachMarker = new google.maps.Marker({position: myLatLng,map: map,icon: image});";
+
+
+		szMarkerHtml += L"} ";
+		szMarkerHtml += L"</script>";
+
+		strHtml += szMarkerHtml;
+	}
+	
+#endif
+
+#if 1	// Moving map with Marker
+	{
+		CString strMapHtml = L"<script>";
+
+//		strMapHtml += L"window.mapobject = window.google || {}; ";
+//		strMapHtml += L"mapobject.maps = google.maps || {}; ";
+//		strMapHtml += L"mapobject.maps.MapTypeId = google.maps.MapTypeId||{}; ";
+
+		// define global variables
+		strMapHtml += L"var g_map; ";
+		strMapHtml += L"var g_currPositionMarker; ";
+		strMapHtml += L"var g_infowindow; ";
+
+		//=======================
+		// initMaps function
+		//=======================
+		strMapHtml += L"function initMaps() { ";
+
+		// default location :::  lat: 40.8833, lng: -85.0167
+		strMapHtml += L"var defaultLat = 40.8833; ";
+		strMapHtml += L"var defaultLon = -85.0167; ";
+
+		strMapHtml += L"var myLatLng = new google.maps.LatLng(defaultLat, defaultLon); ";
+		strMapHtml += L"var mapOptions = {zoom: 16,center: new google.maps.LatLng(defaultLat, defaultLon)}; ";
+		strMapHtml += L"g_map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); ";
+		strMapHtml += L"g_currPositionMarker = new google.maps.Marker({position: myLatLng, map: g_map, icon: \" \"}); ";
+		strMapHtml += L"g_infowindow = new google.maps.InfoWindow( {";
+		strMapHtml += L"content: \"\",";
+		strMapHtml += L"maxWidth: 220";
+		strMapHtml += L"} );";
+
+		// add info window to marker
+		strMapHtml += L"g_currPositionMarker.addListener('click', function() {";
+		strMapHtml += L"g_infowindow.open(g_map, g_currPositionMarker); ";
+		strMapHtml += L"} ); ";
+		strMapHtml += L"g_infowindow.open(g_map, g_currPositionMarker); ";
+
+
+
+		strMapHtml += L"} ";
+
+
+		//=======================
+		// setMarker function
+		//=======================
+#if 0
+		strMapHtml += L"function setMarker(strLat, strLon, csPath) { ";
+#else
+		strMapHtml += L"function setMarker(strLat, strLon, csPath, strTime, strCurrTime, strSpeed) { ";
+#endif
+
+		strMapHtml += L"var mapOptions = {zoom: 16,center: new google.maps.LatLng(strLat, strLon)}; ";
+		strMapHtml += L"var image = csPath; ";
+		strMapHtml += L"var myLatLng = new google.maps.LatLng(strLat, strLon); ";	
+		
+		strMapHtml += L"g_map.setCenter(myLatLng); ";
+
+		strMapHtml += L"g_currPositionMarker.setPosition(myLatLng); ";
+		strMapHtml += L"g_currPositionMarker.setIcon(image); ";
+
+#if 0
+		// define infoWindow content
+		strMapHtml += L"var contentString = '<div id=\"content\">'+";
+		strMapHtml += L"'<div id=\"siteNotice\">'+";
+		strMapHtml += L"'</div>'+";
+		strMapHtml += L"'<div id=\"bodyContent\">'+";
+		strMapHtml += L"'<b>TIME</b> : strTime<br/>' + ";
+		strMapHtml += L"'<b>Current Time</b> : strCurrTime<br/>' + ";
+		strMapHtml += L"'<b>SPEED</b> : strSpeed<br/>' + ";
+		strMapHtml += L"'</div>'+";
+		strMapHtml += L"'</div>';";
+#endif		
+
+		strMapHtml += L"var contentString = '<div id=\"content\">'+";
+		strMapHtml += L"'<div id=\"siteNotice\">'+";
+		strMapHtml += L"'</div>'+";
+		strMapHtml += L"'<div id=\"bodyContent\">'+";
+		strMapHtml += L"'<b>TIME</b> :' + strTime + '<br/>' + ";
+		strMapHtml += L"'<b>Current Time</b> :' + strCurrTime + '<br/>' + ";
+		strMapHtml += L"'<b>SPEED</b> :' + strSpeed + '<br/>' + ";
+		strMapHtml += L"'</div>'+";
+		strMapHtml += L"'</div>';";
+
+//		strMapHtml += L"var contentString = strInfoContent; ";
+
+		strMapHtml += L"g_infowindow.setContent(contentString); ";
+//		strMapHtml += L"g_infowindow.open(g_map, g_currPositionMarker); ";
+
+		strMapHtml += L"} ";
+
+		strMapHtml += L"</script>";
+
+		// add to prev html
+		strHtml += strMapHtml;
+	}
+#endif
+
+
 	strHtml += L"<script>function initialize() { ";
 	strHtml += L"var mapOptions = {zoom: 16,center: new google.maps.LatLng(" + strLatLon + L")}; ";
 	strHtml += L"var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions); ";

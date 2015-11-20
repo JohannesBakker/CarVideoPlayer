@@ -123,3 +123,41 @@ bool CHTMLWriter::Add( LPCTSTR pszHTMLContent )
 	}
 	return bResult;
 }
+
+bool CHTMLWriter::RunScript( LPCTSTR pszHTMLContent )
+{
+	if (!pszHTMLContent) return false;
+	if (!GetDocumentPtr()) return false;
+	IHTMLDocument2 * pHTMLDoc = NULL;
+	IHTMLElement * pElem = NULL;
+	HRESULT hr;
+	bool bResult = false;
+	// get an interface to the document object
+	hr = m_pDoc->QueryInterface( IID_IHTMLDocument2, (void **) &pHTMLDoc );
+	if (SUCCEEDED(hr))
+	{
+		if (pHTMLDoc != NULL)
+		{
+			IHTMLWindow2 *parentWindow = NULL;
+
+			// get parent window
+			hr = pHTMLDoc->get_parentWindow(&parentWindow);
+			if (SUCCEEDED(hr))
+			{
+				if (parentWindow != NULL) {
+					
+					CComBSTR fullScript = pszHTMLContent;
+					CComVariant empty;
+
+					hr = parentWindow->execScript(fullScript, L"JAVASCRIPT", &empty);
+
+					if (SUCCEEDED(hr))
+						bResult = true;
+				}
+			}
+		}
+
+		pHTMLDoc->Release();
+	}
+	return bResult;
+}
