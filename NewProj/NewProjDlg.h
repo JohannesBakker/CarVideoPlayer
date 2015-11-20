@@ -121,6 +121,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnClose();
+	virtual void OnCancel();
+	virtual void OnOK();
 };
 void WndsBK_Paint(CView1Dlg*, CView2Dlg*, int);
 int Unichar2Ascii(WCHAR *unichar, char* asciichar);

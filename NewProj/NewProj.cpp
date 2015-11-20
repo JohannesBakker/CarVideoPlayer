@@ -14,8 +14,6 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CNewProjApp
 
-BOOL g_bEnableQuitApplication = TRUE;
-
 BEGIN_MESSAGE_MAP(CNewProjApp, CWinApp)
 	//{{AFX_MSG_MAP(CNewProjApp)
 		// NOTE - the ClassWizard will add and remove mapping macros here.
@@ -83,26 +81,3 @@ BOOL CNewProjApp::InitInstance()
 	return FALSE;
 }
 
-
-BOOL CNewProjApp::PreTranslateMessage(MSG* pMsg)
-{
-	// TODO: Add your specialized code here and/or call the base class
-
-	// When press any key, close applications
-	if (pMsg->message == WM_KEYDOWN)
-	{
-		if (g_bEnableQuitApplication == TRUE) 
-		{
-			CFile file;
-			file.Open(_T(CONFIG_FILE_PATH), CFile::modeWrite);
-			file.Write(&CNewProjDlg::g_config_Value_ST, sizeof(Config_Datas));
-			file.Close();
-
-
-			AfxGetMainWnd()->SendMessage(WM_CLOSE);
-		}
-		
-	}
-
-	return CWinApp::PreTranslateMessage(pMsg);
-}

@@ -588,7 +588,8 @@ void CNewProjDlg::OnExit()
 	file.Open(_T(CONFIG_FILE_PATH), CFile::modeWrite);
 	file.Write(&g_config_Value_ST, sizeof(Config_Datas));
 	file.Close();
-	OnOK();
+	
+	CDialog::OnOK();
 }
 
 void CNewProjDlg::OnSize(UINT nType, int cx, int cy) 
@@ -661,8 +662,6 @@ void CNewProjDlg::OnSettings()
 	else m_SystemSetupDlg.m_rgb16Btn.SetCheck(0);
 	if (CNewProjDlg::g_config_Value_ST.bWtrmkVerify == true) m_SystemSetupDlg.m_waterMarkBtn.SetCheck(1);
 	else m_SystemSetupDlg.m_waterMarkBtn.SetCheck(0);
-
-	g_bEnableQuitApplication = FALSE;
 
 	m_SystemSetupDlg.ShowWindow(SW_SHOW);
 }
@@ -883,7 +882,21 @@ void CNewProjDlg::OnClose()
 	file.Write(&g_config_Value_ST, sizeof(Config_Datas));
 	file.Close();
 
-	CDialog::OnClose();
+	//CDialog::OnClose();
+	CDialog::OnCancel();
+}
+
+void CNewProjDlg::OnCancel()
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	// comment for none closing
 }
 
 
+void CNewProjDlg::OnOK()
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	// comment for none closing
+}
