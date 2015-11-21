@@ -200,10 +200,6 @@
 #define IDC_STATIC_BEGIN                1182
 #define IDC_STATIC_SEARCH_BEGIN         1182
 #define IDC_RADIO1                      1186
-#define IDC_EXPLORER2                   1187
-#define IDC_EXPLORER3                   1188
-#define IDC_EXPLORER4                   1189
-#define IDC_EXPLORER5                   1190
 #define IDC_HUE_SLIDER                  1311
 #define IDC_HUE_STATIC                  1312
 #define IDC_HUE_EDIT                    1313

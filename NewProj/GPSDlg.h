@@ -14,15 +14,14 @@
 /////////////////////////////////////////////////////////////////////////////
 // CGPSDlg dialog
 //typedef DWORD		(_cdecl* FuncMAP_FixGps)(double, double, int, int);
-struct GPS_INFO
-{
-	float fLat;
-	float fLon;
-	float fSpeed;
 
-	DWORD			dwOffsetSecs;
-	unsigned char	alarmFlags;
-};
+
+typedef enum MapCommand {
+	MAP_CMD_INIT_MAP	= 0,
+	MAP_CMD_SET_MARKER,
+
+	MAP_CMD_MAX,
+} MapCommand_t;
 
 typedef struct GpsLocation {
 	float fLat;
@@ -55,9 +54,6 @@ public:
 	//FuncMAP_FixGps		m_MAP_FixGps;
 	bool		m_bGPSDlg;
 	//}}AFX_DATA
-	GPS_INFO m_gpsOldInfo;
-	GPS_INFO m_gpsCurInfo;
-	bool		m_bGPSUpdated;
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -79,8 +75,6 @@ public:
 
 	bool m_bInitComplete;
 
-	int m_nWindowWidth;
-	int m_nWindowHeight;
 
 	SpeedUnit_t	m_nSpeedUnit;
 	SYSTEMTIME m_VideoDateTime;
@@ -88,18 +82,16 @@ public:
 
 
 #define	GPS_BROWSER_NUMBER	3
-	CExplorer1		m_arrMapBrowser[GPS_BROWSER_NUMBER];
-	int				m_arrBrowserId[GPS_BROWSER_NUMBER];
-
 	int				m_nCurrMapBrowserId;	// 0 ~ 2
+
+	CExplorer1		m_vwMapBrowser;
 
 	GpsMapInfo_t	m_stInitGpsInfo;	// init GPS information
 	GpsMapInfo_t	m_stPrevGpsInfo;	// previous GPS information
 	GpsMapInfo_t	m_stCurrGpsInfo;	// current GPS information
 	
 	bool			m_bTimerRunning;	// true : timer running
-	
-	
+
 
 	afx_msg void OnTimer(UINT_PTR nIDEvent); 
 
@@ -116,16 +108,18 @@ public:
 			DWORD dwOffsetSecs, unsigned char ubAlarmState, CString strCarImageName);	
 	void SetGpsMapInfo(GpsMapInfo_t *pDstInfo, GpsMapInfo_t *pSrcInfo);
 
-	int GetNextBrowserId(int nCurrentId, int nBrowserNum);
 	void SetBrowserContents(int nBrowserId, GpsMapInfo_t *pGpsMapInfo);
-	void SetBrowserDefaultContents(int nBrowserId);
-	void ShowBrowser(int nBrowserId);
 
 	void TimerStart();
 	void TimerStop();
 
 	void ResetGpsDialog(bool bResetMap);
-		
+
+	CString GetBrowserContent();
+	void LoadBrowser();
+	void RunMapCommand(MapCommand_t command, GpsMapInfo_t* pGpsMapInfo);
+
+	
 };
 
 //{{AFX_INSERT_LOCATION}}
