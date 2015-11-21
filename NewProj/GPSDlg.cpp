@@ -13,7 +13,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define TIMER_INTERVAL	1500
+#define TIMER_INTERVAL	2000	//1500
 #define DEFAULT_IMAGE_NAME	_T("1.png")
 //#define DEFAULT_IMAGE_NAME	_T("")
 
@@ -22,9 +22,13 @@ static char THIS_FILE[] = __FILE__;
 
 #define TIMER_GPS_MAP	30000
 
-#define DEFAULT_MAP_BROWSER_ID	0
-
 #define IGNORE_GPS_INFO_NUM		2
+
+#define LOCATION_DEFAULT_LAT	22.573978188551297
+#define LOCATION_DEFAULT_LON	113.92078757286072
+
+#define MAP_ZOOM_DEFAULT		1
+#define MAP_ZOOM_ROAD			16
 
 
 typedef struct {
@@ -80,7 +84,7 @@ void CGPSDlg::OnSize(UINT nType, int cx, int cy)
 	
 	// TODO: Add your message handler code here
 	if (m_bInitComplete == true)
-		GetDlgItem(IDC_EXPLORER1)->MoveWindow(0, 0, cx, cx);
+		GetDlgItem(IDC_EXPLORER1)->MoveWindow(0, 0, cx, cy);
 }
 
 
@@ -102,8 +106,9 @@ BOOL CGPSDlg::OnInitDialog()
 
 	m_bInitComplete = true;
 
-	// setting default GpsWindow data 
-//	LoadBrowser(TYPE_DEFAULT_BROWSER);
+	m_szImageName = DEFAULT_IMAGE_NAME;
+	m_nIgnoreCounter = 0;
+
 	LoadBrowser();
 	
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -142,48 +147,42 @@ void CGPSDlg::DisplayGpsMap(MainBinaryData * pMBDatas, DWORD dwFirstDTS, DWORD d
 
 	m_stCurrGpsInfo.strCarImageName = m_stPrevGpsInfo.strCarImageName;
 
-	if (memcmp(&m_stCurrGpsInfo.stGpsPos, &m_stPrevGpsInfo.stGpsPos, sizeof(GpsLocation_t)))
+	GpsLocation_t *pPrevGps = &m_stPrevGpsInfo.stGpsPos;
+	GpsLocation_t *pCurrGps = &m_stCurrGpsInfo.stGpsPos;
+
+	if (pPrevGps->fLat == 0 && pPrevGps->fLon == 0)
 	{
-		GpsLocation_t *pPrevGps = &m_stPrevGpsInfo.stGpsPos;
-		GpsLocation_t *pCurrGps = &m_stCurrGpsInfo.stGpsPos;
-		
-		if (pPrevGps->fLat == 0 && pPrevGps->fLon == 0)
-		{
-		}
-		else
-		{
-			static int nCount = 0;
-			nCount ++;
-
-			if (nCount <= IGNORE_GPS_INFO_NUM)
-				return;
-
-
-			int deg = GetBearingLocation(pPrevGps->fLat, pPrevGps->fLon, pCurrGps->fLat, pCurrGps->fLon);
-			CString szImageName = GetCarImageName(deg);
-
-			if (!szImageName.IsEmpty())
-				m_stCurrGpsInfo.strCarImageName = szImageName;
-
-			if (m_stCurrGpsInfo.strCarImageName.IsEmpty())
-				m_stCurrGpsInfo.strCarImageName = DEFAULT_IMAGE_NAME;
-
-			//LoadBrowser(TYPE_MAP_BROWSER);
-			//RunMapCommand(MAP_CMD_INIT_MAP, &m_stCurrGpsInfo);
+	}
+	else
+	{
+		if (m_nIgnoreCounter < IGNORE_GPS_INFO_NUM) {
+			m_nIgnoreCounter ++;
+			return;
 		}
 
-		// set GPS init information
-		if (m_stInitGpsInfo.stGpsPos.fLat == 0 && m_stInitGpsInfo.stGpsPos.fLon == 0)
+
+		int deg = GetBearingLocation(pPrevGps->fLat, pPrevGps->fLon, pCurrGps->fLat, pCurrGps->fLon);
+		CString szImageName = GetCarImageName(deg);
+
+		if (!szImageName.IsEmpty())
+			m_szImageName = szImageName;
+
+		m_stCurrGpsInfo.strCarImageName = m_szImageName;
+
+		if (m_bTimerRunning == false)
 		{
-			SetGpsMapInfo(&m_stInitGpsInfo, &m_stCurrGpsInfo);
+			// Start Map browser timer
+			TimerStart();
 		}
 	}
 
-	if (m_bTimerRunning == false)
+	// set GPS init information
+	if (m_stInitGpsInfo.stGpsPos.fLat == 0 && m_stInitGpsInfo.stGpsPos.fLon == 0)
 	{
-		// Start Map browser timer
-		TimerStart();
+		SetGpsMapInfo(&m_stInitGpsInfo, &m_stCurrGpsInfo);
 	}
+
+	
 		
 }
 
@@ -324,17 +323,10 @@ void CGPSDlg::ResetGpsDialog(bool bResetMap)
 		ResetGpsMapInfo(&m_stPrevGpsInfo);
 		ResetGpsMapInfo(&m_stCurrGpsInfo);
 
-		m_nCurrMapBrowserId = DEFAULT_MAP_BROWSER_ID;
-
 		m_bTimerRunning = false;
-
+		m_nIgnoreCounter = 0;
 		
-
-//		if (m_currBrowserType != TYPE_DEFAULT_BROWSER)
-//			LoadBrowser(TYPE_DEFAULT_BROWSER);
-
-		LoadBrowser();
-		
+		m_szImageName = DEFAULT_IMAGE_NAME;
 	}
 }
 
@@ -361,23 +353,26 @@ CString CGPSDlg::GetBrowserContent()
 	// functions
 	strHtml += L"<script type=\"text/javascript\">";
 	{
-		
+		CString szLat, szLon, szZoom;
 
 		// define global variables
 		strHtml += L"var g_map; ";
 		strHtml += L"var g_currPositionMarker; ";
 		strHtml += L"var g_infowindow; ";
 
-
 		//=======================
 		// initialize function
 		//=======================
 		{
-			// initial location : (40.8833, -85.0167), zoom : 5
+			szLat.Format(L"%f", LOCATION_DEFAULT_LAT);
+			szLon.Format(L"%f", LOCATION_DEFAULT_LON);
+			szZoom.Format(L"%d", MAP_ZOOM_DEFAULT);
+
+			// initial location : (22.573978188551297, 113.92078757286072), zoom : 1;
 			strHtml += L"function initialize() { ";
 			
-			strHtml += L"var mapOptions = {center: { lat: 40.8833, lng: -85.0167},zoom: 5}; ";
-			strHtml += L"var myLatLng = new google.maps.LatLng(40.8833, -85.0167); ";
+			strHtml += L"var mapOptions = {center: { lat: " + szLat + L", lng: " + szLon + L"},zoom: " + szZoom + "}; ";
+			strHtml += L"var myLatLng = new google.maps.LatLng(" + szLat + L", " + szLon + L"); ";
 			
 			strHtml += L"g_map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); ";
 			strHtml += L"g_currPositionMarker = new google.maps.Marker({position: myLatLng, map: g_map, icon: \" \"}); ";
@@ -401,6 +396,8 @@ CString CGPSDlg::GetBrowserContent()
 		// setMarker function
 		//=======================
 		{
+			szZoom.Format(L"%d", MAP_ZOOM_ROAD);
+
 			// function begin
 			strHtml += L"function setMarker(strLat, strLon, strImage, strTime, strCurrTime, strSpeed) { ";
 
@@ -420,8 +417,8 @@ CString CGPSDlg::GetBrowserContent()
 
 			// set values of map, marker, infowindow			
 			strHtml += L"g_map.setCenter(myLatLng); ";
-			strHtml += L"if (_zoom != 16) {";
-			strHtml += L"g_map.setZoom(16); } ";
+			strHtml += L"if (_zoom != " + szZoom + L") {";
+			strHtml += L"g_map.setZoom(" + szZoom + L"); } ";
 			
 			strHtml += L"g_currPositionMarker.setPosition(myLatLng); ";
 			strHtml += L"g_currPositionMarker.setIcon(image); ";
@@ -539,17 +536,10 @@ void CGPSDlg::RunMapCommand(MapCommand_t command, GpsMapInfo_t* pGpsMapInfo)
 			strSpeed += L"mph";
 	}
 
-
 	CString strHtml = L"";
 
 	switch (command)
 	{
-		case MAP_CMD_INIT_MAP:
-			strHtml = L"Javascript:initMaps(\"" + strLat + L"\", \"" + strLon + L"\", \"" + strImagePath + L"\", ";
-			strHtml += "\"" + strTime + L"\", \"" + strCurrTime + L"\", \"" + strSpeed + L"\"";
-			strHtml += L"); ";
-			break;
-
 		case MAP_CMD_SET_MARKER:
 			strHtml = L"Javascript:setMarker(\"" + strLat + L"\", \"" + strLon + L"\", \"" + strImagePath + L"\", ";
 			strHtml += "\"" + strTime + L"\", \"" + strCurrTime + L"\", \"" + strSpeed + L"\"";
@@ -563,5 +553,3 @@ void CGPSDlg::RunMapCommand(MapCommand_t command, GpsMapInfo_t* pGpsMapInfo)
 	CHTMLWriter htmlWriter(m_vwMapBrowser.GetControlUnknown());
 	htmlWriter.RunScript(strHtml);
 }
-
-

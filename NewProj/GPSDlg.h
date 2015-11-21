@@ -17,8 +17,7 @@
 
 
 typedef enum MapCommand {
-	MAP_CMD_INIT_MAP	= 0,
-	MAP_CMD_SET_MARKER,
+	MAP_CMD_SET_MARKER = 0,
 
 	MAP_CMD_MAX,
 } MapCommand_t;
@@ -79,18 +78,16 @@ public:
 	SpeedUnit_t	m_nSpeedUnit;
 	SYSTEMTIME m_VideoDateTime;
 
-
-
-#define	GPS_BROWSER_NUMBER	3
-	int				m_nCurrMapBrowserId;	// 0 ~ 2
-
 	CExplorer1		m_vwMapBrowser;
-
 	GpsMapInfo_t	m_stInitGpsInfo;	// init GPS information
 	GpsMapInfo_t	m_stPrevGpsInfo;	// previous GPS information
 	GpsMapInfo_t	m_stCurrGpsInfo;	// current GPS information
 	
 	bool			m_bTimerRunning;	// true : timer running
+
+	CString 		m_szImageName;		// 
+	int				m_nIgnoreCounter;
+	
 
 
 	afx_msg void OnTimer(UINT_PTR nIDEvent); 
@@ -107,8 +104,6 @@ public:
 			float fLat, float fLon, float fSpeed,
 			DWORD dwOffsetSecs, unsigned char ubAlarmState, CString strCarImageName);	
 	void SetGpsMapInfo(GpsMapInfo_t *pDstInfo, GpsMapInfo_t *pSrcInfo);
-
-	void SetBrowserContents(int nBrowserId, GpsMapInfo_t *pGpsMapInfo);
 
 	void TimerStart();
 	void TimerStop();
