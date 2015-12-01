@@ -1378,7 +1378,6 @@ void CToolBarDlg::OnRecordBegin()
 int k = 0;
 UINT AviRecordThreadProc(LPVOID pParam);
 
-#if 1
 void CToolBarDlg::OnRecordEnd() 
 {
 	// TODO: Add your control notification handler code here
@@ -1491,125 +1490,6 @@ void CToolBarDlg::OnRecordEnd()
 	m_bClickedStop = true;
 }
 
-#else
-void CToolBarDlg::OnRecordEnd() 
-{
-	// TODO: Add your control notification handler code here
-
-	// stop record alarm
-	m_number1.SetBitmap(IDB_NUMBER_ONE_WHITE);
-	m_number2.SetBitmap(IDB_NUMBER_TWO_WHITE);
-	m_number3.SetBitmap(IDB_NUMBER_THREE_WHITE);
-	KillTimer(TIMER_RECORD_ALARM);
-	SetTimer(TIMER_ALARM,100,NULL);
-	m_bAlarmOn = false;
-
-
-	m_nEndPos = m_Slider_Seek.GetPos();
-	memcpy(&m_TimeRangeDlg.m_StartDateTime, &CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr], sizeof(SYSTEMTIME));
-
-	DWORD dwTime = CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr].wHour * 3600 
-					+ CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr].wMinute * 60 
-					+ CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr].wSecond 
-					+ m_nStartPos / 1000;
-
-	m_TimeRangeDlg.m_StartDateTime.wHour = (WORD)(dwTime / 3600) % 24;
-	m_TimeRangeDlg.m_StartDateTime.wMinute = (WORD)(dwTime / 60) % 60;
-	m_TimeRangeDlg.m_StartDateTime.wSecond = (WORD)(dwTime % 60);
-	memcpy(&m_TimeRangeDlg.m_EndDateTime, &CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr], sizeof(SYSTEMTIME));
-
-	dwTime = CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr].wHour * 3600 
-					+ CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr].wMinute * 60 
-					+ CNewProjDlg::m_DateTime[CNewProjDlg::m_nPathArraysPtr].wSecond 
-					+ m_nEndPos / 1000;
-
-	m_TimeRangeDlg.m_EndDateTime.wHour = (WORD)(dwTime / 3600) % 24;
-	m_TimeRangeDlg.m_EndDateTime.wMinute = (WORD)(dwTime / 60) % 60;
-	m_TimeRangeDlg.m_EndDateTime.wSecond = (WORD)(dwTime % 60);
-	m_TimeRangeDlg.m_bRecordCurFlag = true;
-
-	m_bClickedStop = false;
-	OnStop();
-	m_bClickedStop = true;
-	
-	m_TimeRangeDlg.UpdateWnd();
-	m_TimeRangeDlg.m_1stFile = &m_1stFile;
-	if (CNewProjDlg::g_config_Value_ST.nWndCounts == 2)
-		m_TimeRangeDlg.m_2ndFile = &m_2ndFile;
-
-	m_TimeRangeDlg.m_flt_1stStartPos = (float)m_nStartPos / m_Slider_Seek.GetRangeMax();
-	m_TimeRangeDlg.m_flt_1stEndPos = (float)m_nEndPos / m_Slider_Seek.GetRangeMax();
-	m_TimeRangeDlg.m_flt_2ndStartPos = (float) m_nStartPos / m_Slider_Seek.GetRangeMax();
-	m_TimeRangeDlg.m_flt_2ndEndPos = (float)m_nEndPos / m_Slider_Seek.GetRangeMax();
-
-	if (m_n2ndRecordStopPos == -1) 
-		m_n2ndRecordStopPos = m_nEndPos;
-
-	m_TimeRangeDlg.m_flt_2ndStopPos = (float)m_n2ndRecordStopPos / m_Slider_Seek.GetRangeMax();
-	
-	m_TimeRangeDlg.ShowWindow(SW_SHOW);
-	
-#if 0
-		KillTimer(TIMER_PLAYER1);
-		KillTimer(TIMER_PLAYER2);
-		KillTimer(TIMER_SLIDER);
-
-		m_bClickedStop = false;
-		OnStop();
-		m_bClickedStop = true;
-		
-		wchar_t		szFilter[]= _T("AVI Files(*.avi)|*.avi|");
-		CFileDialog	dlg(FALSE,NULL,NULL,OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT, szFilter);
-		if (dlg.DoModal() ==IDOK)
-		{
-			m_AviPathStr = dlg.GetPathName();
-			m_AviPathStr += _T(".avi");
-			m_ProgressDlg.m_AVIFilePath = m_AviPathStr;
-			if (CNewProjDlg::g_config_Value_ST.nWndCounts == 2)
-				m_ProgressDlg.Init_AVI_Convert(&m_1stFile, &m_2ndFile, (float)m_nStartPos / m_Slider_Seek.GetRangeMax(), (float)m_nEndPos / m_Slider_Seek.GetRangeMax(),(float) m_nStartPos / m_Slider_Seek.GetRangeMax() , (float)m_nEndPos / m_Slider_Seek.GetRangeMax());
-			else if (CNewProjDlg::g_config_Value_ST.nWndCounts == 1 && CNewProjDlg::g_config_Value_ST.nSelWndID == 1)
-				m_ProgressDlg.Init_AVI_Convert(&m_1stFile, NULL, (float)m_nStartPos / m_Slider_Seek.GetRangeMax(), (float)m_nEndPos / m_Slider_Seek.GetRangeMax(), 0, 0);
-			else if (CNewProjDlg::g_config_Value_ST.nWndCounts == 1 && CNewProjDlg::g_config_Value_ST.nSelWndID == 2)
-				m_ProgressDlg.Init_AVI_Convert(NULL, &m_2ndFile, 0, 0, (float)m_nStartPos / m_Slider_Seek.GetRangeMax(), (float)m_nEndPos / m_Slider_Seek.GetRangeMax());
-		}
-		m_ProgressDlg.ShowWindow(SW_SHOW | SW_SHOWNORMAL);
-#endif
-
-	GetDlgItem(IDC_PLAY)->EnableWindow(true);
-	SetDlgItemText(IDC_PLAY, _T("Play"));
-
-	HBITMAP hBmp;
-	HINSTANCE hInst;
-
-	hInst = AfxFindResourceHandle(MAKEINTRESOURCE(IDB_BITMAP_BKCOLOR), RT_BITMAP);
-	hBmp = (HBITMAP)::LoadImage(hInst, MAKEINTRESOURCE(IDB_BITMAP_PLAY), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE);
-	m_btn_Play.SetBitmap(hBmp);
-
-	GetDlgItem(IDC_STOP)->EnableWindow(true);
-	GetDlgItem(IDC_FAST)->EnableWindow(true);
-	GetDlgItem(IDC_NORMAL)->EnableWindow(true);
-	GetDlgItem(IDC_SLOW)->EnableWindow(true);
-	GetDlgItem(IDC_PREV_SEG)->EnableWindow(false);
-	GetDlgItem(IDC_NEXT_SEG)->EnableWindow(false);
-	GetDlgItem(IDC_FORWARD)->EnableWindow(false);
-	GetDlgItem(IDC_BACK)->EnableWindow(false);
-	GetDlgItem(IDC_RECORD_BEGIN)->EnableWindow(true);
-	GetDlgItem(IDC_RECORD_END)->EnableWindow(false);
-	GetDlgItem(IDC_START_CUT)->EnableWindow(true);
-	GetDlgItem(IDC_END_CUT)->EnableWindow(false);
-	GetDlgItem(IDC_1FRAME)->EnableWindow(true);
-	GetDlgItem(IDC_2FRAME)->EnableWindow(true);
-	GetDlgItem(IDC_SNAPSHOT)->EnableWindow(true);
-	GetDlgItem(IDC_AVI)->EnableWindow(true);
-	GetDlgItem(IDC_ADJUST)->EnableWindow(true);
-	GetDlgItem(IDC_FULLSCREEN)->EnableWindow(true);
-	GetDlgItem(IDC_REPAIR_FILE)->EnableWindow(true);
-
-	m_bClickedStop = false;
-	OnStop();
-	m_bClickedStop = true;
-}
-#endif
 
 void CToolBarDlg::OnFast() 
 {

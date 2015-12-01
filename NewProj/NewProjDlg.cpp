@@ -384,6 +384,11 @@ void CNewProjDlg::OnFileOpen()
 		return;
 	}
 
+
+	// set nSelWndID to 1 for sound echo when begin videos
+	CNewProjDlg::g_config_Value_ST.nSelWndID = 1;
+
+
 	file.Write(&CNewProjDlg::g_config_Value_ST, sizeof(CNewProjDlg::g_config_Value_ST));
 	file.Close();
 

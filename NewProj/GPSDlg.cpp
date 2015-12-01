@@ -190,7 +190,7 @@ void CGPSDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	if (nIDEvent == TIMER_GPS_MAP)
 	{	
-		RunMapCommand(MAP_CMD_SET_MARKER, &m_stCurrGpsInfo);		
+		RunMapCommand(MAP_CMD_SET_MARKER, &m_stCurrGpsInfo);
 	}
 
 	
@@ -409,9 +409,9 @@ CString CGPSDlg::GetBrowserContent()
 			strHtml += L"'<div id=\"siteNotice\">'+";
 			strHtml += L"'</div>'+";
 			strHtml += L"'<div id=\"bodyContent\">'+";
-			strHtml += L"'<b>TIME</b> :' + strTime + '<br/>' + ";
-			strHtml += L"'<b>Current Time</b> :' + strCurrTime + '<br/>' + ";
-			strHtml += L"'<b>SPEED</b> :' + strSpeed + '<br/>' + ";
+			strHtml += L"'<b>TIME</b> : ' + strTime + '<br/>' + ";
+			strHtml += L"'<b>Current Time</b> : ' + strCurrTime + '<br/>' + ";
+			strHtml += L"'<b>SPEED</b> : ' + strSpeed + '<br/>' + ";
 			strHtml += L"'</div>'+";
 			strHtml += L"'</div>';";
 

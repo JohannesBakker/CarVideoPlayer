@@ -11,6 +11,8 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+#define SOUND_BUFFER_REFILLING_NUMBER	3 // original - 2
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -64,6 +66,7 @@ bool CSoundOut::Start(WAVEFORMATEX* format)
 		
 		// open wavein device
 		mmReturn = ::waveOutOpen( &m_hPlay, WAVE_MAPPER, &m_Format, m_ThreadID, NULL, CALLBACK_THREAD);
+		
 		//waveOutSetPlaybackRate(m_hPlay, 0x000F8000);
 		//waveOutSetPitch(m_hPlay, 0x000F8000);
 		
@@ -77,7 +80,7 @@ bool CSoundOut::Start(WAVEFORMATEX* format)
 			m_bPlaying = true;
 			
 			// we need at least 2 -> one for playing, one for refilling (3 is better)
- 			for(int i=0; i<2; i++)
+			for (int i = 0; i < SOUND_BUFFER_REFILLING_NUMBER; i++)			
  			{
 				CBuffer buf(/*m_Format.nBlockAlign**/m_BufferSize, false);
 				GetDataToSoundOut(&buf, m_pOwner);
