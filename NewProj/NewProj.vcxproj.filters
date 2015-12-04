@@ -946,5 +946,248 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="googlemap.html" />
+    <None Include="Resource\Image\Bmp2\bmp20139.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31011.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31010.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31009.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31008.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31007.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31006.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31005.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31004.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31003.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31002.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31001.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur31000.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur30999.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur30998.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Cur\cur30977.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\10-8Player.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Play.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\AVI.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Back.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\CutEnd.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\CutStart.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Fast.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\FullScr.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\NextSeg.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Normal.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\OneWnd.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Pause.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\PrevSeg.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\RecEnd.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\RecStart.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Repair.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Slow.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Stop.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\TwoWnd.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Adjust.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Forward.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\SnapShot.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\bmp20162.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\bmp20163.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Button_Normal.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Button_Clicked.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\bmp00002.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\AVI_Stop.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Icon\icon1.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Icon.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\bmp00001.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\VolumeSlider.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\VolumeSliderActive.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\VolumeThumb.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\VolumeThumbActive.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\combo center.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\comboleft.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\comboright.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\list_bot.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\list_left.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\list_right.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\list_top.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\ok.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Cancel.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Change.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\App.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Open.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Restor_Default.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\Start.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\VideoParamSlider.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\VideoParamThumb.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\1White.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\2White.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\1Red.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\2Red.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\3Red.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\3White.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\SeekSlider.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\SeekCursor.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Bmp2\RedCircle.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Icon\checked.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Icon\ico20128.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Icon\unchecked.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Icon\radiooff.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\Image\Icon\radioon.ico">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

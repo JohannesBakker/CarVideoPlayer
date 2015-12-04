@@ -633,7 +633,6 @@ BEGIN
     PUSHBUTTON      "Open",IDC_OUTPUT_OPEN_BUTTON,347,296,58,14,BS_BITMAP
     PUSHBUTTON      "Open",IDC_TARGET_OPEN_BUTTON,347,326,58,13,BS_BITMAP
     CONTROL         "Progress1",IDC_PROGRESS,"msctls_progress32",WS_BORDER,81,268,260,15
-    COMBOBOX        IDC_SELECT_AUDIO_COMBO,78,159,335,13,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     CONTROL         "Picture Flip",IDC_CHECK_PICTURE_FLIP,"Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,77,182,76,10
     CONTROL         "File converted into MP4 format (Note: Conversion process is slow)",IDC_CHECK_MP4_CONVERT,
                     "Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,77,200,280,10
@@ -641,6 +640,7 @@ BEGIN
     CONTROL         "keep the original size",IDC_RADIO_ORIGINAL_SIZE,"Button",BS_AUTORADIOBUTTON | BS_ICON,89,250,86,9
     CONTROL         "4 : 3",IDC_RADIO_43,"Button",BS_AUTORADIOBUTTON | BS_ICON,195,249,46,10,WS_EX_TRANSPARENT
     CONTROL         "16 : 9",IDC_RADIO_16_9,"Button",BS_AUTORADIOBUTTON | BS_ICON,287,249,41,10,WS_EX_TRANSPARENT
+    COMBOBOX        IDC_SELECT_AUDIO_COMBO,79,160,336,60,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
 END
 
 20136 DIALOGEX 0, 0, 186, 90
@@ -1094,6 +1094,10 @@ END
 #ifdef APSTUDIO_INVOKED
 GUIDELINES DESIGNINFO
 BEGIN
+    IDD_AVI_CONVERTER, DIALOG
+    BEGIN
+    END
+
     IDD_TOOLBAR, DIALOG
     BEGIN
     END
@@ -1530,7 +1534,7 @@ END
 LANGUAGE 9, 1
 #pragma code_page(1252)
 #endif //_WIN32
-#include "Resource\res\NewProj.rc2"  // non-Microsoft Visual C++ edited resources
+#include "res\NewProj.rc2"  // non-Microsoft Visual C++ edited resources
 #include "afxres.rc"         // Standard components
 #endif
 

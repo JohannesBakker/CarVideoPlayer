@@ -200,6 +200,7 @@
 #define IDC_STATIC_BEGIN                1182
 #define IDC_STATIC_SEARCH_BEGIN         1182
 #define IDC_RADIO1                      1186
+#define IDC_COMBO1                      1191
 #define IDC_HUE_SLIDER                  1311
 #define IDC_HUE_STATIC                  1312
 #define IDC_HUE_EDIT                    1313
@@ -436,7 +437,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        228
 #define _APS_NEXT_COMMAND_VALUE         32799
-#define _APS_NEXT_CONTROL_VALUE         1191
+#define _APS_NEXT_CONTROL_VALUE         1192
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

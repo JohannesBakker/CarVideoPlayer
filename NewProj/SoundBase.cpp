@@ -17,7 +17,6 @@ static char THIS_FILE[]=__FILE__;
 
 CSoundBase::CSoundBase()
 {
-#if 1
 	m_Format.wFormatTag	= WAVE_FORMAT_PCM;
 	SetNumberOfChannels(1);
 	SetSamplesPerSecond(8000);
@@ -27,33 +26,6 @@ CSoundBase::CSoundBase()
 	m_Format.cbSize		= 0;
 
 	m_BufferSize		= 1600;  // samples per callback
-	
-	
-	
-	
-	
-
-#else
-// Original Code
-	m_Format.wFormatTag	= WAVE_FORMAT_PCM;
-	m_Format.cbSize		= 0;
-	m_BufferSize		= 1600;  // samples per callback
-	SetBitsPerSample(16);
-	SetSamplesPerSecond(8000);
-	m_Format.nAvgBytesPerSec = 16000;
-	SetNumberOfChannels(1);
-	m_Format.nBlockAlign = 2;
-#endif
-
-#if 0
-	m_Format.wFormatTag = WAVE_FORMAT_PCM;
-	m_Format.nChannels = 1;
-	m_Format.nSamplesPerSec = 8000;
-	m_Format.nAvgBytesPerSec = 16000;
-	m_Format.nBlockAlign = 2;
-	m_Format.wBitsPerSample = 16;
-	m_Format.cbSize = 0;
-#endif
 }
 
 CSoundBase::~CSoundBase()
