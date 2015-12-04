@@ -945,5 +945,6 @@
     <None Include="Bmp2\RedCircle.bmp">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="googlemap.html" />
   </ItemGroup>
 </Project>

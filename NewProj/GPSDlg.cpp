@@ -15,7 +15,7 @@ static char THIS_FILE[] = __FILE__;
 
 #define TIMER_INTERVAL	2000	//1500
 #define DEFAULT_IMAGE_NAME	_T("1.png")
-//#define DEFAULT_IMAGE_NAME	_T("")
+#define GOOGLEMAP_HTML_NAME		L"googlemap.html"
 
 #define OFFSET_LAT	-0.0003
 #define OFFSET_LNG	0.0000
@@ -29,6 +29,8 @@ static char THIS_FILE[] = __FILE__;
 
 #define MAP_ZOOM_DEFAULT		1
 #define MAP_ZOOM_ROAD			16
+
+#define LIMITED_SHOW_MAP_TIME_MILISECONDS	0//11000
 
 
 typedef struct {
@@ -63,8 +65,6 @@ void CGPSDlg::DoDataExchange(CDataExchange* pDX)
 	//{{AFX_DATA_MAP(CGPSDlg)
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_EXPLORER1, m_vwMapBrowser);
-	
-	
 }
 
 
@@ -95,7 +95,8 @@ BOOL CGPSDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 
 	// init map browser
-	m_vwMapBrowser.Navigate(_T("about:blank"), NULL, NULL, NULL, NULL);
+	//m_vwMapBrowser.Navigate(_T("about:blank"), NULL, NULL, NULL, NULL);
+	LoadBrowser();
 	m_vwMapBrowser.ShowScrollBar(SB_VERT, false);
 	m_vwMapBrowser.ShowScrollBar(SB_HORZ, false);
 
@@ -104,12 +105,10 @@ BOOL CGPSDlg::OnInitDialog()
 	ResetGpsMapInfo(&m_stPrevGpsInfo);
 	ResetGpsMapInfo(&m_stCurrGpsInfo);
 
-	m_bInitComplete = true;
-
 	m_szImageName = DEFAULT_IMAGE_NAME;
 	m_nIgnoreCounter = 0;
 
-	LoadBrowser();
+	m_bInitComplete = true;
 	
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
@@ -160,7 +159,6 @@ void CGPSDlg::DisplayGpsMap(MainBinaryData * pMBDatas, DWORD dwFirstDTS, DWORD d
 			return;
 		}
 
-
 		int deg = GetBearingLocation(pPrevGps->fLat, pPrevGps->fLon, pCurrGps->fLat, pCurrGps->fLon);
 		CString szImageName = GetCarImageName(deg);
 
@@ -180,19 +178,17 @@ void CGPSDlg::DisplayGpsMap(MainBinaryData * pMBDatas, DWORD dwFirstDTS, DWORD d
 	if (m_stInitGpsInfo.stGpsPos.fLat == 0 && m_stInitGpsInfo.stGpsPos.fLon == 0)
 	{
 		SetGpsMapInfo(&m_stInitGpsInfo, &m_stCurrGpsInfo);
-	}
-
-	
-		
+	}	
 }
 
 void CGPSDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	if (nIDEvent == TIMER_GPS_MAP)
 	{	
-		RunMapCommand(MAP_CMD_SET_MARKER, &m_stCurrGpsInfo);
+		if (m_bInitComplete == true) {
+			RunMapCommand(MAP_CMD_SET_MARKER, &m_stCurrGpsInfo);
+		}
 	}
-
 	
 	CDialog::OnTimer(nIDEvent);
 }
@@ -330,121 +326,19 @@ void CGPSDlg::ResetGpsDialog(bool bResetMap)
 	}
 }
 
-CString CGPSDlg::GetBrowserContent()
-{
-	CString strHtml = L"";
-
-	
-	strHtml = L"<!DOCTYPE html><html>";
-
-	// html Head
-	strHtml += L"<head>";
-	strHtml += L"<meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\"><meta charset=\"utf-8\">";
-	strHtml += L"<title>Simple icons</title>";
-	strHtml += L"<style>html, body {height: 100%;margin: 0px;padding: 0px} #map-canvas {height: 100%;margin: 0px;padding: 0px}</style>";	
-	strHtml += L"</head>";
-
-	// html body
-	strHtml += L"<body>";
-	strHtml += L"<div id=\"map-canvas\"></div>";
-
-	strHtml += L"<script src=\"https://maps.googleapis.com/maps/api/js?sensor=false\"></script>";
-
-	// functions
-	strHtml += L"<script type=\"text/javascript\">";
-	{
-		CString szLat, szLon, szZoom;
-
-		// define global variables
-		strHtml += L"var g_map; ";
-		strHtml += L"var g_currPositionMarker; ";
-		strHtml += L"var g_infowindow; ";
-
-		//=======================
-		// initialize function
-		//=======================
-		{
-			szLat.Format(L"%f", LOCATION_DEFAULT_LAT);
-			szLon.Format(L"%f", LOCATION_DEFAULT_LON);
-			szZoom.Format(L"%d", MAP_ZOOM_DEFAULT);
-
-			// initial location : (22.573978188551297, 113.92078757286072), zoom : 1;
-			strHtml += L"function initialize() { ";
-			
-			strHtml += L"var mapOptions = {center: { lat: " + szLat + L", lng: " + szLon + L"},zoom: " + szZoom + "}; ";
-			strHtml += L"var myLatLng = new google.maps.LatLng(" + szLat + L", " + szLon + L"); ";
-			
-			strHtml += L"g_map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); ";
-			strHtml += L"g_currPositionMarker = new google.maps.Marker({position: myLatLng, map: g_map, icon: \" \"}); ";
-			strHtml += L"g_infowindow = new google.maps.InfoWindow( {";
-			strHtml += L"content: \"\",";
-			strHtml += L"maxWidth: 220";
-			strHtml += L"} );";
-
-			// add info window to marker
-			strHtml += L"g_currPositionMarker.addListener('click', function() {";
-			strHtml += L"g_infowindow.open(g_map, g_currPositionMarker); ";
-			strHtml += L"} ); ";
-
-			strHtml += L"} ";
-
-			// register load function with "initialize"
-			strHtml += L"google.maps.event.addDomListener(window, 'load', initialize); ";
-		}
-
-		//=======================
-		// setMarker function
-		//=======================
-		{
-			szZoom.Format(L"%d", MAP_ZOOM_ROAD);
-
-			// function begin
-			strHtml += L"function setMarker(strLat, strLon, strImage, strTime, strCurrTime, strSpeed) { ";
-
-			// define variables
-			strHtml += L"var _zoom = g_map.getZoom(); ";
-			strHtml += L"var image = strImage; ";
-			strHtml += L"var myLatLng = new google.maps.LatLng(strLat, strLon); ";
-			strHtml += L"var contentString = '<div id=\"content\">'+";
-			strHtml += L"'<div id=\"siteNotice\">'+";
-			strHtml += L"'</div>'+";
-			strHtml += L"'<div id=\"bodyContent\">'+";
-			strHtml += L"'<b>TIME</b> : ' + strTime + '<br/>' + ";
-			strHtml += L"'<b>Current Time</b> : ' + strCurrTime + '<br/>' + ";
-			strHtml += L"'<b>SPEED</b> : ' + strSpeed + '<br/>' + ";
-			strHtml += L"'</div>'+";
-			strHtml += L"'</div>';";
-
-			// set values of map, marker, infowindow			
-			strHtml += L"g_map.setCenter(myLatLng); ";
-			strHtml += L"if (_zoom != " + szZoom + L") {";
-			strHtml += L"g_map.setZoom(" + szZoom + L"); } ";
-			
-			strHtml += L"g_currPositionMarker.setPosition(myLatLng); ";
-			strHtml += L"g_currPositionMarker.setIcon(image); ";
-			strHtml += L"g_infowindow.setContent(contentString); ";
-			strHtml += L"g_infowindow.open(g_map, g_currPositionMarker); ";
-
-			// function end
-			strHtml += L"} ";
-		}
-	}
-	strHtml += L"</script>";
-	
-	strHtml += L"</body></html>";
-	
-	return strHtml;
-}
-
-
 void CGPSDlg::LoadBrowser()
 {
-	CString strContent = GetBrowserContent();
+	TCHAR pathBuf[MAX_PATH];
+	CString szMapHtmlPath = L"";
 
+	GetCurrentDirectory(MAX_PATH, pathBuf);
+	szMapHtmlPath.Format(L"file://%s\\%s", pathBuf, GOOGLEMAP_HTML_NAME);
+
+
+	BSTR bstrURL = SysAllocString(szMapHtmlPath);
 	CHTMLWriter htmlWriter(m_vwMapBrowser.GetControlUnknown());
-	htmlWriter.Write(strContent);
+	htmlWriter.SetMapBrowser(bstrURL);
 }
-
 
 
 void CGPSDlg::RunMapCommand(MapCommand_t command, GpsMapInfo_t* pGpsMapInfo)
@@ -541,9 +435,14 @@ void CGPSDlg::RunMapCommand(MapCommand_t command, GpsMapInfo_t* pGpsMapInfo)
 	switch (command)
 	{
 		case MAP_CMD_SET_MARKER:
-			strHtml = L"Javascript:setMarker(\"" + strLat + L"\", \"" + strLon + L"\", \"" + strImagePath + L"\", ";
+			// add function checker
+			strHtml = L"Javascript:if (typeof setMarker === \"undefined\") {}";
+			strHtml += L"else {";
+
+			strHtml += L"setMarker(\"" + strLat + L"\", \"" + strLon + L"\", \"" + strImagePath + L"\", ";
 			strHtml += "\"" + strTime + L"\", \"" + strCurrTime + L"\", \"" + strSpeed + L"\"";
 			strHtml += L"); ";
+			strHtml += L"}";			
 			break;
 
 		default:

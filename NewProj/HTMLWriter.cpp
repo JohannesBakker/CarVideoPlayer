@@ -153,6 +153,8 @@ bool CHTMLWriter::RunScript( LPCTSTR pszHTMLContent )
 
 					if (SUCCEEDED(hr))
 						bResult = true;
+					else
+						bResult = false;
 				}
 			}
 		}
@@ -160,4 +162,16 @@ bool CHTMLWriter::RunScript( LPCTSTR pszHTMLContent )
 		pHTMLDoc->Release();
 	}
 	return bResult;
+}
+
+bool CHTMLWriter::SetMapBrowser(BSTR szHtmlPath)
+{
+	
+	HRESULT hr = m_pWB->Navigate(szHtmlPath, NULL, NULL, NULL, NULL);
+	if (SUCCEEDED(hr))
+	{
+		m_pWB->put_Visible(VARIANT_TRUE);
+	}
+
+	return true;
 }

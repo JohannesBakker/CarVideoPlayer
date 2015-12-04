@@ -1,0 +1,94 @@
+<!DOCTYPE html><html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no"><meta charset="utf-8">
+<title>Simple icons</title>
+<style>html, body {height: 100%;margin: 0px;padding: 0px} #map-canvas {height: 100%;margin: 0px;padding: 0px}</style>
+</head>
+
+<body>
+<div id="map-canvas"></div>
+<script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false"></script>
+
+<script type="text/javascript">
+
+	var g_map;
+	var g_currPositionMarker;
+	var g_infowindow;
+	var g_initedMap = false;
+
+	function setMarker(strLat, strLon, strImage, strTime, strCurrTime, strSpeed) 
+	{
+		if (typeof google === 'object' && typeof google.maps === 'object')
+		{
+			if (g_initedMap == true)
+			{
+				// define variables
+				var _zoom = g_map.getZoom();
+				var image = strImage;
+				var myLatLng = new google.maps.LatLng(strLat, strLon);
+				var contentString = '<div id="content">' +
+							'<div id="siteNotice">' +
+							'</div>' + 
+							'<div id="bodyContent">' + 
+							'<b>TIME</b> : ' + strTime + '<br/>' + 
+							'<b>Current Time</b> : ' + strCurrTime + '<br/>' + 
+							'<b>SPEED</b> : ' + strSpeed + '<br/>' + 
+							'</div>' + 
+							'</div>';
+
+				// set values of map, marker, infowindow			
+				g_map.setCenter(myLatLng);
+				if (_zoom != 16) 
+				{
+					g_map.setZoom(16);
+				}
+					
+				g_currPositionMarker.setPosition(myLatLng);
+				g_currPositionMarker.setIcon(image);
+				g_infowindow.setContent(contentString);
+				g_infowindow.open(g_map, g_currPositionMarker);
+			}
+		}
+		
+	} // function end
+
+	
+
+	// initial location : (22.573978188551297, 113.92078757286072), zoom : 1;
+	function initialize() 
+	{
+		if (typeof google === 'object' && typeof google.maps === 'object')
+		{
+			var mapOptions = {center: { lat: 22.57397, lng: 113.92078},zoom: 1};
+			var myLatLng = new google.maps.LatLng(22.57397, 113.92078);
+				
+			g_map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); 
+			g_currPositionMarker = new google.maps.Marker({position: myLatLng, map: g_map, icon: " "});
+			g_infowindow = new google.maps.InfoWindow( {
+				content: "",
+				maxWidth: 220
+			} );
+
+			// add info window to marker
+			g_currPositionMarker.addListener('click', function() {
+				g_infowindow.open(g_map, g_currPositionMarker);
+			} );
+
+			g_initedMap = true;
+		}
+		else
+		{
+		}
+	}	// function end
+
+	if (typeof google === 'object' && typeof google.maps === 'object')
+	{
+		// register load function with "initialize"
+		google.maps.event.addDomListener(window, 'load', initialize);
+	}
+
+</script>
+</body>
+</html>
+
+

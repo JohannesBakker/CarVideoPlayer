@@ -17,6 +17,7 @@ public:
 	bool Write( LPCTSTR pszHTMLContent );
 	bool Add( LPCTSTR pszHTMLContent );
 	bool RunScript(LPCTSTR pszHTMLContent);
+	bool SetMapBrowser(BSTR szHtmlPath);
 
 private:
 	CHTMLWriter( void ) {};

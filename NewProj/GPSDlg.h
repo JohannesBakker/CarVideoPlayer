@@ -89,7 +89,6 @@ public:
 	int				m_nIgnoreCounter;
 	
 
-
 	afx_msg void OnTimer(UINT_PTR nIDEvent); 
 
 
@@ -110,7 +109,6 @@ public:
 
 	void ResetGpsDialog(bool bResetMap);
 
-	CString GetBrowserContent();
 	void LoadBrowser();
 	void RunMapCommand(MapCommand_t command, GpsMapInfo_t* pGpsMapInfo);
 
