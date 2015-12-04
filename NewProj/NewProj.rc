@@ -29,7 +29,7 @@ LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
 // Bitmap
 //
 
-IDB_BITMAP_BKCOLOR      BITMAP                  "Bmp2\\bmp20139.bmp"
+IDB_BITMAP_BKCOLOR      BITMAP                  "Resource\\Image\\Bmp2\\bmp20139.bmp"
 #endif    // Japanese (Japan) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1002,21 +1002,21 @@ END
 // Cursor
 //
 
-31011                   CURSOR                  "Cur\\cur31011.cur"
-31010                   CURSOR                  "Cur\\cur31010.cur"
-31009                   CURSOR                  "Cur\\cur31009.cur"
-31008                   CURSOR                  "Cur\\cur31008.cur"
-31007                   CURSOR                  "Cur\\cur31007.cur"
-31006                   CURSOR                  "Cur\\cur31006.cur"
-31005                   CURSOR                  "Cur\\cur31005.cur"
-31004                   CURSOR                  "Cur\\cur31004.cur"
-31003                   CURSOR                  "Cur\\cur31003.cur"
-31002                   CURSOR                  "Cur\\cur31002.cur"
-31001                   CURSOR                  "Cur\\cur31001.cur"
-31000                   CURSOR                  "Cur\\cur31000.cur"
-30999                   CURSOR                  "Cur\\cur30999.cur"
-30998                   CURSOR                  "Cur\\cur30998.cur"
-30977                   CURSOR                  "Cur\\cur30977.cur"
+31011                   CURSOR                  "Resource\\Cur\\cur31011.cur"
+31010                   CURSOR                  "Resource\\Cur\\cur31010.cur"
+31009                   CURSOR                  "Resource\\Cur\\cur31009.cur"
+31008                   CURSOR                  "Resource\\Cur\\cur31008.cur"
+31007                   CURSOR                  "Resource\\Cur\\cur31007.cur"
+31006                   CURSOR                  "Resource\\Cur\\cur31006.cur"
+31005                   CURSOR                  "Resource\\Cur\\cur31005.cur"
+31004                   CURSOR                  "Resource\\Cur\\cur31004.cur"
+31003                   CURSOR                  "Resource\\Cur\\cur31003.cur"
+31002                   CURSOR                  "Resource\\Cur\\cur31002.cur"
+31001                   CURSOR                  "Resource\\Cur\\cur31001.cur"
+31000                   CURSOR                  "Resource\\Cur\\cur31000.cur"
+30999                   CURSOR                  "Resource\\Cur\\cur30999.cur"
+30998                   CURSOR                  "Resource\\Cur\\cur30998.cur"
+30977                   CURSOR                  "Resource\\Cur\\cur30977.cur"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1282,34 +1282,34 @@ LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
 // Bitmap
 //
 
-IDB_BITMAP10_8_PLAYER   BITMAP                  "10-8Player.bmp"
-IDB_BITMAP_PLAY         BITMAP                  "Bmp2\\Play.bmp"
-IDB_BITMAP_AVI          BITMAP                  "Bmp2\\AVI.bmp"
-IDB_BITMAP_BACK         BITMAP                  "Bmp2\\Back.bmp"
-IDB_BITMAP_CUTEND       BITMAP                  "Bmp2\\CutEnd.bmp"
-IDB_BITMAP_CUTSTART     BITMAP                  "Bmp2\\CutStart.bmp"
-IDB_BITMAP_FAST         BITMAP                  "Bmp2\\Fast.bmp"
-IDB_BITMAP_FULLSCR      BITMAP                  "Bmp2\\FullScr.bmp"
-IDB_BITMAP_NEXTSEG      BITMAP                  "Bmp2\\NextSeg.bmp"
-IDB_BITMAP_NORMAL       BITMAP                  "Bmp2\\Normal.bmp"
-IDB_BITMAP_ONEWND       BITMAP                  "Bmp2\\OneWnd.bmp"
-IDB_BITMAP_PAUSE        BITMAP                  "Bmp2\\Pause.bmp"
-IDB_BITMAP_PREVSEG      BITMAP                  "Bmp2\\PrevSeg.bmp"
-IDB_BITMAP_RECEND       BITMAP                  "Bmp2\\RecEnd.bmp"
-IDB_BITMAP_RECSTART     BITMAP                  "Bmp2\\RecStart.bmp"
-IDB_BITMAP_REPAIR       BITMAP                  "Bmp2\\Repair.bmp"
-IDB_BITMAP_SLOW         BITMAP                  "Bmp2\\Slow.bmp"
-IDB_BITMAP_STOP         BITMAP                  "Bmp2\\Stop.bmp"
-IDB_BITMAP_TWOWND       BITMAP                  "Bmp2\\TwoWnd.bmp"
-IDB_BITMAP_ADJUST       BITMAP                  "Bmp2\\Adjust.bmp"
-IDB_BITMAP_FORWARD      BITMAP                  "Bmp2\\Forward.bmp"
-IDB_BITMAP_SNAPSHOT     BITMAP                  "Bmp2\\SnapShot.bmp"
-IDB_BITMAP_VOL_ON       BITMAP                  "Bmp2\\bmp20162.bmp"
-IDB_BITMAP_VOL_OFF      BITMAP                  "Bmp2\\bmp20163.bmp"
-IDB_BITMAP_BTN_NORMAL   BITMAP                  "Bmp2\\Button_Normal.bmp"
-IDB_BITMAP_BTN_CLICKED  BITMAP                  "Bmp2\\Button_Clicked.bmp"
-IDB_OKU                 BITMAP                  "res\\bmp00002.bmp"
-IDB_BITMAP_AVI_STOP     BITMAP                  "Bmp2\\AVI_Stop.bmp"
+IDB_BITMAP10_8_PLAYER   BITMAP                  "Resource\\Image\\10-8Player.bmp"
+IDB_BITMAP_PLAY         BITMAP                  "Resource\\Image\\Bmp2\\Play.bmp"
+IDB_BITMAP_AVI          BITMAP                  "Resource\\Image\\Bmp2\\AVI.bmp"
+IDB_BITMAP_BACK         BITMAP                  "Resource\\Image\\Bmp2\\Back.bmp"
+IDB_BITMAP_CUTEND       BITMAP                  "Resource\\Image\\Bmp2\\CutEnd.bmp"
+IDB_BITMAP_CUTSTART     BITMAP                  "Resource\\Image\\Bmp2\\CutStart.bmp"
+IDB_BITMAP_FAST         BITMAP                  "Resource\\Image\\Bmp2\\Fast.bmp"
+IDB_BITMAP_FULLSCR      BITMAP                  "Resource\\Image\\Bmp2\\FullScr.bmp"
+IDB_BITMAP_NEXTSEG      BITMAP                  "Resource\\Image\\Bmp2\\NextSeg.bmp"
+IDB_BITMAP_NORMAL       BITMAP                  "Resource\\Image\\Bmp2\\Normal.bmp"
+IDB_BITMAP_ONEWND       BITMAP                  "Resource\\Image\\Bmp2\\OneWnd.bmp"
+IDB_BITMAP_PAUSE        BITMAP                  "Resource\\Image\\Bmp2\\Pause.bmp"
+IDB_BITMAP_PREVSEG      BITMAP                  "Resource\\Image\\Bmp2\\PrevSeg.bmp"
+IDB_BITMAP_RECEND       BITMAP                  "Resource\\Image\\Bmp2\\RecEnd.bmp"
+IDB_BITMAP_RECSTART     BITMAP                  "Resource\\Image\\Bmp2\\RecStart.bmp"
+IDB_BITMAP_REPAIR       BITMAP                  "Resource\\Image\\Bmp2\\Repair.bmp"
+IDB_BITMAP_SLOW         BITMAP                  "Resource\\Image\\Bmp2\\Slow.bmp"
+IDB_BITMAP_STOP         BITMAP                  "Resource\\Image\\Bmp2\\Stop.bmp"
+IDB_BITMAP_TWOWND       BITMAP                  "Resource\\Image\\Bmp2\\TwoWnd.bmp"
+IDB_BITMAP_ADJUST       BITMAP                  "Resource\\Image\\Bmp2\\Adjust.bmp"
+IDB_BITMAP_FORWARD      BITMAP                  "Resource\\Image\\Bmp2\\Forward.bmp"
+IDB_BITMAP_SNAPSHOT     BITMAP                  "Resource\\Image\\Bmp2\\SnapShot.bmp"
+IDB_BITMAP_VOL_ON       BITMAP                  "Resource\\Image\\Bmp2\\bmp20162.bmp"
+IDB_BITMAP_VOL_OFF      BITMAP                  "Resource\\Image\\Bmp2\\bmp20163.bmp"
+IDB_BITMAP_BTN_NORMAL   BITMAP                  "Resource\\Image\\Bmp2\\Button_Normal.bmp"
+IDB_BITMAP_BTN_CLICKED  BITMAP                  "Resource\\Image\\Bmp2\\Button_Clicked.bmp"
+IDB_OKU                 BITMAP                  "Resource\\Image\\bmp00002.bmp"
+IDB_BITMAP_AVI_STOP     BITMAP                  "Resource\\Image\\Bmp2\\AVI_Stop.bmp"
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -1356,7 +1356,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "bmp2\\icon1.ico"
+IDI_ICON1               ICON                    "Resource\\Image\\Icon\\icon1.ico"
 #endif    // Chinese (Traditional, Taiwan) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1373,37 +1373,37 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Bitmap
 //
 
-IDB_BITMAP_ICON         BITMAP                  "Bmp2\\Icon.bmp"
-IDB_OKD                 BITMAP                  "res\\bmp00001.bmp"
-IDB_VOLUME_SLIDER       BITMAP                  "Bmp2\\VolumeSlider.bmp"
-IDB_VOLUME_SLIDER_ACTIVE BITMAP                  "Bmp2\\VolumeSliderActive.bmp"
-IDB_VOLUME_THUMB        BITMAP                  "Bmp2\\VolumeThumb.bmp"
-IDB_VOLUME_THUMB_ACTIVE BITMAP                  "Bmp2\\VolumeThumbActive.bmp"
-IDB_COMBO_CEN           BITMAP                  "Bmp2\\combo center.bmp"
-IDB_COMBO_LEFT          BITMAP                  "Bmp2\\comboleft.bmp"
-IDB_COMBO_RIGHT         BITMAP                  "Bmp2\\comboright.bmp"
-IDB_LIST_BOT            BITMAP                  "Bmp2\\list_bot.bmp"
-IDB_LIST_LEFT           BITMAP                  "Bmp2\\list_left.bmp"
-IDB_LIST_RIGHT          BITMAP                  "Bmp2\\list_right.bmp"
-IDB_LIST_TOP            BITMAP                  "Bmp2\\list_top.bmp"
-IDB_BUTTON_OK           BITMAP                  "Bmp2\\ok.bmp"
-IDB_BUTTON_CANCEL       BITMAP                  "Bmp2\\Cancel.bmp"
-IDB_BUTTON_CHANGE       BITMAP                  "Bmp2\\Change.bmp"
-IDB_BUTTON_APP          BITMAP                  "Bmp2\\App.bmp"
-IDB_BUTTON_OPEN         BITMAP                  "Bmp2\\Open.bmp"
-IDB_BUTTON_RESTORE      BITMAP                  "Bmp2\\Restor_Default.bmp"
-IDB_BUTTON_START        BITMAP                  "Bmp2\\Start.bmp"
-IDB_VIDEO_PARAM_SLIDER  BITMAP                  "Bmp2\\VideoParamSlider.bmp"
-IDB_VIDEO_PARAM_THUMB   BITMAP                  "Bmp2\\VideoParamThumb.bmp"
-IDB_NUMBER_ONE_WHITE    BITMAP                  "Bmp2\\1White.bmp"
-IDB_NUMBER_TWO_WHITE    BITMAP                  "Bmp2\\2White.bmp"
-IDB_NUMBER_ONE_RED      BITMAP                  "Bmp2\\1Red.bmp"
-IDB_NUMBER_TWO_RED      BITMAP                  "Bmp2\\2Red.bmp"
-IDB_NUMBER_THREE_RED    BITMAP                  "Bmp2\\3Red.bmp"
-IDB_NUMBER_THREE_WHITE  BITMAP                  "Bmp2\\3White.bmp"
-IDB_SEEK_SLIDER         BITMAP                  "Bmp2\\SeekSlider.bmp"
-IDB_SEEK_CURSOR         BITMAP                  "Bmp2\\SeekCursor.bmp"
-IDB_NUMBER_RED_CIRCLE   BITMAP                  "Bmp2\\RedCircle.bmp"
+IDB_BITMAP_ICON         BITMAP                  "Resource\\Image\\Bmp2\\Icon.bmp"
+IDB_OKD                 BITMAP                  "Resource\\Image\\bmp00001.bmp"
+IDB_VOLUME_SLIDER       BITMAP                  "Resource\\Image\\Bmp2\\VolumeSlider.bmp"
+IDB_VOLUME_SLIDER_ACTIVE BITMAP                  "Resource\\Image\\Bmp2\\VolumeSliderActive.bmp"
+IDB_VOLUME_THUMB        BITMAP                  "Resource\\Image\\Bmp2\\VolumeThumb.bmp"
+IDB_VOLUME_THUMB_ACTIVE BITMAP                  "Resource\\Image\\Bmp2\\VolumeThumbActive.bmp"
+IDB_COMBO_CEN           BITMAP                  "Resource\\Image\\Bmp2\\combo center.bmp"
+IDB_COMBO_LEFT          BITMAP                  "Resource\\Image\\Bmp2\\comboleft.bmp"
+IDB_COMBO_RIGHT         BITMAP                  "Resource\\Image\\Bmp2\\comboright.bmp"
+IDB_LIST_BOT            BITMAP                  "Resource\\Image\\Bmp2\\list_bot.bmp"
+IDB_LIST_LEFT           BITMAP                  "Resource\\Image\\Bmp2\\list_left.bmp"
+IDB_LIST_RIGHT          BITMAP                  "Resource\\Image\\Bmp2\\list_right.bmp"
+IDB_LIST_TOP            BITMAP                  "Resource\\Image\\Bmp2\\list_top.bmp"
+IDB_BUTTON_OK           BITMAP                  "Resource\\Image\\Bmp2\\ok.bmp"
+IDB_BUTTON_CANCEL       BITMAP                  "Resource\\Image\\Bmp2\\Cancel.bmp"
+IDB_BUTTON_CHANGE       BITMAP                  "Resource\\Image\\Bmp2\\Change.bmp"
+IDB_BUTTON_APP          BITMAP                  "Resource\\Image\\Bmp2\\App.bmp"
+IDB_BUTTON_OPEN         BITMAP                  "Resource\\Image\\Bmp2\\Open.bmp"
+IDB_BUTTON_RESTORE      BITMAP                  "Resource\\Image\\Bmp2\\Restor_Default.bmp"
+IDB_BUTTON_START        BITMAP                  "Resource\\Image\\Bmp2\\Start.bmp"
+IDB_VIDEO_PARAM_SLIDER  BITMAP                  "Resource\\Image\\Bmp2\\VideoParamSlider.bmp"
+IDB_VIDEO_PARAM_THUMB   BITMAP                  "Resource\\Image\\Bmp2\\VideoParamThumb.bmp"
+IDB_NUMBER_ONE_WHITE    BITMAP                  "Resource\\Image\\Bmp2\\1White.bmp"
+IDB_NUMBER_TWO_WHITE    BITMAP                  "Resource\\Image\\Bmp2\\2White.bmp"
+IDB_NUMBER_ONE_RED      BITMAP                  "Resource\\Image\\Bmp2\\1Red.bmp"
+IDB_NUMBER_TWO_RED      BITMAP                  "Resource\\Image\\Bmp2\\2Red.bmp"
+IDB_NUMBER_THREE_RED    BITMAP                  "Resource\\Image\\Bmp2\\3Red.bmp"
+IDB_NUMBER_THREE_WHITE  BITMAP                  "Resource\\Image\\Bmp2\\3White.bmp"
+IDB_SEEK_SLIDER         BITMAP                  "Resource\\Image\\Bmp2\\SeekSlider.bmp"
+IDB_SEEK_CURSOR         BITMAP                  "Resource\\Image\\Bmp2\\SeekCursor.bmp"
+IDB_NUMBER_RED_CIRCLE   BITMAP                  "Resource\\Image\\Bmp2\\RedCircle.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1460,11 +1460,11 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_CHECKED             ICON                    "Bmp2\\checked.ico"
-20128                   ICON                    "ico20128.ico"
-IDI_UNCHECKED           ICON                    "Bmp2\\unchecked.ico"
-IDI_RADIO_OFF           ICON                    "Bmp2\\radiooff.ico"
-IDI_RADIO_ON            ICON                    "Bmp2\\radioon.ico"
+IDI_CHECKED             ICON                    "Resource\\Image\\Icon\\checked.ico"
+20128                   ICON                    "Resource\\Image\\Icon\\ico20128.ico"
+IDI_UNCHECKED           ICON                    "Resource\\Image\\Icon\\unchecked.ico"
+IDI_RADIO_OFF           ICON                    "Resource\\Image\\Icon\\radiooff.ico"
+IDI_RADIO_ON            ICON                    "Resource\\Image\\Icon\\radioon.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1530,7 +1530,7 @@ END
 LANGUAGE 9, 1
 #pragma code_page(1252)
 #endif //_WIN32
-#include "res\NewProj.rc2"  // non-Microsoft Visual C++ edited resources
+#include "Resource\res\NewProj.rc2"  // non-Microsoft Visual C++ edited resources
 #include "afxres.rc"         // Standard components
 #endif
 

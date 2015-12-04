@@ -15,7 +15,7 @@ static char THIS_FILE[] = __FILE__;
 
 #define TIMER_INTERVAL	2000	//1500
 #define DEFAULT_IMAGE_NAME	_T("1.png")
-#define GOOGLEMAP_HTML_NAME		L"googlemap.html"
+#define GOOGLEMAP_HTML_NAME		L"Resource\\Html\\googlemap.html"
 
 #define OFFSET_LAT	-0.0003
 #define OFFSET_LNG	0.0000
@@ -367,7 +367,7 @@ void CGPSDlg::RunMapCommand(MapCommand_t command, GpsMapInfo_t* pGpsMapInfo)
 		strImagePath.Empty();
 	}	
 
-	strImagePath = L"file://" + strImagePath + L"/bmp2/Car/";
+	strImagePath = L"file://" + strImagePath + L"/Resource/Image/Png/Car/";
 	if (mapInfo.ubAlarmState == ALARM_STATE_NO_ALARM)
 		strImagePath += L"online/" + mapInfo.strCarImageName;
 	else

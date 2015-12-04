@@ -287,11 +287,11 @@ void CAVIConverterDlg::GetFiles(CFile* p1stFile, CFile* p2ndFile)
 
 void CAVIConverterDlg::InitHeaderDatas(int nWidth, int nHeight)
 {	
-	HINSTANCE hXvidEnc = LoadLibrary(_T("xvidcore.dll"));
+	HINSTANCE hXvidEnc = LoadLibrary(_T(".\\Resource\\DLL\\xvidcore.dll"));
 	m_Func_XvidEnc = (FuncAVI_Xvid_EnCore)GetProcAddress(hXvidEnc, "xvid_encore");
-	HINSTANCE hXvidCreate = LoadLibrary(_T("xvidcore.dll"));
+	HINSTANCE hXvidCreate = LoadLibrary(_T(".\\Resource\\DLL\\xvidcore.dll"));
 	m_Func_XvidCreate = (FuncAVI_Xvid_Create)GetProcAddress(hXvidCreate, "xvid_encore");
-	HINSTANCE hXvidGlobal = LoadLibrary(_T("xvidcore.dll"));
+	HINSTANCE hXvidGlobal = LoadLibrary(_T(".\\Resource\\DLL\\xvidcore.dll"));
 	m_Func_XvidGlobal = (FuncAVI_Xvid_Global)GetProcAddress(hXvidGlobal, "xvid_global");
 ////////////////////////////
 

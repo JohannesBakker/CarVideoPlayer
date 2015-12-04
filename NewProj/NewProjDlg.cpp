@@ -392,7 +392,7 @@ void CNewProjDlg::OnFileOpen()
 	file.Write(&CNewProjDlg::g_config_Value_ST, sizeof(CNewProjDlg::g_config_Value_ST));
 	file.Close();
 
-	strInfo ="D264\\mdvr.log"; 
+	strInfo ="Resource\\D264\\mdvr.log"; 
 	if (str.GetAt(str.GetLength() - 1) !='\\') 
 		m_FolderPath += "\\";
 
@@ -720,25 +720,25 @@ bool CNewProjDlg::GetLanguageResource(int nLanguageID)
 	switch(nLanguageID)
 	{
 	case 0:
-		strLangPath = "Language\\chinese";
+		strLangPath = "Resource\\Language\\chinese";
 		break;
 	case 1:
-		strLangPath = "Language\\english";
+		strLangPath = "Resource\\Language\\english";
 		break;
 	case 2:
-		strLangPath = "Language\\chineseF";
+		strLangPath = "Resource\\Language\\chineseF";
 		break;
 	case 3:
-		strLangPath = "Language\\thai";
+		strLangPath = "Resource\\Language\\thai";
 		break;
 	case 4:
-		strLangPath = "Language\\spain";
+		strLangPath = "Resource\\Language\\spain";
 		break;
 	case 5:
-		strLangPath = "Language\\Portugal";
+		strLangPath = "Resource\\Language\\Portugal";
 		break;
 	case 6:
-		strLangPath = "Language\\Turkish";
+		strLangPath = "Resource\\Language\\Turkish";
 		break;
 	}
 	CFile file;
