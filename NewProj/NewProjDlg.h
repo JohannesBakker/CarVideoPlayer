@@ -123,6 +123,8 @@ public:
 	afx_msg void OnClose();
 	virtual void OnCancel();
 	virtual void OnOK();
+private:
+	void SaveConfigInfo();
 };
 void WndsBK_Paint(CView1Dlg*, CView2Dlg*, int);
 int Unichar2Ascii(WCHAR *unichar, char* asciichar);

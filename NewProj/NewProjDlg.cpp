@@ -589,10 +589,7 @@ void CNewProjDlg::OnFileOpen()
 void CNewProjDlg::OnExit() 
 {
 	// TODO: Add your command handler code here
-	CFile file;
-	file.Open(_T(CONFIG_FILE_PATH), CFile::modeWrite);
-	file.Write(&g_config_Value_ST, sizeof(Config_Datas));
-	file.Close();
+	SaveConfigInfo();
 	
 	CDialog::OnOK();
 }
@@ -882,10 +879,7 @@ void CNewProjDlg::OnClose()
 {
 	// TODO: Add your message handler code here and/or call default
 	// TODO: Add your command handler code here
-	CFile file;
-	file.Open(_T(CONFIG_FILE_PATH), CFile::modeWrite);
-	file.Write(&g_config_Value_ST, sizeof(Config_Datas));
-	file.Close();
+	SaveConfigInfo();
 
 	//CDialog::OnClose();
 	CDialog::OnCancel();
@@ -904,4 +898,12 @@ void CNewProjDlg::OnOK()
 	// TODO: Add your specialized code here and/or call the base class
 
 	// comment for none closing
+}
+
+void CNewProjDlg::SaveConfigInfo()
+{
+	CFile file;
+	file.Open(_T(CONFIG_FILE_PATH), CFile::modeWrite);
+	file.Write(&g_config_Value_ST, sizeof(Config_Datas));
+	file.Close();
 }
