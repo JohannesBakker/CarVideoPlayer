@@ -30,11 +30,11 @@ C264Demuxer::~C264Demuxer()
 
 void C264Demuxer::Init_Hi264()
 {
-	HINSTANCE hAudioInt = LoadLibrary(_T(".\\Resource\\DLL\\lib_VoiceEngine_dll.dll"));
+	HINSTANCE hAudioInt = LoadLibrary(_T("lib_VoiceEngine_dll.dll"));
 	HI_VOICE_DecodeFrame = (FuncHI_VOICE_DecodeFrame)GetProcAddress(hAudioInt, "HI_VOICE_DecodeFrame");
 	HI_VOICE_DecReset = (FuncHI_VOICE_DecReset)GetProcAddress(hAudioInt, "HI_VOICE_DecReset");
 
-	HINSTANCE hVideoInst = LoadLibrary(_T(".\\Resource\\DLL\\hi_h264dec_w.dll"));
+	HINSTANCE hVideoInst = LoadLibrary(_T("hi_h264dec_w.dll"));
 	Hi264DecCreate = (FuncHi264DecCreate)GetProcAddress(hVideoInst, "Hi264DecCreate");
 	Hi264DecGetInfo = (FuncHi264DecGetInfo)GetProcAddress(hVideoInst, "Hi264DecGetInfo");
 	Hi264DecFrame = (FuncHi264DecFrame)GetProcAddress(hVideoInst, "Hi264DecFrame");
