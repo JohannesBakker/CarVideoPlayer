@@ -16,7 +16,12 @@ class CBuffer
 public:
 	void Erase();
 	CBuffer(DWORD size, bool AutoDelete = true);
-	CBuffer(void* buffer, DWORD length);
+	CBuffer(void* buffer, DWORD length);	
+
+	void allocBuffer(DWORD size, bool AutoDelete = true);
+	void setBuffer(void* buffer, DWORD length);
+	
+	CBuffer();
 	virtual ~CBuffer();
 
 	union PointerUnion{

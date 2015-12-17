@@ -81,6 +81,10 @@ struct AVI_CONFIG
 	int		nAVIConvScaleMode;
 };
 
+
+#define N_BUFF_NUMBER		20
+
+
 #endif
 
 

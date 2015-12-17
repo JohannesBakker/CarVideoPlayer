@@ -97,8 +97,8 @@ C264Spliter					CToolBarDlg::m_1stSpliter;
 C264Spliter					CToolBarDlg::m_2ndSpliter;
 int							CToolBarDlg::m_nStartPos;
 int							CToolBarDlg::m_nEndPos;
-OUT_DATAS					CToolBarDlg::m_1stOutDatas[10];
-OUT_DATAS					CToolBarDlg::m_2ndOutDatas[10];
+OUT_DATAS					CToolBarDlg::m_1stOutDatas[N_BUFF_NUMBER];
+OUT_DATAS					CToolBarDlg::m_2ndOutDatas[N_BUFF_NUMBER];
 int							CToolBarDlg::m_nOutDatasPtr;
 int							CToolBarDlg::m_nPlayPtr;
 bool						CToolBarDlg::g_bSoundPlay = false;
@@ -246,10 +246,9 @@ UINT SoundPlayThread(LPVOID lParam)
 
 		lpHdr->dwBufferLength = 1600;
 		lpHdr->dwFlags = WHDR_DONE;
-		pDlg->m_nPlayPtr ++;
 
-		if (pDlg->m_nPlayPtr == 30) 			
-			pDlg->m_nPlayPtr = 0;
+		pDlg->m_nPlayPtr = pDlg->IncreaseVal(pDlg->m_nPlayPtr, N_BUFF_MIN_ID, N_BUFF_MAX_ID, 1);
+		
 
 		MMRESULT mmReturn = waveOutPrepareHeader(g_hWaveOut,lpHdr, sizeof(WAVEHDR));
 		waveOutSetPlaybackRate(g_hWaveOut, 0x8000);
@@ -294,7 +293,7 @@ void CALLBACK WaveCallback(HWAVEOUT hWave, UINT uMsg, DWORD dwUser,
 		g_lpHdr->dwBufferLength = 1600;\
 		g_lpHdr->dwFlags = WHDR_DONE;\
 		CToolBarDlg::m_nPlayPtr++;\
-		if (CToolBarDlg::m_nPlayPtr == 30)\
+		if (CToolBarDlg::m_nPlayPtr == N_BUFF_NUMBER)\
 			CToolBarDlg::m_nPlayPtr = 0;\
 		MMRESULT mmReturn = waveOutPrepareHeader(g_hWaveOut,g_lpHdr, sizeof(WAVEHDR));\
 		waveOutSetPlaybackRate(g_hWaveOut, 0x8000);\
@@ -356,7 +355,7 @@ void CToolBarDlg::OnPlayBtnClick()
 				else
 					m_pipe->m_audioTrack[m_nOutDatasPtr] = m_2ndSpliter.m_2ndOutDatas.buf_A;
 				
-				m_nOutDatasPtr ++;
+				m_nOutDatasPtr = IncreaseVal(m_nOutDatasPtr, N_BUFF_MIN_ID, N_BUFF_MAX_ID, 1);
 			}
 
 			m_bPlayer1 = true;
@@ -375,7 +374,8 @@ void CToolBarDlg::OnPlayBtnClick()
 				m_1stSpliter.GetDatas1();
 				m_1stOutDatas[m_nOutDatasPtr] = m_1stSpliter.m_1stOutDatas;
 				m_pipe->m_audioTrack[m_nOutDatasPtr] = m_1stSpliter.m_1stOutDatas.buf_A;
-				m_nOutDatasPtr ++;
+
+				m_nOutDatasPtr = IncreaseVal(m_nOutDatasPtr, N_BUFF_MIN_ID, N_BUFF_MAX_ID, 1);
 			}
 			m_bPlayer1 = true;
 			SetTimer(TIMER_PLAYER1, m_nSpeed / 10, NULL);
@@ -384,8 +384,11 @@ void CToolBarDlg::OnPlayBtnClick()
 		}
 
 		SetTimer(TIMER_ALARM,100,NULL);
+
 		m_nPlayPtr = 0;
+		
 		m_pipe->m_nBufPtr = 0;
+		m_pipe->InitAudioTrack();
 		m_pipe->StartPlayingFromFile();
 	}
 	else
@@ -734,7 +737,7 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 	if (nIDEvent == TIMER_PLAYER1)
 	{
 		//m_nPlayPtr ++;
-		//if (m_nPlayPtr == 30) m_nPlayPtr = 0;
+		//if (m_nPlayPtr == N_BUFF_NUMBER) m_nPlayPtr = 0;
 		char buf[100];
 		CString str;
 		int nSecs = (m_1stSpliter.m_1stOutDatas.dwDTS_V - m_dwFirstDTS) / 1000;
@@ -772,13 +775,9 @@ void CToolBarDlg::OnTimer(UINT nIDEvent)
 		else
 			m_pipe->m_audioTrack[m_nOutDatasPtr] = m_2ndSpliter.m_2ndOutDatas.buf_A;
 
-		m_nPlayPtr ++;
-		if (m_nPlayPtr == 10) 
-			m_nPlayPtr = 0;
+		m_nPlayPtr = IncreaseVal(m_nPlayPtr, N_BUFF_MIN_ID, N_BUFF_MAX_ID, 1);
 
-		m_nOutDatasPtr ++;
-		if (m_nOutDatasPtr == 10) 
-			m_nOutDatasPtr = 0;
+		m_nOutDatasPtr = IncreaseVal(m_nOutDatasPtr, N_BUFF_MIN_ID, N_BUFF_MAX_ID, 1);
 
 		if (m_AdjustDlg.m_bSel1 != TRUE)
 		{
@@ -2661,7 +2660,8 @@ bool CToolBarDlg::TimeSeek(bool bSetPos, bool bPlayEnable, float fSeekPos, int n
 				m_pipe->m_audioTrack[m_nOutDatasPtr] = m_1stSpliter.m_1stOutDatas.buf_A;
 			else
 				m_pipe->m_audioTrack[m_nOutDatasPtr] = m_2ndSpliter.m_2ndOutDatas.buf_A;
-			m_nOutDatasPtr ++;
+
+			m_nOutDatasPtr = IncreaseVal(m_nOutDatasPtr, N_BUFF_MIN_ID, N_BUFF_MAX_ID, 1);
 		}
 	}
 	else if (m_nThreadCounts == 1)
@@ -2691,12 +2691,14 @@ bool CToolBarDlg::TimeSeek(bool bSetPos, bool bPlayEnable, float fSeekPos, int n
 			m_1stSpliter.GetDatas1();
 			m_1stOutDatas[m_nOutDatasPtr] = m_1stSpliter.m_1stOutDatas;
 			m_pipe->m_audioTrack[m_nOutDatasPtr] = m_1stSpliter.m_1stOutDatas.buf_A;
-			m_nOutDatasPtr ++;
+
+			m_nOutDatasPtr = IncreaseVal(m_nOutDatasPtr, N_BUFF_MIN_ID, N_BUFF_MAX_ID, 1);
 		}
 		SetTimer(TIMER_PLAYER1, m_nSpeed / 10, NULL);
 	}
 
 	m_pipe->m_nBufPtr = 0;
+	m_pipe->InitAudioTrack();
 	m_pipe->StartPlayingFromFile();
 
 	SetTimer(TIMER_ALARM, 100, NULL);
@@ -3034,4 +3036,25 @@ CString CToolBarDlg::GetToolTipText(UINT uId)
 
 	return txtTip;
 }
+
+int CToolBarDlg::IncreaseVal(int nCurrVal, int nMin, int nMax, int nStep)
+{
+	int nResult = nCurrVal + nStep;
+
+	if (nResult > nMax)
+		nResult = nMin;
+
+	return nResult;
+}
+
+int CToolBarDlg::DecreaseVal(int nCurrVal, int nMin, int nMax, int nStep)
+{
+	int nResult = nCurrVal - nStep;
+
+	if (nResult < nMin)
+		nResult = nMax;
+
+	return nResult;
+}
+
 

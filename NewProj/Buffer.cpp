@@ -15,9 +15,41 @@ static char THIS_FILE[]=__FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+CBuffer::CBuffer() 
+{
+	ptr.b = NULL;
+	ByteLen = 0;
+	m_bAutoDelete = false;
+}
+
 CBuffer::CBuffer(DWORD size, bool AutoDelete)
 {
+	allocBuffer(size, AutoDelete);
+}
+
+CBuffer::CBuffer(void* buffer, DWORD length)
+{
+	setBuffer(buffer, length);
+}
+
+CBuffer::~CBuffer()
+{
+	// remember to delete the memory
+	if (m_bAutoDelete && ptr.b != NULL)  delete ptr.b;
+}
+
+void CBuffer::Erase()
+{
+	if (ptr.b) ZeroMemory(ptr.b,ByteLen);
+}
+
+void CBuffer::allocBuffer(DWORD size, bool AutoDelete)
+{
+	
 	m_bAutoDelete = AutoDelete;
+	
+	ByteLen = 0;
+	
 	try
 	{
 		ptr.b = new BYTE[size];
@@ -29,7 +61,7 @@ CBuffer::CBuffer(DWORD size, bool AutoDelete)
 	}
 }
 
-CBuffer::CBuffer(void* buffer, DWORD length)
+void CBuffer::setBuffer(void* buffer, DWORD length)
 {
 	m_bAutoDelete = false;
 	if (buffer)
@@ -44,13 +76,3 @@ CBuffer::CBuffer(void* buffer, DWORD length)
 	}
 }
 
-CBuffer::~CBuffer()
-{
-	// remember to delete the memory
-	if (m_bAutoDelete && ptr.b != NULL)  delete ptr.b;
-}
-
-void CBuffer::Erase()
-{
-	if (ptr.b) ZeroMemory(ptr.b,ByteLen);
-}

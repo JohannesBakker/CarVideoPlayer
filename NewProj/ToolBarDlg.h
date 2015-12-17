@@ -30,6 +30,10 @@
 
 #define IO_SIGNALS_NUM	3
 
+#define N_BUFF_MIN_ID	0
+#define N_BUFF_MAX_ID	(N_BUFF_NUMBER - 1)
+
+
 typedef struct _264_FILE_HEADER{
 	char	chUnk1[0x46];
 	DWORD	dwFileSize;
@@ -141,8 +145,8 @@ static CAVIConverterDlg		m_AVIConverterDlg;
 	CGPSDlg*                m_pGpsDlg;
 	CToolBarDlg*			m_pToolBarDlg;
 static	DWORD				m_duration;
-static	OUT_DATAS			m_1stOutDatas[10];
-static	OUT_DATAS			m_2ndOutDatas[10];
+static	OUT_DATAS			m_1stOutDatas[N_BUFF_NUMBER];
+static	OUT_DATAS			m_2ndOutDatas[N_BUFF_NUMBER];
 static	int					m_nOutDatasPtr;
 static	int					m_nPlayPtr;
 static	bool				g_bSoundPlay;
@@ -257,6 +261,11 @@ static	DWORD m_dw2ndRecordStopPos;
 	afx_msg void OnBnClickedNextSeg();
 	afx_msg void OnBnClickedRepairFile();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	
+public:
+	int IncreaseVal(int nCurrVal, int nMin, int nMax, int nStep);
+	int DecreaseVal(int nCurrVal, int nMin, int nMax, int nStep);
+	
 };
 
 //{{AFX_INSERT_LOCATION}}

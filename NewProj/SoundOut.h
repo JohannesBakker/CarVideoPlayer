@@ -11,6 +11,9 @@
 
 #include "soundbase.h"
 
+#define SOUNDOUT_BUFF_NUMBER		20
+
+
 				// CWinThread must be before CSoundBase -> and it's very difficult to debug!
 				// Trust me!   Thomas.Holme@openmpeg4.org
 class CSoundOut : public CWinThread, public CSoundBase
@@ -38,6 +41,13 @@ protected:
 	HWAVEOUT m_hPlay;
 	DWORD m_ThreadID;
 	int m_QueuedBuffers;
+
+	// add by AnSI for global buffering
+	CBuffer m_Buff[SOUNDOUT_BUFF_NUMBER];
+	LPWAVEHDR m_pHdr[SOUNDOUT_BUFF_NUMBER];
+
+	int m_nCurrBufIndex;
+	int m_nCurrHdrIndex;
 
 	BOOL InitInstance();
 	int AddOutputBufferToQueue(CBuffer* buffer);

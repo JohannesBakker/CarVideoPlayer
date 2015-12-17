@@ -25,6 +25,8 @@ CPipe::CPipe()
 	m_SoundOut.GetDataToSoundOut = GetDataToSoundOut;  // assign pointer to callback function
 	m_SoundOut.m_pOwner = this;
 	m_nBufPtr = 0;
+
+	InitAudioTrack();
 }
 
 CPipe::~CPipe()
@@ -66,10 +68,13 @@ void CPipe::GetDataToSoundOut(CBuffer* buffer, void* Owner)
 
 void CPipe::ReadSoundDataFromFile(CBuffer* buffer)
 {
-	memcpy(buffer->ptr.c, m_audioTrack[m_nBufPtr], 1600);
-	m_nBufPtr ++;
-	if (m_nBufPtr == 10) 
-		m_nBufPtr = 0;
+	if (m_audioTrack[m_nBufPtr] != NULL) {
+		memcpy(buffer->ptr.c, m_audioTrack[m_nBufPtr], 1600);
+
+		m_nBufPtr = IncreaseVal(m_nBufPtr, N_AUDIO_TRACK_MIN, N_AUDIO_TRACK_MAX, 1);
+	}
+	
+	
 //	if (m_pFile)
 //	{
 //		if (!m_pFile->Read(buffer))
@@ -128,3 +133,35 @@ void CPipe::OnEndOfPlayingFile()
 {
 	// implement this function in the GUI to change things when EOF is reached
 }
+
+int CPipe::IncreaseVal(int nCurrVal, int nMin, int nMax, int nStep)
+{
+	int nResult = nCurrVal + nStep;
+
+	if (nResult > nMax)
+		nResult = nMin;
+
+	return nResult;
+}
+
+int CPipe::DecreaseVal(int nCurrVal, int nMin, int nMax, int nStep)
+{
+	int nResult = nCurrVal - nStep;
+
+	if (nResult < nMin)
+		nResult = nMax;
+
+	return nResult;
+}
+
+void CPipe::InitAudioTrack()
+{
+	m_nBufPtr = 0;
+
+	for (int i = 0; i < N_AUDIO_TRACNK_NUMBER; i++)
+	{
+		m_audioTrack[i] = NULL;
+	}	
+}
+
+
